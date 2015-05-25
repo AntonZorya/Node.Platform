@@ -1,0 +1,27 @@
+{
+  "name": "Devir.P;atform.API",
+  "version": "0.0.1",
+  "description": "Devir platform api",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "keywords": [
+    "arenda"
+  ],
+  "author": "Anton, Alibek, Vasya, Sabit",
+  "license": "?",
+  "dependencies": {
+    "async": "^1.0.0",
+    "body-parser": "^1.12.4",
+    "cron": "^1.0.9",
+    "express": "^4.12.4",
+    "express-session": "^1.11.2",
+    "moment": "^2.10.3",
+    "mongoose": "^4.0.3",
+    "passport": "^0.2.2",
+    "passport-http-bearer": "^1.0.1",
+    "q": "^1.4.1",
+    "underscore": "^1.8.3"
+  }
+}
