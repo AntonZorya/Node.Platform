@@ -1,6 +1,7 @@
 var Logic = require('../../logicLayer/identity/organizationLogic');
 
 module.exports = function(router){
+	
 	router.route('/identity/organization').
 	post(function(req, res) {
 		Logic.add(req.body, function(data){

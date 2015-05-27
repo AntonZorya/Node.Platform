@@ -7,9 +7,9 @@
     "test": "test"
   },
   "keywords": [
-    "mesto dlya arendy"
+    "eto mesto sdaetsya v arendu"
   ],
-  "author": "Anton, Alibek, Vasya", "Sabit",
+  "author": "Anton, Alibek, Vasya, Sabit",
   "license": "?",
   "dependencies": {
     "async": "^1.0.0",

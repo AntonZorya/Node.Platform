@@ -7,9 +7,9 @@ module.exports = function(router){
 			
 			res.json(data);
 			
-		})
+		});
 	});
-}
+};
 
 
 
