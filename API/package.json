@@ -1,15 +1,15 @@
 {
-  "name": "DevirPlatformAPI",
+  "name": "platform_node",
   "version": "0.0.1",
-  "description": "Devir platform api",
+  "description": "project api",
   "main": "index.js",
   "scripts": {
     "test": "test"
   },
   "keywords": [
-    "arenda"
+    "mesto dlya arendy"
   ],
-  "author": "Anton, Alibek, Vasya, Sabit",
+  "author": "Anton, Alibek, Vasya", "Sabit",
   "license": "?",
   "dependencies": {
     "async": "^1.0.0",

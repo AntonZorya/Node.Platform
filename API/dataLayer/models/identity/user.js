@@ -1,14 +1,23 @@
 var ModelBase = require('../base/modelBase');
-var _ = require('underscore');
+
 var mongoose     = require('mongoose');
 var Schema       = mongoose.Schema;
-var systemRoleScheme = new require('../../../helpers/mongoose/modelBuilder')('systemRole', require('./systemRole'), true);
+var systemRoleScheme = new require(_helpersMongoosePath+'modelBuilder')('systemRole', require('./systemRole'), true);
 
-module.exports =  _.extend(ModelBase, { 
+exports.definition =  _.extend( { 
 	userName: {type: String, required: true},
 	password: {type: String, required: true},
 	email: {type: String, required: true},
 	employee: { type: Schema.Types.ObjectId, ref: 'Employee', required: false},
 	roles: [systemRoleScheme]
 
-});
+},ModelBase);
+
+
+exports.validators = [
+{name: "email", validator: function(){
+    var emailRegex = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+   return emailRegex.test(email.text);
+}, err: "Не правильный email"}
+]
+

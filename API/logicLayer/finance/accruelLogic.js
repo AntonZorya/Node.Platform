@@ -1,26 +1,16 @@
 var AccruelRepo = require('../../dataLayer/repositories/finance/accruelRepo');
 var OrganizationRepo = require('../../dataLayer/repositories/identity/organizationRepo');
-var Q = require('q');
 
 
-exports.add = function(accruel){
-	var deferred = Q.defer();
+exports.add = function(accruel, done){
 
-	OrganizationRepo.getById(accruel.organization._id).then(function(data){
-		if(data.result!=null){
+	OrganizationRepo.getById(accruel.organization._id, function(data){
+		if(data.operationResult==0){
 			accruel.organization = data.result._doc;
-			AccruelRepo.add(accruel).then(function(addresult){
-				deferred.resolve(addresult);
-			}, function(err){
-				deferred.reject(err);
+			AccruelRepo.add(accruel, function(data){
+				return done(data);
 			});
-		} else{
-			deferred.reject({operationResult: 1, err: "Неверная организация"});
 		}
-	})
-
-	return deferred.promise;
-
-
-	
+		else return done({operationResult:1, error:data.error});
+	});
 }

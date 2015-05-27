@@ -2,8 +2,8 @@ var ModelBase = require('../base/modelBase');
 var _ = require('underscore');
 
 
-module.exports =  _.extend(ModelBase,{ 
+exports.definition =  _.extend({ 
 	roleName: {type: String, required: true},
+	
 
-
-});
+},ModelBase);

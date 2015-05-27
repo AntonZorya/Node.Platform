@@ -1,7 +1,7 @@
 var _ = require('underscore');
 var ModelBase = require('../base/modelBase');
-var OrganizationDef = require('../identity/organization');
+var OrganizationDef = require('../identity/organization').definition;
 
-module.exports = _.extend({
+exports.definition = _.extend({
 	organization: OrganizationDef
 }, ModelBase);

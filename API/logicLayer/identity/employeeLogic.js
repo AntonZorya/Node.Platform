@@ -1,39 +1,25 @@
 var EmployeeRepo = require('../../dataLayer/repositories/identity/employeeRepo');
 var OrganizationRepo = require('../../dataLayer/repositories/identity/organizationRepo');
-var async = require("async");
-var Q = require('q');
 
 
-exports.add = function(employee){
-	var deferred = Q.defer();
+exports.add = function(employee, done){
 
-	OrganizationRepo.getById(employee.organizationId).then(function(data){
-		if(data.result!=null){
-
-			EmployeeRepo.add(employee).then(function(addresult){
-				deferred.resolve(addresult);
-			}, function(err){
-				deferred.reject(err);
+	OrganizationRepo.getById(employee.organizationId, function(data){
+		if(data.operationResult==0){
+			EmployeeRepo.add(employee, function(data){
+				return done(data);
 			});
-		} 
-		else{
-			deferred.reject({operationResult: 1, err: "Организация не найдена"});
 		}
+		else return done({operationResult:1, error:data.error});
 	});
-
-	return deferred.promise;
 }
 
-exports.get = function(id){
-	var deferred = Q.defer();
+exports.get = function(id, done){
 
-	EmployeeRepo.get(id).then(function(data){
-		deferred.resolve(data);
-	},function(err){
-		deferred.reject({operationResult: 1, err: "Ощибка"});
+	EmployeeRepo.get(id, function(data){
+		if(data.operationResult==0) return done(data);
+		return done({operationResult:1, error:data.error});
 	});
-
-	return deferred.promise;
 }
 
 

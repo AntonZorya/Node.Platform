@@ -3,6 +3,8 @@ var app        = express();                 // define our app using express
 var bodyParser = require('body-parser');
 var passport = require('./helpers/passport/passportInit');
 
+_ = require('underscore');
+
 var mongoose   = require('mongoose');
 mongoose.connect('mongodb://192.168.66.27/toxakz'); // connect to our database
 
@@ -18,18 +20,34 @@ var port = process.env.PORT || 8080;        // set our port
 // =============================================================================
 var router = express.Router();         
 
+//Регистрация путей
+_rootPath = __dirname;
+_modelsPath = _rootPath+'/dataLayer/models/';
+_viewModelsPath = _rootPath+'/dataLayer/viewmodels/';
+_repositoriesPath = _rootPath+ '/dataLayer/repositories/';
+_helpersCommonPath = _rootPath+'/helpers/common/';
+_helpersMongoosePath = _rootPath+'/helpers/mongoose/';
+_helpersPassportPath = _rootPath+'/helpers/passport/';
+_logicPath = _rootPath+'/logicLayer/';
+//!Регистрация поутей
 
+
+
+
+//i18String registratoin
+_i18nString = require(_modelsPath+'i18n/i18nString').definition;
+
+//!i18nString registratiom
 
 //Passport
 passport.init(app);
 passport.secureRoutes(app, passport);
 //!Passport
 
+	//Наши роуты
+		require('./helpers/common/controllersRequirer')(router, "controllers", passport);
+		//!Наши роуты
 
-
-//Наши роуты
-require('./helpers/common/controllersRequirer')(router, "controllers", passport);
-//!Наши роуты
 
 app.use('/api', router);
 
@@ -40,5 +58,22 @@ console.log('Magic happens on port ' + port);
 
 
 
+
 require('./testConsole/toxa').main();
 require('./testConsole/vasya').main();
+
+
+// var menu = require('node-menu');
+// menu._printHeader = function(){return "ARND platform"};
+// menu.addDelimiter('-', 40, 'Main Menu');
+// menu.addItem(
+//     'Reload translations', 
+//     function() {
+//         console.log("Reloading translations");
+//     });
+// menu.addItem(
+//     'Run toxa.js', 
+//     function() {
+//         console.log("Running toxa.js");
+//     });
+// menu.start();

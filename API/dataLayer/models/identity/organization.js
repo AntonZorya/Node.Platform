@@ -1,8 +1,8 @@
 var ModelBase = require('../base/modelBase');
 var _ = require('underscore');
 
-module.exports =  _.extend({ 		
-	organizationName: { type: String, required: true }
+exports.definition =  _.extend({
+	organizationName: _i18nString
 	
 }, ModelBase);
 

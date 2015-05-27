@@ -3,7 +3,7 @@ var _ = require('underscore');
 var mongoose     = require('mongoose');
 var Schema       = mongoose.Schema;
 
-module.exports =  _.extend({ 		
+exports.definition =  _.extend({ 		
 	name: { type: String, required: true },
 	surname: { type: String, required: true},
 	iin: { type: String, required: true},
