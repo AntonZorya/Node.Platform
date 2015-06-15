@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>AngularJS Routing - Маршрутизация на Ангулар</title>
+		<link rel="stylesheet" href="bootstrap.min.css">
+		<link rel="stylesheet" href="bootstrap-theme.min.css">
+		<link rel="stylesheet" href="customStyles.css">
+		<script src="angular.min.js"></script>
+		<script src="angular-route.min.js"></script>
+		<script src="angular-messages.min.js"></script>
+		<script src="ui-bootstrap-tpls-0.13.0.min.js"></script>
+		<script src="module.js"></script>
+		<script src="routeConfig.js"></script>
+		<script src="DatabaseService.js"></script>
+		<script src="MainController.js"></script>
+		<script src="CounterController.js"></script>
+		<script src="HistoryController.js"></script>
+        
+        <script>
+            function goBack(){
+                window.history.back();
+            }
+        </script>
+	</head>
+
+    <body ng-app="mainApp" ng-controller="MainController as vm" style="padding: 20px">
+        <div style="height: 20px">
+            <span style="font-size:14;color:blue;">{{clock | date:'MM/dd/yyyy HH:mm:ss'}}</span>
+        </div>
+        <ng-view>
+        </ng-view>
+        <input type="submit" value="Add new objects" ng-click="vm.addSomeObjects()">
+    </body>
+</html>

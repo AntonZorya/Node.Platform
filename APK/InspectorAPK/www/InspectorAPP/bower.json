@@ -1,0 +1,21 @@
+{
+  "name": "InspectorAPP",
+  "version": "0.0.0",
+  "authors": [
+    "nursultan156 <nursultan156@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "libs/",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.4.0",
+    "angular-route": "~1.4.0",
+    "bootstrap": "~3.3.4"
+  }
+}

@@ -1,0 +1,44 @@
+<div class="table" ng-controller="CounterController as vm">
+	<div class="row">
+		<div class="cell"><b>Номер договора</b></div>
+		<div class="cell">{{vm.Object.contractNum}}</div>
+	</div>
+	<div class="row">
+		<div class="cell"><b>Название объекта</b></div>
+		<div class="cell">{{vm.Object.objName}}</div>
+	</div>
+	<div class="row">
+		<div class="cell"><b>Адрес объекта</b></div>
+		<div class="cell">{{vm.Object.objAddress}}</div>
+	</div>
+</div>
+
+<div class="table" ng-controller="CounterController as cc">
+  <div class="row">
+	<div class="cell"><b>Заводской</br>номер</b></div>
+	<div class="cell"><b>Модуль</b></div>
+	<div class="cell"><b>Диаметр</b></div>
+	<div class="cell"><b>В действии</b></div>
+	<div class="cell"><b>Разрядность</b></div>
+	<div class="cell"><b>Дата последнего</br>показания</b></div>
+	<div class="cell"><b>Последнее</br>показание</b></div>
+	<div class="cell"><b>Ввод показаний</b></div>
+  </div>
+  <div class="row" ng-repeat="counter in cc.Object.counters">
+	<div class="cell">{{counter.serial}}</div>
+	<div class="cell">{{counter.module}}</div>
+	<div class="cell">{{counter.diameter | number:2}}</div>
+	<div class="cell">{{counter.inUse}}</div>
+	<div class="cell">{{counter.capacity}}</div>
+	<div class="cell">{{counter.readings[counter.readings.length-1].readingDate | date:'dd.MM.yyyy H:mm:ss'}}</div>
+	<div class="cell">{{counter.readings[counter.readings.length-1].reading | number:2}}</div>
+	<div class="cell"><a href="#/objects/{{objectId}}/counters/{{counter.serial}}/history">История показаний</a></div>
+	<div class="cell">
+		<input type="text" style="width:100px" ng-model="counter.newReading">
+		<input type="button" value="Сохранить" style="width:100px"
+			ng-click="cc.addReading(cc.Object.id, counter.serial, counter.newReading, counter.readings[counter.readings.length-1].reading)"/>
+	</div>
+  </div>
+</div>
+
+<a onclick="goBack()">Назад</a>

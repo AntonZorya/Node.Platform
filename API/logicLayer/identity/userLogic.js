@@ -2,8 +2,10 @@ var UserRepo = require(_repositoriesPath+'identity/userRepo');
 var TokenLogic = require('./tokenLogic');
 var moment = require('moment');
 var loginValidator = require(_helpersMongoosePath+'validator');
-var loginDefinition = require(_viewModelsPath+'login');
-
+var loginDefinition = require(_viewModelsPath + 'login');
+var OrganizationDef = require("../../dataLayer/models/identity/organization");
+var OrgLogic = require("./organizationLogic");
+var roleDefinitions = require("../../dataLayer/security/roleDefinitions");
 
 exports.add = function(user, done){
 	UserRepo.add(user, function(data){
@@ -41,17 +43,38 @@ exports.check = function(model, done){
 							}	
 						});
 					}else{
-						return done({operationResult:0, result: false});
+						return done({operationResult:3, result: ["#wrong userName or password"]});
 					}
 
 				}else{
-					return done({operationResult:0, result: false});
+					return done({operationResult:3, result: ["#wrong userName or password"]});
 				}
 
 			});
 
 		} else{
-			return done({operationResult:2, error: validationRes.result});
+			return done({operationResult:2, result: validationRes.result});
 		}
 	});
+}
+
+
+exports.register = function (regVM, done) {
+    OrgLogic.getByBin(regVM.org.bin, function (res) {
+        if (res.result != null)
+            return done({ operationResul: 2, result: ["#организация с таким БИН/ИИН уже зарегистрирована"] });
+        else
+            OrgLogic.add(regVM.org, function (addRes) {
+                if (addRes.operationResult === 0) {
+                    regVM.user.organizationId = addRes.result._id;
+                    regVM.user.roles = [roleDefinitions.organizationAdmin];
+                    UserRepo.add(regVM.user, function (data) {
+                        return done(data);
+                    });
+                }
+                else {
+                    return done(addRes);
+                }
+            });
+    });
 }

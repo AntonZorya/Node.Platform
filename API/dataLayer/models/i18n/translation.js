@@ -5,7 +5,6 @@ var Schema       = mongoose.Schema;
 
 exports.definition =  _.extend( { 
 	text: {type: String, required: true},
-	// application: { type: Schema.Types.ObjectId, ref: 'application', required: false},
-	// language: { type: Schema.Types.ObjectId, ref: 'language', required: false},
+	application: { type: Schema.Types.ObjectId, ref: 'application', required: false},
 	translate: _i18nString
 }, ModelBase);

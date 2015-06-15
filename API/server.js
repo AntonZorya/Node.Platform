@@ -1,11 +1,36 @@
-var express    = require('express');        // call express
-var app        = express();                 // define our app using express
+/* global _i18nString */
+/* global _logicPath */
+/* global _helpersPassportPath */
+/* global _helpersMongoosePath */
+/* global _helpersCommonPath */
+/* global _repositoriesPath */
+/* global _ */
+/* global _viewModelsPath */
+/* global _modelsPath */
+/* global _rootPath */
+/* global __dirname */
+var express = require('express');        // call express
+var app = express();                 // define our app using express
 var bodyParser = require('body-parser');
 var passport = require('./helpers/passport/passportInit');
+var cors = require('cors');
+errorBuilder = require('./helpers/mongoose/errorBuilder').buildError;
+operationResultBuilder = require('./helpers/common/operationOutcome').buildOperationOutcome;
+
+
+
+
+app.use(cors());
+
+//var corsOptions = {
+//  origin: 'http://example.com'
+//};
+
+
 
 _ = require('underscore');
 
-var mongoose   = require('mongoose');
+var mongoose = require('mongoose');
 mongoose.connect('mongodb://192.168.66.27/toxakz'); // connect to our database
 
 // configure app to use bodyParser()
@@ -22,31 +47,37 @@ var router = express.Router();
 
 //Регистрация путей
 _rootPath = __dirname;
-_modelsPath = _rootPath+'/dataLayer/models/';
-_viewModelsPath = _rootPath+'/dataLayer/viewmodels/';
-_repositoriesPath = _rootPath+ '/dataLayer/repositories/';
-_helpersCommonPath = _rootPath+'/helpers/common/';
-_helpersMongoosePath = _rootPath+'/helpers/mongoose/';
-_helpersPassportPath = _rootPath+'/helpers/passport/';
-_logicPath = _rootPath+'/logicLayer/';
+_modelsPath = _rootPath + '/dataLayer/models/';
+_viewModelsPath = _rootPath + '/dataLayer/viewmodels/';
+_repositoriesPath = _rootPath + '/dataLayer/repositories/';
+_helpersCommonPath = _rootPath + '/helpers/common/';
+_helpersMongoosePath = _rootPath + '/helpers/mongoose/';
+_helpersPassportPath = _rootPath + '/helpers/passport/';
+_logicPath = _rootPath + '/logicLayer/';
 //!Регистрация поутей
 
 
 
 
 //i18String registratoin
-_i18nString = require(_modelsPath+'i18n/i18nString').definition;
+_i18nString = require(_modelsPath + 'i18n/i18nString').definition;
 
 //!i18nString registratiom
 
 //Passport
 passport.init(app);
 passport.secureRoutes(app, passport);
+_checkRoles = passport.checkRoles;
 //!Passport
 
-	//Наши роуты
-		require('./helpers/common/controllersRequirer')(router, "controllers", passport);
-		//!Наши роуты
+//Наши роуты
+require('./helpers/common/controllersRequirer')(router, "controllers", passport);
+//!Наши роуты
+
+
+//File upload
+require('./helpers/common/fileUploadHelper')(app);
+//!FileUpload
 
 
 app.use('/api', router);
@@ -77,3 +108,5 @@ require('./testConsole/vasya').main();
 //         console.log("Running toxa.js");
 //     });
 // menu.start();
+
+

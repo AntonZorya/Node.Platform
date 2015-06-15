@@ -1,0 +1,12 @@
+.cell  { padding: 10px; border: 1px solid #999; }
+.halfcell { padding: 10px; border: 1px solid #999; width:50%; }
+.quartercell { padding: 10px; border: 1px solid #999; width:25%; }
+
+.table        { display: table }
+.table .row   { display: table-row; }
+.table .cell  { display: table-cell; }
+.table .halfcell  { display: table-cell; }
+.table .quartercell  { display: table-cell; }
+
+.flexbox       { display: flex; flex-direction: column; }
+.flexbox .row  { display: flex; }

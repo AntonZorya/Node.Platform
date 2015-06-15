@@ -1,6 +1,7 @@
 var TokenDef = require('../../models/identity/token');
 var Collection = new require('../../../helpers/mongoose/modelBuilder')('Token', TokenDef);
 var moment = require('moment');
+var ObjectId     = require('mongoose').Types.ObjectId;
 
 exports.add = function(token, done){		
 	var model = Collection(token);
@@ -34,7 +35,7 @@ exports.findByUserId = function(userId, done){
 }
 
 exports.closeUserTokens = function(userId, done){
-	Collection.update({user: userId}, {$set: {isDeleted: true}}, {multi: true}, function(err){
+	Collection.update({user: new ObjectId(userId)}, {$set: {isDeleted: true}}, {multi: true}, function(err){
 		done();
 	}); 
 }

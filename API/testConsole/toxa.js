@@ -5,6 +5,8 @@ var TranslateLogic = require('../logicLayer/i18n/translationLogic');
 
 
 exports.main = function(){
+	
+	
 
 	// TranslateLogic.add({text: "UserName required", 
 	// application: "556091a34f380ef01728bd88",

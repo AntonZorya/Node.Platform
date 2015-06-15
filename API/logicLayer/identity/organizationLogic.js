@@ -4,10 +4,10 @@ var async = require("async");
 
 exports.add = function(organization, done){
 
-	OrganizationRepo.getByName(organization.organizationName, function(data){
+	OrganizationRepo.getByBin(organization.bin, function(data){
 		if(data.result==null){
 			OrganizationRepo.add(organization, function(data){
-				done(data);
+                return done(data);
 			});
 		}
 	});
@@ -18,6 +18,12 @@ exports.getAll = function(done){
 	OrganizationRepo.getAll(function(data){
 		done(data);
 	});
+}
+
+exports.getByBin = function (bin, done) {
+    OrganizationRepo.getByBin(bin, function (data) {
+        done(data);
+    });
 }
 
 

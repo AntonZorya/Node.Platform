@@ -9,15 +9,15 @@ exports.definition =  _.extend( {
 	password: {type: String, required: true},
 	email: {type: String, required: true},
 	employee: { type: Schema.Types.ObjectId, ref: 'Employee', required: false},
-	roles: [systemRoleScheme]
-
+    roles: [{ type: String }],
+    organizationId: {type: Schema.Types.ObjectId, required: false}
 },ModelBase);
 
 
 exports.validators = [
-{name: "email", validator: function(){
+{name: "email", validator: function(email){
     var emailRegex = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
-   return emailRegex.test(email.text);
-}, err: "Не правильный email"}
+   return emailRegex.test(email);
+}, err: "#Не правильный email"}
 ]
 

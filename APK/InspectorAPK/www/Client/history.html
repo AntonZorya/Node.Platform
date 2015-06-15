@@ -1,0 +1,26 @@
+<div class="table" ng-controller="HistoryController as hc">
+  <div class="row">
+	<div class="quartercell"><b>Заводской номер</b></div>
+	<div class="quartercell"><b>Модуль</b></div>
+	<div class="quartercell"><b>Диаметр</b></div>
+	<div class="quartercell"><b>В действии</b></div>
+  </div>
+  <div class="row">
+	<div class="quartercell">{{hc.Counter.serial}}</div>
+	<div class="quartercell">{{hc.Counter.module}}</div>
+	<div class="quartercell">{{hc.Counter.diameter | number:2}}</div>
+	<div class="quartercell">{{hc.Counter.inUse}}</div>
+  </div>
+</div>
+</br>
+<div class="table" ng-controller="HistoryController as hc">
+  <div class="row">
+	<div class="halfcell"><b>Дата показаний</b></div>
+	<div class="halfcell"><b>Показания</b></div>
+  </div>
+  <div class="row" ng-repeat="reading in hc.Counter.readings.slice().reverse()">
+	<div class="halfcell">{{reading.readingDate | date:'dd/MM/yyyy H:mm:ss'}}</div>
+	<div class="halfcell">{{reading.reading | number:2}}</div>
+  </div>
+</div>
+<a onclick="goBack()">Назад</a>

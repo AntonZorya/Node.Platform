@@ -1,0 +1,14 @@
+<div class="table">
+  <div class="row">
+	<div class="cell"><b>Номер договора</b></div>
+	<div class="cell"><b>Название объекта</b></div>
+	<div class="cell"><b>Адрес объекта</b></div>
+	<div class="cell"><b>Счетчики</b></div>
+  </div>
+  <div class="row" ng-repeat="obj in vm.objects">
+	<div class="cell">{{obj.contractNum}}</div>
+	<div class="cell">{{obj.objName}}</div>
+	<div class="cell">{{obj.objAddress}}</div>
+	<div class="cell"><a href="#/objects/{{obj.id}}/counters">Счетчики</a></div>
+  </div>
+</div>

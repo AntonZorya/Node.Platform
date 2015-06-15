@@ -44,6 +44,18 @@ exports.mustAuthenticatedMw = function (req, res, next){
 	})(req, res, next);
 };
 
+exports.checkRoles = function(req, roles){
+	_.each(req.user.roles, function(elem)
+		{
+			_.each(roles, function(role){
+				if(role == elem) return true;
+			})
+		})
+	return false;
+}
+
 exports.secureRoutes = function(app, passport){
-	app.all('/api/finance*', passport.mustAuthenticatedMw);
+    app.all('/api/finance*', passport.mustAuthenticatedMw);
+    app.all('/api/identity/menu', passport.mustAuthenticatedMw);
+	app.all('/api/language/add', passport.mustAuthenticatedMw);
 }

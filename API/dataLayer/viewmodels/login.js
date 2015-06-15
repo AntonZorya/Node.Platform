@@ -1,7 +1,7 @@
 
 exports.definition =  { 
-	userName: {type: String, required: "UserName required"},//getTvjy franslation("UserName required")},
-	password: {type: String, required: true},
+	userName: {type: String, required: "#userName required"},//getTvjy franslation("UserName required")},
+	password: {type: String, required: "#password required"},
 	rememberMe: {type: Boolean, reuqired: false}
 };
 
