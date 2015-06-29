@@ -1,0 +1,86 @@
+<div ng-controller="subController" class="ui padded segment">
+    <div class="ui button" ng-click="goback()">
+        Назад
+    </div>
+    <h3>{{currentObject.name}}  </h3>
+    <div>
+        <div class="ui grid">
+            <!--<div class="row">-->
+            <div class="four wide column">
+                {{currentObject.address}}
+            </div>
+            <div class="four wide column">
+                {{currentObject.bin}}
+            </div>
+            <div class="three wide column">
+                <div class="ui label" ng-click="showCounters(item)">
+                    <i class="dashboard icon"></i> {{currentObject.counters.length}}
+                </div>
+            </div>
+
+            <!--</div>-->
+        </div>
+    </div>
+
+
+    <h4 class="ui horizontal header divider">
+        <i class="bar chart icon"></i>
+        #pokazaniya
+    </h4>
+
+    <table class="ui table">
+        <thead>
+        <th>#counterNumber</th>
+        <th>#counterPlumb</th>
+        <th>#lastCounts</th>
+        <th>#dateOfLast</th>
+        <th>#currentCounts</th>
+        <th>#problemWithGetting</th>
+        <th>#problemDescription</th>
+        </thead>
+        <tbody>
+        <tr ng-repeat="counter in currentObject.counters">
+            <td>
+                {{counter.counterNumber}}
+            </td>
+            <td>
+                {{counter.plumbNumber}}
+            </td>
+            <td>
+                {{counter.lastCounts}}м3
+            </td>
+
+            <td>
+                {{counter.dateOfLastCounts}}
+            </td>
+
+            <td>
+                <div class="ui right labeled input">
+                    <input type="number" ng-model="counter.currentCounts" placeholder="#currentCounts"/>
+                    <div class="ui label">
+                        м3
+                    </div>
+                </div>
+            </td>
+            <td>
+                <checkbox checked="false " type="toggle " ng-model="counter.hasProblems "></checkbox>
+            </td>
+            <td>
+                <div class="ui  input">
+                    <input type="text" ng-model="counter.problemDescription" placeholder="#curentProblems"/>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="ui button" ng-click="goback()">
+        Назад
+    </div>
+    <div class="ui primary button" ng-click="saveData()">
+        Сохранить
+    </div>
+
+
+
+</div>

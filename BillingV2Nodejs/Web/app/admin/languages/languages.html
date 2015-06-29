@@ -1,0 +1,27 @@
+<div id="languages" ng-controller="languagesCtrl">
+	<div class="ui grid">
+		<div class=" sixteen wide column">
+			<div class="mini ui buttons">
+				<div class="mini ui icon button" ng-click="addLanguage()">
+					<i class="plus icon"></i>
+					{{'#add' | translate}}
+				</div>
+				<div class="mini ui icon button" ng-click="editLanguage()">
+					<i class="edit icon"></i>
+					{{'#edit' | translate}}
+				</div>
+				<div class="mini ui icon button" ng-click="removeLanguage()">
+					<i class="remove icon"></i>
+					{{'#delete' | translate}}
+				</div>
+			</div>
+		</div>
+		<div class="sixteen wide column">
+			<div>
+				<div class="gridStyle" id="languagesGrid" ui-grid="languagesGrid"></div>
+			</div>
+		</div>
+	</div>
+	<ng-include src="modalPath"></ng-include>
+</div>
+

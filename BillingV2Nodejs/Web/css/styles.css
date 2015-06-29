@@ -1,0 +1,17 @@
+.gridStyle {
+    border: 1px solid rgb(212,212,212);
+    min-height: 250px;
+}
+
+
+
+
+.ui.vertical.menu .item {
+    cursor: pointer;
+}
+
+.ui.vertical.menu .item .menu .active.item {
+    background: rgba(0,0,0,.03) !important;
+    border-radius: 0 !important;
+    box-shadow: 2px 0 0 inset !important;
+}

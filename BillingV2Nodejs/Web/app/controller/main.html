@@ -1,0 +1,159 @@
+<div ng-controller="mainController" class="ui padded segment">
+
+
+
+    <div>
+        <div class="ui grid">
+            <div class="four wide column">
+                <h3>{{ '#Объекты' | translate }}</h3>
+            </div>
+            <div class="right floated  two wide column">
+                <div class="blue ui button" ng-click="sync()" >{{ '#Syncronize' | translate }}</div>
+                <div class="green ui button" ng-click="add()" >{{ '#stistics' | translate }}</div>
+            </div>
+        </div>
+
+        <div class="ui form">
+
+
+                <div class="field">
+                    <form ng-submit="search()">
+                    <label>{{ '#Поиск' | translate }}</label>
+                    <div class="ui action input">
+                        <input type="text" ng-model="term" placeholder="Search..."/>
+                        <input type="submit" id="submit" class="ui button" value="Search"/>
+                    </div>
+                    </form>
+                </div>
+
+
+
+
+
+
+        </div>
+    </div>
+
+
+
+    <div class="ui divided items">
+        <div class="item" ng-repeat="item in foundObjects">
+
+            <div class="content">
+                <a class="header">{{item.name}}  </a>
+                <div>
+                    <div class="ui grid">
+                        <!--<div class="row">-->
+                            <div class="four wide column">
+                                {{item.address}}
+                            </div>
+                            <div class="four wide column">
+                                {{item.bin}}
+                            </div>
+                            <div class="three wide column">
+                                <div class="ui label" ng-click="showCounters(item)">
+                                    <i class="dashboard icon"></i> {{item.counters.length}}
+                                </div>
+                            </div>
+
+                        <div class="four wide column" style="padding: 0px;">
+                            <div class="ui right labeled icon button" ng-click="toEnter(item)">
+                                <i class="right arrow icon"></i>
+                                #к вводу
+                            </div>
+                        </div>
+
+                        <!--</div>-->
+                    </div>
+                </div>
+
+                <div class="description" ng-show="item.isShowCounters">
+
+                    <table class="ui table">
+                    <thead>
+                    <th>#counterNumber</th>
+                    <th>#counterPlumb</th>
+                    <th>#lastCounts</th>
+                    <th>#dateOfLast</th>
+                    <th>#currentCounts</th>
+                    <th>#dateOfCurrent</th>
+                    <th>#problemDescription</th>
+                    </thead>
+                        <tbody>
+                        <tr ng-repeat="counter in item.counters">
+                            <td>
+                                {{counter.counterNumber}}
+                            </td>
+                            <td>
+                                {{counter.plumbNumber}}
+                            </td>
+                            <td>
+                                {{counter.lastCounts}}м3
+                            </td>
+                            <td>
+                                {{counter.dateOfLastCounts}}
+                            </td>
+
+                            <td>
+                                {{counter.currentCounts}}м3
+
+                            </td>
+
+                            <td>
+                                {{counter.dateOfCurrentCounts}}
+                            </td>
+
+                            <td>
+                                {{counter.problemDescription}}
+                            </td>
+
+
+
+                        </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+                <!--<div class="extra">-->
+                    <!--<div class="ui label">IMAX</div>-->
+                    <!--<div class="ui label"><i class="globe icon"></i> Additional Languages</div>-->
+                <!--</div>-->
+        </div>
+        </div>
+        </div>
+
+    <!--<div class="ui celled list">-->
+        <!--<div class="item" ng-repeat="item in foundObjects">-->
+           <!--<div class="ui grid">-->
+               <!--<div class="sixteen wide equal height row">-->
+                   <!--<div class="four wide column">-->
+                       <!--<h4>{{item.name}}</h4>-->
+                   <!--</div>-->
+                   <!--<div class="four wide column">-->
+                       <!--{{item.bin}}-->
+                   <!--</div>-->
+                   <!--<div class="four wide column">-->
+                       <!--{{item.address}}-->
+                   <!--</div>-->
+                   <!--<div class="four wide column">-->
+                       <!--<div class="ui divided list">-->
+                           <!--<i class="item" ng-repeat="counter in item.counters"> {{counter.counterNumber}}</i>-->
+                       <!--&lt;!&ndash;<div class="item" ng-repeat="counter in item.counters">&ndash;&gt;-->
+                                <!--&lt;!&ndash;<div class="four wide column">&ndash;&gt;-->
+                                  <!--&lt;!&ndash; &ndash;&gt;-->
+                                <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                               <!--&lt;!&ndash;<div class="four wide column">&ndash;&gt;-->
+                                   <!--&lt;!&ndash;{{counter.plumbNumber}}&ndash;&gt;-->
+                               <!--&lt;!&ndash;</div>&ndash;&gt;-->
+
+                       <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                       <!--</div>-->
+                   <!--</div>-->
+               <!--</div>-->
+           <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+
+
+
+</div>

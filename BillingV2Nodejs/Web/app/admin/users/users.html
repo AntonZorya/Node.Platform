@@ -1,0 +1,30 @@
+<div ng-controller="usersCtrl" id="usersContainer">
+	<div>
+		<div class="ui grid">
+			<div class="four wide column">
+				<h3>{{ '#Пользователи' | translate }}</h3>
+			</div>
+			<div class="right floated  two wide column">
+				<div class="green ui button" ng-click="add()" >{{ '#Добавить' | translate }}</div>
+			</div>
+		</div>
+	</div>
+	<div class="ui cards">
+		<div class="ui card" ng-repeat="user in data">
+			<div class="image">
+			</div>
+			<div class="content">
+				<div class="header">
+					<i class="right floated edit icon green" ng-click="update(user)" style="cursor: pointer"></i>
+					<i class="right floated remove icon red" ng-click="delete(user)" style="cursor: pointer"></i>
+					{{ user.userName }}
+				</div>
+				<div class="meta">
+					<strong>Email: </strong>{{ user.email }}
+					<h5>Роли: </h5><div class="ui list"><div class="item" ng-repeat="role in user.roles" translate="{{role}}" ></div></div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>

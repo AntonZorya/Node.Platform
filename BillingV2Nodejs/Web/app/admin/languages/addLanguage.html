@@ -1,0 +1,54 @@
+<div class="ui modal" ng-controller="addLanguageCtrl">
+    <i class="close icon"></i>
+    <div class="header">{{header}}</div>
+    <div class="content">
+        <form id="addLanguageForm" class="ui form attached fluid segment">
+            <div class="ui grey top right attached label small ">
+                <i class="info icon"></i>Поля помеченные
+                <b>*</b>обязательны для заполнения
+            </div>
+            <div class="ui red message" style="margin-top:30px;" ng-show="commonErrors.length>0">
+                <ul>
+                    <li ng-repeat="error in commonErrors">{{error}}</li>
+                </ul>
+            </div>
+            <div class="field " ng-class="{error: isErrorForField('languageCode', this)}">
+                <label>Код языка</label>
+                <div class="ui small left icon input">
+                    <input type="text" placeholder="Код языка" ng-model="language.languageCode">
+                    <i class="user small icon"></i>
+                    <div class="ui small corner label">
+                        <i class="icon asterisk"></i>
+                    </div>
+                </div>
+                <div ng-show="isErrorForField('languageCode', this)" class="ui red pointing prompt label transition">{{getErrorForField('languageCode', this)}}</div>
+            </div>
+            <div class="field " ng-class="{error: isErrorForField('name', this)}">
+                <label>Название языка</label>
+                <div class="ui small left icon input">
+                    <input type="text" placeholder="Название языка" ng-model="language.name">
+                    <i class="user small icon"></i>
+                    <div class="ui small corner label">
+                        <i class="icon asterisk"></i>
+                    </div>
+                </div>
+                <div ng-show="isErrorForField('name', this)" class="ui red pointing prompt label transition">{{getErrorForField('name', this)}}</div>
+            </div>
+            <div class="field " ng-class="{error: isErrorForField('flagName', this)}">
+                <label>Флаг</label>
+                <div class="ui small left icon input">
+                    <input type="text" placeholder="Флаг" ng-model="language.flagName">
+                    <i class="user small icon"></i>
+                    <div class="ui small corner label">
+                        <i class="icon asterisk"></i>
+                    </div>
+                </div>
+                <div ng-show="isErrorForField('flagName', this)" class="ui red pointing prompt label transition">{{getErrorForField('flagName', this)}}</div>
+            </div>
+        </form>
+    </div>
+    <div class="actions">
+        <button class="ui negative  tiny button" ng-click="clickCancel()">{{'#cancel' | translate}}</button>
+        <button class="ui positive  tiny button" ng-click="clickOk()">{{'#add' | translate}}</button>
+    </div>
+</div>

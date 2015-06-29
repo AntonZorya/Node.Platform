@@ -1,0 +1,35 @@
+<div ng-controller="translateCtrl">
+	<form id="translationsTable" class="ui form">
+		<div class="tiny ui icon button" ng-click="addTranslation()">
+			<i class="plus icon"></i>
+			{{'#addTranslation' | translate}}
+		</div>
+		<div class="tiny ui icon button" ng-click="saveAll()">
+			<i class="save icon"></i>
+			{{'#save' | translate}}
+		</div>
+		
+		<table class="ui celled striped table">
+			<tr>
+				<td>
+					I18NString
+				</td>
+				<td ng-repeat="lang in languages">
+					{{lang.name}}
+				</td>
+			</tr>
+			<tr ng-repeat="trans in translations">
+				<td>
+					<div class="ui input fluid">
+						<input type="text" value="{{trans.text}}" ng-model="trans.text" />
+					</div>
+				</td>
+				<td ng-repeat="translated in trans.translate">
+					<div class="ui input fluid">
+						<input type="text" value="{{translated.text}}" ng-model="translated.text" />
+					</div>
+				</td>
+			</tr>
+		</table>
+	</form>
+</div>

@@ -1,0 +1,74 @@
+<div class="column">
+    <div class="ui top attached ">
+
+        <switch-lng selection="1"></switch-lng>
+    </div>
+
+</div>
+
+<div id="loginWindow" ng-controller="loginNormalCtrl" class="ui padded grid" style="display:none;   ">
+    <div class="row">
+
+
+    </div>
+    <div class="row">
+        <div class="one wide mobile four wide tablet four wide computer column" style="height:10%"></div>
+        <div class="sixteen wide mobile eight wide tablet eight wide computer column">
+            <div style="box-shadow: -31px 32px 53px rgba(0,0,0,.2);">
+                <div class="ui blue attached message">
+                    <div class="header" translate="#loginWindow"></div>
+                    <p translate="#loginWindowNotify"></p>
+                </div>
+                <form id="loginForm" class="ui form attached fluid segment" ng-submit="logIn()">
+                    <input type="submit" style="display:none;"/>
+                    <div class="ui grey top right attached label small ">
+                        <i class="info icon"></i>
+                        <span translate="#starMarkedFieldsRequired"></span>
+                    </div>
+                    <div class="ui red message" style="margin-top:30px;" ng-show="commonErrors.length>0">
+                        <ul>
+                            <li ng-repeat="error in commonErrors">{{error | translate}}</li>
+                        </ul>
+                    </div>
+                    <div class="field " ng-class="{error: isErrorForField('userName', this)}">
+                        <label translate="#userName"></label>
+                        <div class="ui left icon input">
+                            <input type="text" placeholder="{{'#userName'|translate}}" ng-model="login.userName">
+                            <i class="user icon"></i>
+                            <div class="ui corner label">
+                                <i class="icon asterisk"></i>
+                            </div>
+                        </div>
+                        <div ng-show="isErrorForField('userName', this)" class="ui red pointing prompt label transition">{{getErrorForField('userName', this) | translate}}</div>
+                    </div>
+                    <div class="field" ng-class="{error: isErrorForField('password', this)}">
+                        <label translate="#password">Пароль</label>
+                        <div class="ui left icon input">
+                            <input type="password" placeholder="{{'#password' | translate}}" ng-model="login.password">
+                            <i class="lock icon"></i>
+                            <div class="ui corner label">
+                                <i class="icon asterisk"></i>
+                            </div>
+                        </div>
+                        <div ng-show="isErrorForField('password', this)" class="ui red pointing prompt label transition">{{getErrorForField('password', this) | translate}}</div>
+                    </div>
+                    <div class="field">
+                    <!-- <div class="ui toggle checkbox ">
+                            <input type="checkbox " ng-checked="login.rememberMe ">
+                            <label>Запомнить меня</label>
+                        </div>-->
+                    <checkbox checked="false " type="toggle " ng-model="login.rememberMe ">{{'#rememberMe' | translate}}</checkbox>
+                </div>
+                <div class="center " style="width:100%; text-align:center; padding-top:15px; ">
+                    <div class="ui buttons ">
+                        <div class="ui green button" ng-click="logIn()" translate="#enter to system"></div>
+                        <div class="or" data-text="or"></div>
+                        <div class="ui teal button" translate="#controllers as controllers" ng-click="register()"></div>
+                    </div>
+                </div>
+            </form>
+              </div>
+        </div>
+        <div class="one wide mobile four wide tablet four wide computer column"></div>
+    </div>
+</div>

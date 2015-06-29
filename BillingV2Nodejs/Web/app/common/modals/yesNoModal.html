@@ -1,0 +1,25 @@
+<div class="ui basic test modal transition hidden" style="margin-top: -142px;" ng-controller="yesNoModalCtrl">
+    <div class="header">
+        <span translate="{{modalHeader}}"></span>
+    </div>
+    <div class="content">
+        <div class="image">
+            <i class="{{modalIcon}} icon"></i>
+        </div>
+        <div class="description">
+            <p> <span translate="{{modalText}}"></span></p>
+        </div>
+    </div>
+    <div class="actions">
+        <div class="two fluid ui inverted buttons">
+            <div class="ui red basic cancel inverted button" ng-click="clickCancel()">
+                <i class="remove icon"></i>
+                <span translate="{{modalNoText}}"></span>
+            </div>
+            <div class="ui green ok basic inverted button" ng-click="clickOk()">
+                <i class="checkmark icon"></i>
+                <span translate="{{modalYesText}}"></span>
+            </div>
+        </div>
+    </div>
+</div>
