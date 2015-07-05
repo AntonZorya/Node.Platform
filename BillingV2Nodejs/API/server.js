@@ -80,7 +80,7 @@ console.log('Magic happens on port ' + port);
 
 
 
-require('./testConsole/toxa').main();
+//require('./testConsole/toxa').main();
 //require('./testConsole/vasya').main();
 
 
