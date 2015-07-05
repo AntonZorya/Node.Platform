@@ -1,0 +1,161 @@
+<div ng-controller="updateArendatorFizCtrl">
+	<h3>{{'#updateArendatorFiz' | translate}}</h3>
+	<div style="display: block; margin: 10px;"></div>
+	<div class="content">
+		<form id="updateArendatorFizForm" class="ui form attached fluid segment">
+
+			<div class="ui grey top right attached label small ">
+				<i class="info icon"></i>
+				<span translate="#starMarkedFieldsRequired"></span>
+			</div>
+			<div class="ui red message" style="margin-top:30px;" ng-show="commonErrors.length>0">
+				<ul>
+					<li ng-repeat="error in commonErrors">{{error}}</li>
+				</ul>
+			</div>
+
+			<div class="three fields">
+				<div class="field " ng-class="{error: isErrorForField('firstName', this)}">
+					<label>{{'#firstName' | translate}}</label>
+					<div class="ui small input">
+						<input type="text" placeholder="{{'#firstName' | translate}}" ng-model="clientFiz.firstName">
+						<div class="ui small corner label">
+							<i class="icon asterisk"></i>
+						</div>
+					</div>
+					<div ng-show="isErrorForField('firstName', this)" class="ui red pointing prompt label transition">{{getErrorForField('firstName', this)}}</div>
+				</div>
+				<div class="field " ng-class="{error: isErrorForField('lastName', this)}">
+					<label>{{'#lastName' | translate}}</label>
+					<div class="ui small input">
+						<input type="text" placeholder="{{'#lastName' | translate}}" ng-model="clientFiz.lastName">
+						<div class="ui small corner label">
+							<i class="icon asterisk"></i>
+						</div>
+					</div>
+					<div ng-show="isErrorForField('lastName', this)" class="ui red pointing prompt label transition">{{getErrorForField('lastName', this)}}</div>
+				</div>
+				<div class="field " ng-class="{error: isErrorForField('middleName', this)}">
+					<label>{{'#middleName' | translate}}</label>
+					<div class="ui small input">
+						<input type="text" placeholder="{{'#middleName' | translate}}" ng-model="clientFiz.middleName">
+					</div>
+					<div ng-show="isErrorForField('middleName', this)" class="ui red pointing prompt label transition">{{getErrorForField('middleName', this)}}</div>
+				</div>
+			</div>
+
+			<div class="ui divider"></div>
+
+			<div class="two fields">
+				<!-- добавить валидатор -->
+				<div class="field " ng-class="{error: isErrorForField('iin', this)}">
+					<label>{{'#iin' | translate}}</label>
+					<div class="ui small input">
+						<input type="text" placeholder="{{'#iin' | translate}}" ng-model="clientFiz.iin">
+						<div class="ui small corner label">
+							<i class="icon asterisk"></i>
+						</div>
+					</div>
+					<div ng-show="isErrorForField('iin', this)" class="ui red pointing prompt label transition">{{getErrorForField('iin', this)}}</div>
+				</div>
+				<!-- добавить календарь -->
+				<div class="field " ng-class="{error: isErrorForField('birthDate', this)}">
+					<label>{{'#birthDate' | translate}}</label>
+					<div class="ui small input">
+						<input type="text" placeholder="{{'#birthDate' | translate}}" ng-model="clientFiz.birthDate">
+						<div class="ui small corner label">
+							<i class="icon asterisk"></i>
+						</div>
+					</div>
+					<div ng-show="isErrorForField('birthDate', this)" class="ui red pointing prompt label transition">{{getErrorForField('birthDate', this)}}</div>
+				</div>
+			</div>
+
+			<div class="ui divider"></div>
+
+			<div class="two fields">
+				<div class="field " ng-class="{error: isErrorForField('homeAddress', this)}">
+					<label>{{'#homeAddress' | translate}}</label>
+					<div class="ui small input">
+						<input type="text" placeholder="{{'#homeAddress' | translate}}" ng-model="clientFiz.homeAddress">
+						<div class="ui small corner label">
+							<i class="icon asterisk"></i>
+						</div>
+					</div>
+					<div ng-show="isErrorForField('homeAddress', this)" class="ui red pointing prompt label transition">{{getErrorForField('homeAddress', this)}}</div>
+				</div>
+				<div class="field " ng-class="{error: isErrorForField('registrationAddress', this)}">
+					<label>{{'#registrationAddress' | translate}}</label>
+					<div class="ui small input">
+						<input type="text" placeholder="{{'#registrationAddress' | translate}}" ng-model="clientFiz.registrationAddress">
+						<div class="ui small corner label">
+							<i class="icon asterisk"></i>
+						</div>
+					</div>
+					<div ng-show="isErrorForField('registrationAddress', this)" class="ui red pointing prompt label transition">{{getErrorForField('registrationAddress', this)}}</div>
+				</div>
+			</div>
+
+			<div class="ui divider"></div>
+
+			<div class="fields">
+				<div class="six wide field">
+					<label>{{'#phoneNumber' | translate}}</label>
+				</div>
+				<div class="six wide field">
+					<label>{{'#phoneDescription' | translate}}</label>
+				</div>
+				<div class="four wide field">
+					<label>
+						{{'#isMain' | translate}}
+						<i class="info circle icon popup medium" data-content="{{'#info' | translate}}"></i>
+					</label>
+				</div>
+			</div>
+
+			<div class="fields" ng-repeat="phone in clientFiz.phones">
+				<!-- добавить маску номера телефона -->
+				<div class="six wide field" ng-class="{error: isErrorForField('phones.{{$index}}.phoneNumber', this)}">
+					<div class="ui small input">
+						<input type="text" placeholder="{{'#phoneNumber' | translate}}" ng-model="phone.phoneNumber">
+						<div class="ui small corner label">
+							<i class="icon asterisk"></i>
+						</div>
+					</div>
+					<div ng-show="isErrorForField('phones.{{$index}}.phoneNumber', this)" class="ui red pointing prompt label transition">{{getErrorForField('phones.'+$index+'.phoneNumber', this)}}</div>
+				</div>
+				<div class="six wide field" ng-class="{error: isErrorForField('phones.{{$index}}.phoneDescription', this)}">
+					<div class="ui small input">
+						<input type="text" placeholder="{{'#phoneDescription' | translate}}" ng-model="phone.phoneDescription">
+						<div class="ui small corner label">
+							<i class="icon asterisk"></i>
+						</div>
+					</div>
+					<div ng-show="isErrorForField('phones.{{$index}}.phoneDescription', this)" class="ui red pointing prompt label transition">{{getErrorForField('phones.'+$index+'.phoneDescription', this)}}</div>
+				</div>
+				<div class="four wide field" ng-class="{error: isErrorForField('phones.{{$index}}.isMain', this)}">
+					<div style="float:left; padding-top: 6px;">
+						<checkbox type="toggle" ng-model="phone.isMain" ng-click="likeRadio(this.phone)"></checkbox>
+						<div ng-show="isErrorForField('phones.{{$index}}.isMain', this)" class="ui red pointing prompt label transition">{{getErrorForField('phones.'+$index+'.isMain', this)}}</div>
+					</div>
+					<div style="float:left; padding-top: 2px;">
+						<div class="ui button mini negative" ng-click="removePhone($index)">
+							<i class="icon minus"></i>
+							{{'#removePhone' | translate}}
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="fields">
+				<div class="ui button mini positive" ng-click="addPhone()">
+					<i class="icon plus"></i>
+					{{'#addPhone' | translate}}
+				</div>
+			</div>
+
+		</form>
+	</div>
+	<div style="display: block; margin: 10px;"></div>
+	<div class="ui mini primary button" ng-click="save()">{{'#save' | translate}}</div>
+	<a class="ui mini button" href="#/arendators" class="">{{'#cancel' | translate}}</a>
+</div>

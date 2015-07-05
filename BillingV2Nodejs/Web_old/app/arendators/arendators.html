@@ -1,0 +1,131 @@
+﻿<div ng-controller="arendatorsCtrl">
+	<div class="ui top attached tabular menu">
+		<a class="active item" data-tab="first" translate="#fizLica">First</a>
+		<a class="item" data-tab="second" translate="#jurLica">Second</a>
+	</div>
+	<div id="clientsFizContainer" class="ui bottom attached active tab segment" data-tab="first">
+
+		<div class="ui mini primary button" ng-click="addFiz()">
+			<i class="plus icon"></i>
+			{{'#add' | translate}}
+		</div>
+
+		<!-- добавить пагинацию -->
+		<div class="ui items">
+			<div class="item" ng-repeat="model in modelsFiz">
+				<div class="ui segment">
+					<div class="ui grid">
+						<div class="two wide column">
+							<div class="ui circular fluid image">
+								<img src="/img/stevie.jpg">
+							</div>
+						</div>
+						<div class="fourteen wide column">
+							<div>
+								<h4 class="ui header left floated">
+									{{model.lastName}} {{model.firstName}} {{model.middleName}} 
+									<div class="sub header">Тел.: {{getMainPhoneNumber(model.phones)}}</div>
+								</h4>
+								<h4 class="ui header left floated" >
+									<div class="ui tiny green horizontal label" style="vertical-align: top;">Активный</div>
+								</h4>
+								<div class="ui right floated">
+									<a class="popup" style="color: #000;" data-content="#edit" ng-click="updateFiz(model)"><i class="icon edit"></i></a>
+									<a class="popup" style="color: #000;" data-content="#remove" ng-click="deleteFiz(model)"><i class="icon remove"></i></a>
+								</div>
+							</div>
+							<div class="ui divider" style="clear:both;"></div>
+							<div>
+								<div class="ui list">
+									<div class="item">
+										<i class="right triangle icon"></i>
+										<div class="content">
+											<a class="header">KZ 001 AAA 01</a>
+											<div class="description">Mercedes Benz S600</div>
+										</div>
+									</div>
+									<div class="item">
+										<i class="right triangle icon"></i>
+										<div class="content">
+											<a class="header">KZ 001 AAA 01</a>
+											<div class="description">Mercedes Benz S600</div>
+										</div>
+									</div>
+									<div class="item">
+										<i class="right triangle icon"></i>
+										<div class="content">
+											<a class="header">KZ 001 AAA 01</a>
+											<div class="description">Mercedes Benz S600</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="clientsJurContainer" class="ui bottom attached tab segment" data-tab="second">
+		<div class="ui mini primary button" ng-click="addJur()">
+			<i class="plus icon"></i>
+			{{'#add' | translate}}
+		</div>
+
+		<!-- добавить пагинацию -->
+		<div class="ui items">
+			<div class="item" ng-repeat="model in modelsJur">
+				<div class="ui segment">
+					<div class="ui grid">
+						<div class="two wide column">
+							<div class="ui circular fluid image">
+								<img src="/img/steve.jpg">
+							</div>
+						</div>
+						<div class="fourteen wide column">
+							<div>
+								<h4 class="ui header left floated">
+									{{model.name}}
+									<div class="sub header">Тел.: {{getMainPhoneNumber(model.phones)}}</div>
+								</h4>
+								<h4 class="ui header left floated" >
+									<div class="ui tiny green horizontal label" style="vertical-align: top;">Активный</div>
+								</h4>
+								<div class="ui right floated">
+									<a class="popup" style="color: #000;" data-content="#edit" ng-click="updateJur(model)"><i class="icon edit"></i></a>
+									<a class="popup" style="color: #000;" data-content="#remove" ng-click="deleteJur(model)"><i class="icon remove"></i></a>
+								</div>
+							</div>
+							<div class="ui divider" style="clear:both;"></div>
+							<div>
+								<div class="ui list">
+									<div class="item">
+										<i class="right triangle icon"></i>
+										<div class="content">
+											<a class="header">KZ 001 AAA 01</a>
+											<div class="description">Mercedes Benz S600</div>
+										</div>
+									</div>
+									<div class="item">
+										<i class="right triangle icon"></i>
+										<div class="content">
+											<a class="header">KZ 001 AAA 01</a>
+											<div class="description">Mercedes Benz S600</div>
+										</div>
+									</div>
+									<div class="item">
+										<i class="right triangle icon"></i>
+										<div class="content">
+											<a class="header">KZ 001 AAA 01</a>
+											<div class="description">Mercedes Benz S600</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

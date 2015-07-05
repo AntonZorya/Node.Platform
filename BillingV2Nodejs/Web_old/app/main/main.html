@@ -1,0 +1,142 @@
+<div id="main_page" ng-controller="mainCtrl">
+
+
+    <div id="main_tabs" class="ui top attached tabular menu">
+        <a class="item active" data-tab="first">#DashBoard</a>
+        <a class="item" data-tab="second">#TimeLine</a>
+        <a class="item" data-tab="third">#Samples</a>
+    </div>
+    <div class="ui bottom attached tab segment active" data-tab="first">
+        <div class="ui cards">
+
+        <div class="green card" style="background-color: #f7fff3">
+            <div class="content">
+                <div   style="position: absolute;
+                       left: 5px;
+                       top: -9px;
+                         background-color: #F6FFED;
+                      "><b>Daewoo Nexia, X579DLB</b></div>
+                <div class="ui grid">
+                    <div class="row">
+                        <div class="fourteen wide column">
+
+                <div> <i class="user icon"></i>Каримов Алибек</div>
+
+                <div><i class="green bar chart icon"></i>Баланс: <span style="color:darkgreen;"><b>7787</b></span> тг.</div>
+                            <div class="meta">
+                                <i class="world icon"></i> <span>ул. Алпамыс батыра, 72</span>
+                            </div>
+                            <div class="ui divider"></div>
+                 <div>
+                     <highchart config="karimovChartConfig"></highchart>
+                 </div>
+                <p></p>
+                        </div>
+                        <div class="two wide column" style="padding-left: 0px; ">
+                            <i class="circular green  money icon popup" data-title="Оплата" data-content="Все в порядке, оплата производится вовремя, незакрытых начислений нет."></i>
+                            <i class="circular orange warning sign  icon popup" data-html="<b>Довереность</b><br> Срок доверености заканчивается через 2 дня.<br/> <b>Страховка</b><br> Страховка КАСКО №22а555 закончилась 2 дня назад."></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+            <div class="red card" style="background-color: #ffeded">
+                <div class="content">
+                    <div   style="position: absolute;
+                       left: 5px;
+                       top: -9px;
+                         background-color: #ffeded;
+                      "><b>LEXUS RX330, X579DLB</b></div>
+                    <div class="ui grid">
+                        <div class="row">
+                            <div class="fourteen wide column">
+
+                                <div> <i class="user icon"></i>Зоря Антон</div>
+
+                                <div><i class="red bar chart icon"></i>Задолженость: <span style="color:darkred;"><b>9000</b></span> тг.</div>
+                                <div class="meta">
+                                   &nbsp;
+                                </div>
+                                <div class="ui divider"></div>
+                                <div>
+                                    <highchart config="zoryaChartConfig"></highchart>
+                                </div>
+                                <p></p>
+                            </div>
+                            <div class="two wide column" style="padding-left: 0px; ">
+                                <i class="circular red  money icon popup" data-title="Оплата" data-content="Образовалась задолженость за 3 дня, последняя оплата производилась 07.06.2012, также имеется не погашеный долг в размере 27000тг."></i>
+                                <i class="circular green warning sign  icon popup" data-title="Документы в порядке"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="orange card" style="background-color: #fff7f4">
+                <div class="content">
+                    <div   style="position: absolute;
+                       left: 5px;
+                       top: -9px;
+                         background-color: #fff7f4;
+                      "><b>ВАЗ 2110, X567AR</b></div>
+                    <div class="ui grid">
+                        <div class="row">
+                            <div class="fourteen wide column">
+
+                                <div> <i class="user icon"></i>Сергезин Нурсултан</div>
+
+                                <div><i class="green bar chart icon"></i>Баланс: <span style="color:darkgreen;"><b>7787</b></span> тг.</div>
+                                <div class="meta">
+                                    <i class="world icon"></i> <span>ул. Алпамыс батыра, 72</span>
+                                </div>
+                                <div class="ui divider"></div>
+                                <div>
+                                    <highchart config="karimovChartConfig"></highchart>
+                                </div>
+                                <p></p>
+                            </div>
+                            <div class="two wide column" style="padding-left: 0px; ">
+                                <i class="circular green  money icon popup" data-title="Оплата" data-content="Все в порядке, оплата производится вовремя, незакрытых начислений нет."></i>
+                                <i class="circular green warning sign  icon popup" data-title="Документы в порядке"></i>
+                                <i class="circular red frown   icon popup" data-title="ШТРАФ!!!"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            </div>
+    </div>
+    <div class="ui bottom attached tab segment" data-tab="second">
+        Second
+    </div>
+    <div class="ui bottom attached tab segment" data-tab="third">
+        <span translate="#userName"></span><br>
+        <span>{{'#userName' | translate}}</span><br>
+        <span translate="{{'#userName'}}"></span><br>
+        <button ng-click="clicked()">Пример модалки бле</button><br>
+
+        <button ng-click="checkDelete()">Проверка delete метода</button><br>
+
+
+        <!--55806e212faf1cafb58f1dbe-->
+        <!--558070d0261dd0d8b51232a4-->
+        <img src="http://localhost:8080/api/file?_id=558070d0261dd0d8b51232a4&size=thumb1">
+    </div>
+
+
+
+
+
+
+ </div>

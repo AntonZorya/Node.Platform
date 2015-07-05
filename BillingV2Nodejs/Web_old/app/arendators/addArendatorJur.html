@@ -1,0 +1,154 @@
+<div ng-controller="addArendatorJurCtrl">
+	<h3>{{'#addArendatorJur' | translate}}</h3>
+	<div style="display: block; margin: 10px;"></div>
+	<div class="content">
+		<form id="addArendatorJurForm" class="ui form attached fluid segment">
+
+			<div class="ui grey top right attached label small ">
+				<i class="info icon"></i>
+				<span translate="#starMarkedFieldsRequired"></span>
+			</div>
+			<div class="ui red message" style="margin-top:30px;" ng-show="commonErrors.length>0">
+				<ul>
+					<li ng-repeat="error in commonErrors">{{error}}</li>
+				</ul>
+			</div>
+
+			<div class="two fields">
+				<div class="field " ng-class="{error: isErrorForField('name', this)}">
+					<label>{{'#name' | translate}}</label>
+					<div class="ui small input">
+						<input type="text" placeholder="{{'#name' | translate}}" ng-model="clientJur.name">
+						<div class="ui small corner label">
+							<i class="icon asterisk"></i>
+						</div>
+					</div>
+					<div ng-show="isErrorForField('name', this)" class="ui red pointing prompt label transition">{{getErrorForField('name', this)}}</div>
+				</div>
+				<div class="field " ng-class="{error: isErrorForField('registrationCertificateNumber', this)}">
+					<label>{{'#registrationCertificateNumber' | translate}}</label>
+					<div class="ui small input">
+						<input type="text" placeholder="{{'#registrationCertificateNumber' | translate}}" ng-model="clientJur.registrationCertificateNumber">
+						<div class="ui small corner label">
+							<i class="icon asterisk"></i>
+						</div>
+					</div>
+					<div ng-show="isErrorForField('registrationCertificateNumber', this)" class="ui red pointing prompt label transition">{{getErrorForField('registrationCertificateNumber', this)}}</div>
+				</div>
+			</div>
+
+			<div class="ui divider"></div>
+
+			<div class="two fields">
+				<!-- добавить валидатор -->
+				<div class="field " ng-class="{error: isErrorForField('bin', this)}">
+					<label>{{'#bin' | translate}}</label>
+					<div class="ui small input">
+						<input type="text" placeholder="{{'#bin' | translate}}" ng-model="clientJur.bin">
+						<div class="ui small corner label">
+							<i class="icon asterisk"></i>
+						</div>
+					</div>
+					<div ng-show="isErrorForField('bin', this)" class="ui red pointing prompt label transition">{{getErrorForField('bin', this)}}</div>
+				</div>
+				<!-- добавить календарь -->
+				<div class="field " ng-class="{error: isErrorForField('registrationDate', this)}">
+					<label>{{'#registrationDate' | translate}}</label>
+					<div class="ui small input">
+						<input type="text" placeholder="{{'#registrationDate' | translate}}" ng-model="clientJur.registrationDate">
+						<div class="ui small corner label">
+							<i class="icon asterisk"></i>
+						</div>
+					</div>
+					<div ng-show="isErrorForField('registrationDate', this)" class="ui red pointing prompt label transition">{{getErrorForField('registrationDate', this)}}</div>
+				</div>
+			</div>
+
+			<div class="ui divider"></div>
+
+			<div class="two fields">
+				<div class="field " ng-class="{error: isErrorForField('jurAddress', this)}">
+					<label>{{'#jurAddress' | translate}}</label>
+					<div class="ui small input">
+						<input type="text" placeholder="{{'#jurAddress' | translate}}" ng-model="clientJur.jurAddress">
+						<div class="ui small corner label">
+							<i class="icon asterisk"></i>
+						</div>
+					</div>
+					<div ng-show="isErrorForField('jurAddress', this)" class="ui red pointing prompt label transition">{{getErrorForField('jurAddress', this)}}</div>
+				</div>
+				<div class="field " ng-class="{error: isErrorForField('factAddress', this)}">
+					<label>{{'#factAddress' | translate}}</label>
+					<div class="ui small input">
+						<input type="text" placeholder="{{'#factAddress' | translate}}" ng-model="clientJur.factAddress">
+						<div class="ui small corner label">
+							<i class="icon asterisk"></i>
+						</div>
+					</div>
+					<div ng-show="isErrorForField('factAddress', this)" class="ui red pointing prompt label transition">{{getErrorForField('factAddress', this)}}</div>
+				</div>
+			</div>
+
+			<div class="ui divider"></div>
+
+			<div class="fields">
+				<div class="six wide field">
+					<label>{{'#phoneNumber' | translate}}</label>
+				</div>
+				<div class="six wide field">
+					<label>{{'#phoneDescription' | translate}}</label>
+				</div>
+				<div class="four wide field">
+					<label>
+						{{'#isMain' | translate}}
+						<i class="info circle icon popup medium" data-content="{{'#info' | translate}}"></i>
+					</label>
+				</div>
+			</div>
+
+			<div class="fields" ng-repeat="phone in clientJur.phones">
+				<!-- добавить маску номера телефона -->
+				<div class="six wide field" ng-class="{error: isErrorForField('phones.{{$index}}.phoneNumber', this)}">
+					<div class="ui small input">
+						<input type="text" placeholder="{{'#phoneNumber' | translate}}" ng-model="phone.phoneNumber">
+						<div class="ui small corner label">
+							<i class="icon asterisk"></i>
+						</div>
+					</div>
+					<div ng-show="isErrorForField('phones.{{$index}}.phoneNumber', this)" class="ui red pointing prompt label transition">{{getErrorForField('phones.'+$index+'.phoneNumber', this)}}</div>
+				</div>
+				<div class="six wide field" ng-class="{error: isErrorForField('phones.{{$index}}.phoneDescription', this)}">
+					<div class="ui small input">
+						<input type="text" placeholder="{{'#phoneDescription' | translate}}" ng-model="phone.phoneDescription">
+						<div class="ui small corner label">
+							<i class="icon asterisk"></i>
+						</div>
+					</div>
+					<div ng-show="isErrorForField('phones.{{$index}}.phoneDescription', this)" class="ui red pointing prompt label transition">{{getErrorForField('phones.'+$index+'.phoneDescription', this)}}</div>
+				</div>
+				<div class="four wide field" ng-class="{error: isErrorForField('phones.{{$index}}.isMain', this)}">
+					<div style="float:left; padding-top: 6px;">
+						<checkbox type="toggle" ng-model="phone.isMain" ng-click="likeRadio(this.phone)"></checkbox>
+						<div ng-show="isErrorForField('phones.{{$index}}.isMain', this)" class="ui red pointing prompt label transition">{{getErrorForField('phones.'+$index+'.isMain', this)}}</div>
+					</div>
+					<div style="float:left; padding-top: 2px;">
+						<div class="ui button mini negative" ng-click="removePhone($index)">
+							<i class="icon minus"></i>
+							{{'#removePhone' | translate}}
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="fields">
+				<div class="ui button mini positive" ng-click="addPhone()">
+					<i class="icon plus"></i>
+					{{'#addPhone' | translate}}
+				</div>
+			</div>
+
+		</form>
+	</div>
+	<div style="display: block; margin: 10px;"></div>
+	<div class="ui mini primary button" ng-click="save()">{{'#save' | translate}}</div>
+	<a class="ui mini button" href="#/arendators" class="">{{'#cancel' | translate}}</a>
+</div>

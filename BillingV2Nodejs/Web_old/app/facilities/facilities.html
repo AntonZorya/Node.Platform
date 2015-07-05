@@ -1,0 +1,43 @@
+﻿<div ng-controller="facilitiesCtrl" id="facilitiesContainer">
+    <div>
+        <div class="ui grid">
+            <div class="four wide column">
+                <h3>{{ '#Объекты' | translate }}</h3>
+            </div>
+            <div class="right floated  two wide column">
+                <div class="green ui button" ng-click="add()" >{{ '#Добавить' | translate }}</div>
+            </div>
+        </div>
+
+        <div class="ui form">
+            <div class="two fields">
+                <div class="field">
+                    <label>{{ '#Поиск' | translate }}</label>
+                    <div class="ui icon input">
+                        <input type="text" ng-model="term">
+                        <i class="icon search"></i>
+                    </div>
+                </div>
+                <div class="field">
+                    <label>{{ '#Тип объекта'  | translate }}</label>
+                    <select ng-options="typ as typ.name for typ in types" ng-model="type"></select>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="ui cards">
+        <div class="ui card" ng-repeat="facility in data">
+            <div class="content">
+                <div class="header">
+                    <i class="right floated edit icon green" ng-click="update(facility)" style="cursor: pointer"></i>
+                    <i class="right floated remove icon red" ng-click="delete(facility)" style="cursor: pointer"></i>
+                    {{ facility.name }}
+                </div>
+                <div class="description">
+                    {{ facility.description }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

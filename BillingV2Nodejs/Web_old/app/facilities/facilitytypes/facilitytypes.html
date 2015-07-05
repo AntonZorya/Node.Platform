@@ -1,0 +1,63 @@
+﻿<div ng-controller="facilityTypesCtrl">
+    <div>
+        <div class="ui grid">
+            <div class="six wide column">
+                <h3>Типы объектов</h3>
+            </div>
+            <div class="right floated two wide column">
+                <div class="ui primary button" ng-click="add()">Добавить</div>
+            </div>
+            <div class="right floated five wide column">
+                <div class="ui fluid icon input">
+                    <input type="text" placeholder="Поиск..." ng-model="term">
+                    <i class="search icon"></i>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="ui cards">
+        <div class="ui card" ng-repeat="ft in models ">
+            <div class="image" ng-if="ft.iconClass">
+                <i class="ft.iconClass"></i>
+            </div>
+            <div class="content">
+                <div class="header" >
+                    <i class="right floated edit icon green" ng-click="update(ft)" style="cursor: pointer"></i>
+                    <i class="right floated remove icon red" ng-click="delete(ft)" style="cursor: pointer"></i>
+                    {{ ft.name }}
+                </div>
+                <div class="description">
+                    {{ ft.description }}
+                </div>
+            </div>
+          
+        </div>
+    </div>
+</div>
+
+<div class="ui basic test modal transition hidden" style="margin-top: -142px;">
+    <div class="header">
+        #Archive Old Messages
+    </div>
+    <div class="content">
+        <div class="image">
+            <i class="archive icon"></i>
+        </div>
+        <div class="description">
+            <p>#confirm delete?</p>
+        </div>
+    </div>
+    <div class="actions">
+        <div class="two fluid ui inverted buttons">
+            <div class="ui red basic cancel inverted button">
+                <i class="remove icon"></i>
+                #No
+            </div>
+            <div class="ui green ok basic inverted button">
+                <i class="checkmark icon"></i>
+                #Yes
+            </div>
+        </div>
+    </div>
+</div>

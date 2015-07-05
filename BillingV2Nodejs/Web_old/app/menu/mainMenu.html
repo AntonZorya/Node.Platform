@@ -1,0 +1,20 @@
+<div class="ui menu fixed" style="background-image: linear-gradient(to bottom,#f3f3f3,#e2e2e2); box-shadow: 0px 3px 3px rgba(0,0,0,.2);" ng-controller="mainMenuCtrl">
+
+    <div class="item" style="padding-top: 0px; padding-bottom: 0px;"><img src="/img/rentorLogo.png"/></div>
+
+    <div class="right menu">
+
+
+                <switch-lng></switch-lng>
+
+
+    </div>
+
+    <a ng-repeat="menuItem in menu" ng-click="link(menuItem, $event)" ng-class="{ 'active': menuItem.active}" class="item">
+        <i ng-if="menuItem.iconClass" class="{{menuItem.iconClass}}"></i>
+        {{ menuItem.name }}
+    </a>
+    
+    
+</div>
+<div style="height: 35px; margin-bottom: 1rem;"></div>

@@ -1,0 +1,99 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>BIlling</title>
+    <!--CSS-->
+    <link href="libs/normalize.css/normalize.css" rel="stylesheet" />
+    <link href="libs/semantic-ui/dist/semantic.min.css" rel="stylesheet" />
+    <link href="libs/angular-ui-grid/ui-grid.min.css" rel="stylesheet" />
+    <link href="css/styles.css" rel="stylesheet" />
+    <!--Common JS-->
+    <script src="libs/jquery/dist/jquery.min.js"></script>
+    <script src="http://code.highcharts.com/highcharts.src.js"></script>
+    <script src="libs/jquery-cookie/jquery.cookie.js"></script>
+    <script src="libs/angular/angular.js"></script>
+    <script src="libs/angular-route/angular-route.min.js"></script>
+    <script src="libs/highcharts-ng/dist/highcharts-ng.min.js"></script>
+    <script src="libs/angular-cookies/angular-cookies.min.js"></script>
+        <script src="libs/angular-translate/angular-translate.js"></script>
+    <script src="libs/angular-translate-loader-partial/angular-translate-loader-partial.min.js"></script>
+    <script src="libs/semantic-ui/dist/semantic.min.js"></script>
+    <script src="libs/underscore/underscore-min.js"></script>
+    <script src="libs/angular-semantic-ui/dist/angular-semantic-ui.min.js"></script>
+    <script src="libs/angular-ui-grid/ui-grid.min.js"></script>
+
+    <!--Application JS-->
+    <script src="app/app.js"></script>
+    <script src="app/common/dataSvc.js"></script>
+    <script src="app/common/validation.js"></script>
+    <script src="app/common/commonModule.js"></script>
+    <script src="app/common/modalSvc.js"></script>
+    <script src="app/common/modals/yesNoModalCtrl.js"></script>
+    <script src="app/common/i18n/i18nModule.js"></script>
+    <script src="app/common/i18n/i18nService.js"></script>
+    <script src="app/common/i18n/switchLngDirective.js"></script>
+    <!--Modules-->
+
+    <script src="app/menu/mainMenuCtrl.js"></script>
+    <script src="app/menu/leftSideMenuCtrl.js"></script>
+    <script src="app/main/mainCtrl.js"></script>
+    <script src="app/admin/translate/translateCtrl.js"></script>
+    <script src="app/admin/languages/languagesCtrl.js"></script>
+    <script src="app/admin/languages/addLanguageCtrl.js"></script>
+    <script src="app/admin/users/usersCtrl.js"></script>
+    <script src="app/admin/users/addUserCtrl.js"></script>
+    <script src="app/admin/users/updateUserCtrl.js"></script>
+
+
+    <script src="app/facilities/facilitytypes/facilitytypesCtrl.js"></script>
+
+    <script src="app/facilities/facilitytypes/addFacilitytypeCtrl.js"></script> 
+    <script src="app/facilities/facilitytypes/updateFacilitytypeCtrl.js"></script>
+    <script src="app/facilities/facilitiesCtrl.js"></script>
+    <script src="app/facilities/addFacilityCtrl.js"></script>
+    <script src="app/facilities/updateFacilityCtrl.js"></script>
+    <script src="app/arendators/arendatorsCtrl.js"></script> 
+    <script src="app/arendators/addArendatorFizCtrl.js"></script> 
+    <script src="app/arendators/updateArendatorFizCtrl.js"></script> 
+    <script src="app/arendators/addArendatorJurCtrl.js"></script> 
+    <script src="app/arendators/updateArendatorJurCtrl.js"></script> 
+    <!--END OF ALL JS -->
+</head>
+
+<body style="background: url(img/mybg.png) #fff;" ng-app="arndApplication" >
+
+    <div ng-include="'app/menu/mainMenu.html'"></div>
+
+    <div style="padding: 0em 1rem;">
+        <div class="ui grid">
+
+
+            <div class="sixteen wide mobile five wide tablet three wide computer column" ng-if="$root.currentTopMenuItem.childs.length">
+
+                <div ng-include="'app/menu/leftSideMenu.html'"></div>
+
+
+            </div>
+
+            <div class="sixteen wide mobile eleven wide tablet thirteen wide computer column" ng-if="$root.currentTopMenuItem && $root.currentTopMenuItem.childs.length > 0">
+                <div class=" ui segment" style="box-shadow: 0px 5px 15px rgba(0,0,0,.2);" ng-view>
+
+                </div>
+            </div>
+            
+            <div class="sixteen wide mobile eleven wide tablet sixteen wide computer column" ng-if="!$root.currentTopMenuItem || $root.currentTopMenuItem.childs.length == 0">
+                <div class=" ui segment" style="box-shadow: 0px 5px 15px rgba(0,0,0,.2);" ng-view>
+
+                </div>
+            </div>
+        </div>
+    </div>
+<div id="modals"></div>
+
+</body>
+
+</html>

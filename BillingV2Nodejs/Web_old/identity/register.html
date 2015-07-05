@@ -1,0 +1,71 @@
+<div class="column">
+    <div class="ui top attached ">
+
+        <switch-lng selection="1"></switch-lng>
+    </div>
+
+</div>
+
+<div id="registerWindow" ng-controller="registerCtrl"  class="ui padded grid" style="display:none;   ">
+	<div class="one wide mobile four wide tablet four wide computer column" style="height:10%"></div>
+	
+	 	<div class="sixteen wide mobile eight wide tablet eight wide computer column">
+
+	 		<div style="box-shadow: -31px 32px 53px rgba(0,0,0,.2);">
+	 			
+                <form id="loginForm" class="ui form attached fluid segment" ng-submit="register()">
+                	<input type="submit" style="display:none;"/>
+                	<div class="ui red message" style="margin-top:30px;" ng-show="commonErrors.length">
+                        <ul>
+                            <li ng-repeat="error in commonErrors">{{error | translate}}</li>
+                        </ul>
+                    </div>
+                    	 <a class="ui ribbon green label"> <h3 translate="$Organization"></h4></a>
+                    	 <br />
+                	<div class="field">
+                		<label>#Наименование</label>
+                		<input type="text" ng-model="vm.org.organizationName" />
+                		<div ng-show="isErrorForField('organizationName', this)" class="ui red pointing prompt label transition">{{getErrorForField('organizationName', this) | translate}}</div>
+                	</div>
+                	<div class="field">
+                		<label>#БИН/ИИН</label>
+                		<input type="text" ng-model="vm.org.bin" />
+                		<div ng-show="isErrorForField('bin', this)" class="ui red pointing prompt label transition">{{getErrorForField('bin', this) | translate}}</div>
+                	</div>
+                	<div class="field">
+                		<label>#Описание</label>
+                		<textarea ng-model="vm.org.description"  rows="3"></textarea> 
+                	</div>
+                    	 <a class="ui ribbon green label"><h3 translate="#User"></h3></a>
+                    	 <br />
+                	<div class="field">
+                		<label>#Имя пользователя</label>
+                		<input type="text" ng-model="vm.user.userName"> 
+                		<div ng-show="isErrorForField('userName', this)" class="ui red pointing prompt label transition">{{getErrorForField('userName', this) | translate}}</div>
+                	</div>
+                	<div class="field">
+                		<label>#Email</label>
+                		<input type="text" ng-model="vm.user.email"> 
+                		<div ng-show="isErrorForField('email', this)" class="ui red pointing prompt label transition">{{getErrorForField('email', this) | translate}}</div>
+                	</div>
+                	<div class="field">
+                		<label>#Пароль</label>
+                		<input type="password" ng-model="vm.user.password"> 
+                		<div ng-show="isErrorForField('password', this)" class="ui red pointing prompt label transition">{{getErrorForField('password', this) | translate}}</div>
+                	</div>
+                	<div class="field">
+                		<label>#Подтвердить пароль</label>
+                		<input type="password" ng-model="passwordConfirmation"> 
+                	</div>
+                	<div class="center " style="width:100%; text-align:center; padding-top:15px; ">
+                		<div class="ui button green" translate="#Зарегистрировать" ng-click="register()"></div>
+                	</div>
+                </form>
+
+	 		</div>
+
+
+	 	</div>
+	</div>
+
+</div>

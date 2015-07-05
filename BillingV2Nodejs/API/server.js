@@ -21,7 +21,7 @@ app.use(cors());
 _ = require('underscore');
 
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://127.0.0.1/toxakz'); // connect to our database
+mongoose.connect('mongodb://192.168.66.27/BillingController'); // connect to our database
 
 // configure app to use bodyParser()
 // this will let us get the data from a POST
