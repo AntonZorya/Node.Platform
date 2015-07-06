@@ -52,3 +52,21 @@ exports.delete = function (id, done) {
         });
     } 
 };
+
+exports.report = function (period, done){
+    Collection.aggregate(
+        { $unwind : "$counters" },
+        { $match: {
+            period: period,
+            "counters.dateOfCurrentCounts" : {$ne:null} 
+        }},
+        { $group : {
+            _id : {_id:"$_id", controllerId:"$controllerId"},
+            total : { $addToSet : "$counters"}
+        } },
+        function(err, result){
+            if(err) throw err;
+            return done({operationResult: 0, result: result});
+        }
+    );
+}

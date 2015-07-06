@@ -88,13 +88,13 @@ exports.getAllTranslations = function (req, done) {
 		TranslationRepo.getAllTranslations(function (data) {
 			if (data.operationResult == 0 && data.result != null) {
 				var translations = {};
-				async.each(data.result, function (translation, callback) {
+				async.eachSeries(data.result, function (translation, callback1) {
 					if (translation.translate && translation.translate.length > 0) {
-						async.eachSeries(translation.translate, function (item, callback) {
+						async.eachSeries(translation.translate, function (item, callback2) {
 							if (item.languageCode) {
 								if (item._doc.languageCode == req.languageCode && item._doc.text != "") {
 									translations[translation.text] = item.text;
-									return callback("translation found");
+									return callback2("translation found");
 								}
 								else {
 									translations[translation.text] = translation.text;
@@ -103,13 +103,15 @@ exports.getAllTranslations = function (req, done) {
 							else {
 								translations[translation.text] = translation.text;
 							}
-							callback();
-						}, function (err) { });
+							callback2();
+						}, function (err) {
+							callback1();
+						});
 					}
 					else {
 						translations[translation.text] = "#no translations found";
+						callback1();
 					}
-					callback();
 				}, function (err) {
 						// if any of the file processing produced an error, err would equal that error
 						if (err) {

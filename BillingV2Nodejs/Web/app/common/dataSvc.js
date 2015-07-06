@@ -11,7 +11,7 @@ function dataService($http, $q, $location, $window, $cookies, API_HOST) {
     var self = this;
 
     this.checkLogin = function (url) {
-        var re = /(\/identity\/login)|(\/languages)|(\/register)/;
+        var re = /(\/login)|(\/languages)|(\/register)/;
         if (url.match(re)) return "";
         var token = $.cookie("ArndBooksAuthToken");
             //$cookies.get('ArndBooksAuthToken');
@@ -23,7 +23,7 @@ function dataService($http, $q, $location, $window, $cookies, API_HOST) {
 
     this.toLogin = function () {
         var currentUrl = encodeURIComponent($location.absUrl());
-        $window.location.href = '/identity/#login?url=' + currentUrl;
+        $window.location.href = '#/login?url=' + currentUrl;
     };
 
 
@@ -151,7 +151,7 @@ function dataService($http, $q, $location, $window, $cookies, API_HOST) {
     
         var deferred = $q.defer();
 
-  if (loaderElem)
+        if (loaderElem)
             $(loaderElem).addClass("loading");
 
         $http({
@@ -164,10 +164,10 @@ function dataService($http, $q, $location, $window, $cookies, API_HOST) {
         })
             .success(function (data) {
             
-  if (loaderElem)
-            $(loaderElem).removeClass("loading");
-            deferred.resolve(data);
-        })
+              if (loaderElem)
+                  $(loaderElem).removeClass("loading");
+                  deferred.resolve(data);
+              })
             .error(function (error, status) {
                   if (loaderElem)
             $(loaderElem).removeClass("loading");

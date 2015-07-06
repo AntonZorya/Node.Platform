@@ -11,20 +11,20 @@ module.exports = [
         iconClass: "icon home"
     },
     {
-        url: "/facilities",
-        name: 'Объекты',
+        url: "/reports",
+        name: 'Отчеты',
         iconClass: "star icon",
         loadFirstChild: true,
         childs: [
             {
-                url: "/facilities",
-                name: 'Картотека',
+                url: "/reports/report1",
+                name: 'Отчет 1',
                 childs: [],
                 roles: null
             },
             {
-                url: "/facilities/facilitytypes",
-                name: 'Типы объектов',
+                url: "/reports/report2",
+                name: 'Отчет 2',
                 childs: [],
                 roles: null
             }
@@ -32,7 +32,7 @@ module.exports = [
         roles: [roleDefinitions.admin, roleDefinitions.organizationAdmin]
     },
     {
-        url: "/admin",
+        url: "/administration",
         name: "Администрирование",
         roles: [roleDefinitions.admin, roleDefinitions.organizationAdmin],
         iconClass: "configure icon",
@@ -40,17 +40,17 @@ module.exports = [
             {
                 url: "/multilanguage",
                 name: "Мультиязычность",
-                roles: [roleDefinitions.admin],
+                roles: [roleDefinitions.admin, roleDefinitions.organizationAdmin],
                 iconClass: "translate icon",
                 loadFirstChild: true,
                 childs: [{
-                        url: "/admin/translate",
+                        url: "/administration/translate",
                         name: "Переводы",
                         roles: null,
                         childs: []
                     },
                      {
-                        url: "/admin/languages",
+                        url: "/administration/languages",
                         name: "Языки",
                         roles: null,
                         childs: []
@@ -58,7 +58,7 @@ module.exports = [
         
             },
             {
-                url: "/admin/users",
+                url: "/administration/users",
                 name: "Пользователи",
                 roles: [roleDefinitions.admin, roleDefinitions.organizationAdmin],
                 iconClass: "users icon",
