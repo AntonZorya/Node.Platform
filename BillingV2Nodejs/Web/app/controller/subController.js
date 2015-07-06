@@ -17,11 +17,19 @@ function subController($window, $route, dataSvc, $scope,$cookie, valSvc, $locati
     $scope.saveData = function(){
 
         if(_.all($scope.currentObject.counters, function(item){
-             return item.currentCounts<item.lastCounts
+             return (item.currentCounts<item.lastCounts || item.hasProblems)
         })){
             alert("#Текщие показания не должны быть меньше предыдущих");
             return;
         }
+
+        _.each($scope.currentObject.counters, function(item){
+            if (item.currentCounts>item.lastCounts || item.hasProblems)
+            {
+                if(!item.dateOfCurrentCounts)
+                item.dateOfCurrentCounts = new Date();
+            }
+        })
 
         $indexedDB.openStore('objects',function(store) {
             store.upsert($scope.currentObject).then(function (obj) {

@@ -4,12 +4,25 @@
 
     <div>
         <div class="ui grid">
-            <div class="four wide column">
-                <h3>{{ '#Объекты' | translate }}</h3>
+            <div class="eight wide column">
+                <h3>{{ '#Объекты' | translate }}&nbsp;&nbsp;&nbsp;Контроллер - <i>{{controllerName}}</i></h3>
+
             </div>
-            <div class="right floated  two wide column">
-                <div class="blue ui button" ng-click="sync()" >{{ '#Syncronize' | translate }}</div>
-                <div class="green ui button" ng-click="add()" >{{ '#stistics' | translate }}</div>
+            <div class="right floated eight wide column">
+                <div class="right floated ui buttons">
+                <div class="ui button" ng-click="sync()" >
+                    <i class="icon wifi"></i>
+                    {{ '#Syncronize' | translate }}
+                </div>
+                <div class="ui button" ng-click="add()" >
+                    <i class="icon line chart"></i>
+                    {{ '#stistics' | translate }}
+                </div>
+                    <div class="ui button" ng-click="exit()" >
+                        <i class="icon sign out"></i>
+                        {{ '#Exit' | translate }}
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -37,10 +50,10 @@
 
 
     <div class="ui divided items">
-        <div class="item" ng-repeat="item in foundObjects">
+        <div class="item" ng-repeat="item in foundObjects" style="background-color: {{item.color}}">
 
             <div class="content">
-                <a class="header">{{item.name}}  </a>
+                <a class="header">{{item.name}}</a>
                 <div>
                     <div class="ui grid">
                         <!--<div class="row">-->
@@ -56,11 +69,18 @@
                                 </div>
                             </div>
 
-                        <div class="four wide column" style="padding: 0px;">
-                            <div class="ui right labeled icon button" ng-click="toEnter(item)">
+                        <div class="two wide column" style="padding: 0px;">
+                            <div class="right floated ui right labeled icon button" ng-click="toEnter(item)" ng-hide="item.state==0">
                                 <i class="right arrow icon"></i>
                                 #к вводу
                             </div>
+                        </div>
+
+                        <div class="two wide column" style="padding: 0px;">
+                           <i class="right floated big icon cloud upload" ng-show="item.state==1"></i>
+                            <i class="right floated big icon lock" ng-show="item.state==2"></i>
+                            <i class="right floated big icon wait" ng-show="item.state==3"></i>
+                            <i class="right floated big icon checkmark" ng-show="item.state==0"></i>
                         </div>
 
                         <!--</div>-->
@@ -80,7 +100,7 @@
                     <th>#problemDescription</th>
                     </thead>
                         <tbody>
-                        <tr ng-repeat="counter in item.counters">
+                        <tr ng-repeat="counter in item.counters" style="background-color: {{counter.color}}">
                             <td>
                                 {{counter.counterNumber}}
                             </td>
@@ -114,45 +134,12 @@
                     </table>
 
                 </div>
-                <!--<div class="extra">-->
-                    <!--<div class="ui label">IMAX</div>-->
-                    <!--<div class="ui label"><i class="globe icon"></i> Additional Languages</div>-->
-                <!--</div>-->
+
         </div>
         </div>
         </div>
 
-    <!--<div class="ui celled list">-->
-        <!--<div class="item" ng-repeat="item in foundObjects">-->
-           <!--<div class="ui grid">-->
-               <!--<div class="sixteen wide equal height row">-->
-                   <!--<div class="four wide column">-->
-                       <!--<h4>{{item.name}}</h4>-->
-                   <!--</div>-->
-                   <!--<div class="four wide column">-->
-                       <!--{{item.bin}}-->
-                   <!--</div>-->
-                   <!--<div class="four wide column">-->
-                       <!--{{item.address}}-->
-                   <!--</div>-->
-                   <!--<div class="four wide column">-->
-                       <!--<div class="ui divided list">-->
-                           <!--<i class="item" ng-repeat="counter in item.counters"> {{counter.counterNumber}}</i>-->
-                       <!--&lt;!&ndash;<div class="item" ng-repeat="counter in item.counters">&ndash;&gt;-->
-                                <!--&lt;!&ndash;<div class="four wide column">&ndash;&gt;-->
-                                  <!--&lt;!&ndash; &ndash;&gt;-->
-                                <!--&lt;!&ndash;</div>&ndash;&gt;-->
-                               <!--&lt;!&ndash;<div class="four wide column">&ndash;&gt;-->
-                                   <!--&lt;!&ndash;{{counter.plumbNumber}}&ndash;&gt;-->
-                               <!--&lt;!&ndash;</div>&ndash;&gt;-->
 
-                       <!--&lt;!&ndash;</div>&ndash;&gt;-->
-                       <!--</div>-->
-                   <!--</div>-->
-               <!--</div>-->
-           <!--</div>-->
-        <!--</div>-->
-    <!--</div>-->
 
 
 

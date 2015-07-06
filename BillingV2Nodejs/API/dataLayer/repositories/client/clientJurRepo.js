@@ -1,5 +1,7 @@
 var ClientJurDef = require('../../models/client/clientJur');
+var clientTypeDef = require('../../models/client/clientType');
 var Collection = new require('../../../helpers/mongoose/modelBuilder')('ClientJur', ClientJurDef);
+var ClientType = new require('../../../helpers/mongoose/modelBuilder')('ClientType', clientTypeDef);
 
 exports.add = function(client, done){
 	var model = Collection(client);

@@ -21,6 +21,13 @@ module.exports = function(router){
 				operationResultBuilder(data, res);
 			});
 		});
+
+	router.route('/syncClients').
+		post(function(req, res){
+			Logic.sync(req.body.clients, function(data){
+				operationResultBuilder(data, res);
+			});
+	});
 	
 	router.route('/clientJur').
 	get(function(req, res) {

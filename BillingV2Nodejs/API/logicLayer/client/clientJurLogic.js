@@ -1,7 +1,7 @@
 var ClientJurRepo = require('../../dataLayer/repositories/client/clientJurRepo');
 var clientJurValidator = require(_helpersMongoosePath + 'validator');
 var clientJurDefinition = require(_modelsPath + 'client/clientJur');
-
+var async = require('async');
 
 exports.add = function (clientJur, orgId, done) {
 
@@ -48,6 +48,22 @@ exports.update = function (clientJur, done) {
 		}
 	});
 };
+exports.sync = function(clientJurArr, done){
+	async.each(clientJurArr, function(clientJur, callback){
+		clientJurValidator('clientJur', clientJurDefinition, clientJur, function (validationRes) {
+			if (validationRes.operationResult == 0) {
+				ClientJurRepo.update(clientJur, function (res) {
+					return callback();
+				});
+			}
+			else {
+				callback();
+			}
+		});
+	}, function(){
+		done({operationResult:0});
+	});
+}
 
 exports.delete = function (id, done) {
 	ClientJurRepo.delete(id, function (res) {
