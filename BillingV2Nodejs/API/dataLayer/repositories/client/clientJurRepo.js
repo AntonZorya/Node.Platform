@@ -56,16 +56,33 @@ exports.delete = function (id, done) {
 exports.report = function (period, done){
     Collection.aggregate(
         { $unwind : "$counters" },
-        { $match: {
-            period: period,
-            "counters.dateOfCurrentCounts" : {$ne:null} 
-        }},
-        { $group : {
-            _id : {_id:"$_id", controllerId:"$controllerId"},
-            total : { $addToSet : "$counters"}
+        { $match : {
+            
+            $and: [ 
+                {period : parseInt(period)},
+                {"counters.currentCounts": {$ne: null}}, 
+                {"counters.currentCounts": {$ne: ""}}, 
+                {"counters.currentCounts": {$ne: 0}}, 
+                {"counters.dateOfCurrentCounts": {$ne: null}}
+            ]
+            
         } },
+        { $project: {
+        	counterId: "$counters._id",
+        	controllerId: 1,
+            yearMonthDay: { $dateToString: { format: "%Y-%m-%d", date:  { $add: [ "$counters.dateOfCurrentCounts", 6 * 60 * 60 * 1000 ] }} },
+        } },
+        
+        { $group : {
+            _id : { controllerId : "$controllerId", yearMonthDay : "$yearMonthDay" },
+            total : {$sum:1}
+        } },
+        // { $group : {
+        //     _id : { controllerId : "$_id.controllerId", yearMonthDay : "$_id.yearMonthDay" },
+        //     total : { $sum : 1 }
+        // } },
         function(err, result){
-            if(err) throw err;
+            if(err) return done(errorBuilder(err));
             return done({operationResult: 0, result: result});
         }
     );

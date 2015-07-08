@@ -32,3 +32,9 @@ exports.getByCode = function (code, done) {
     });
 }
 
+exports.getAll = function (done) {
+    Collection.find({ isDeleted: false }, function (err, clients) {
+        if (err) return done(errorBuilder(err));
+        return done({operationResult: 0, result: clients});
+    });
+};
