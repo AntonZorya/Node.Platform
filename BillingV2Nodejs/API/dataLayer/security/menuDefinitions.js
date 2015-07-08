@@ -18,13 +18,13 @@ module.exports = [
         childs: [
             {
                 url: "/reports/report1",
-                name: 'Отчет 1',
+                name: 'Отчет по контролерам',
                 childs: [],
                 roles: null
             },
             {
                 url: "/reports/report2",
-                name: 'Отчет 2',
+                name: 'Отчет по водопотреблению',
                 childs: [],
                 roles: null
             }

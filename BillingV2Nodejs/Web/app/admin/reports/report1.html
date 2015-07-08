@@ -1,15 +1,16 @@
 <div ng-controller="report1Ctrl" id="container">
 
+<h4>Отчет по контролерам (кол-во пройденых объектов)</h4>
 
-	<table style="border:1px solid black;">
+	<table class="ui very compact celled  table">
 		
-		<tr style="border:1px solid black;">
-			<td style="border:1px solid black;">Дата/Контролер</td>
-			<td style="border:1px solid black;" ng-repeat="con in controllersList">{{con.fullName}}</td>
+		<tr>
+			<td >Дата/Контролер</td>
+			<td  ng-repeat="con in controllersList">{{con.fullName}}</td>
 		</tr>
 		<tr ng-repeat="day in days">
-			<td style="border:1px solid black;">{{day}}</td>
-			<td style="border:1px solid black; text-align: center;" ng-repeat="con in controllersList">{{getCounts(day,con.fullName)}}</td>
+			<td style="font-size: 12px;">{{day}}</td>
+			<td  ng-repeat="con in controllersList">{{getCounts(day,con.fullName)}}</td>
 		</tr>
 	</table>
 
