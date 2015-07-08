@@ -6,6 +6,7 @@ function report1Ctrl(dataSvc, $scope, valSvc) {
 	$scope.controllersList = [];
 	$scope.days = getDaysInMonth(6,2015);
 	$scope.data = [];
+	$scope.series = [];
 
 
 	dataSvc.get("/controllers", {}, $("#container")).then(function(res) {
@@ -14,7 +15,35 @@ function report1Ctrl(dataSvc, $scope, valSvc) {
 
 		dataSvc.get("/report", {period: 201506}, $("#container")).then(function(res) {
 			$scope.data = res;
-			console.log($scope.data);
+
+			for(var j=0;j<$scope.controllersList.length;j++){
+				// var temObj = {};
+				// tempObj.tooltip.headerFormat="";
+				// tempObj.tooltip.pointFormat=$scope.controllersList[j].fullName+':{point.y}<br>';
+				var tempArr = [];
+
+				for(var i=0;i<$scope.days.length;i++){
+					
+					tempArr.push($scope.getCounts2($scope.days[i], $scope.controllersList[j].fullName));
+				}
+
+				$scope.series.push({
+					data: tempArr,
+					tooltip: {
+
+						headerFormat: "",
+						pointFormat: $scope.controllersList[j].fullName+':{point.y}<br>'
+					}
+				});
+
+			}
+
+
+
+			$scope.karimovChartConfig = {
+				options: dashboardChartObptions,
+				series: $scope.series
+			}
 
 
 		});
@@ -37,9 +66,18 @@ function report1Ctrl(dataSvc, $scope, valSvc) {
 	$scope.getCounts = function(day,con){
 		var look = _.findWhere($scope.data, {controllerId: con, date: day});
 		if(look){
-			console.log(day,con,look);
 			return look.total;
 		}
+
+	}
+
+	$scope.getCounts2 = function(day,con){
+		var look = _.findWhere($scope.data, {controllerId: con, date: day});
+		if(look){
+			return look.total;
+		}
+		return 0;
+		
 	}
 
 
@@ -132,26 +170,6 @@ function report1Ctrl(dataSvc, $scope, valSvc) {
 	};
 
 
-	$scope.karimovChartConfig = {
-		options: dashboardChartObptions,
-		series: [{
-			data: [4, 5, 0, 12, 18],
-			tooltip: {
-
-				headerFormat: "",
-				pointFormat: 'Даяров Алмабек :{point.y}<br>'
-			}
-		},
-
-			{
-			data: [9, 0, 4, 5, 12],
-			tooltip: {
-
-				headerFormat: "",
-				pointFormat: 'Бекбалаев Максат :{point.y}<br>'
-			}}
-		]
-	}
 
 	
 
