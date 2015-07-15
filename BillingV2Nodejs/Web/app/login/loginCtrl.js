@@ -2,7 +2,6 @@
 billingApplication.controller('loginCtrl', ['dataService', '$scope', '$cookieStore','validationSvc', '$location', '$indexedDB', loginCtrl]);
 
 function loginCtrl(dataSvc, $scope,$cookie, valSvc, $location, $indexedDB) {
-	alert("here");
 	valSvc.init($scope);
     $scope.vm = this;
 	$scope.login = {userName: "",

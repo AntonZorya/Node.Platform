@@ -12,7 +12,7 @@ exports.add = function(client, done){
 };
 
 exports.getAll = function (orgId, done) {
-    Collection.find({ isDeleted: false, organizationId: orgId }, function (err, clients) {
+    Collection.find({ isDeleted: false}).populate("clientTypeId").populate("controllerId").exec(function (err, clients) {
         if (err) return done(errorBuilder(err));
         return done({operationResult: 0, result: clients});
     });
@@ -26,7 +26,7 @@ exports.getAllByCtrlId = function (ctrlId, done) {
 };
 
 exports.get = function (id, done) {
-    Collection.findById(id, {isDeleted: false}, function(err, client){
+    Collection.findById(id, {isDeleted: false}).populate("clientTypeId").populate("controllerId").exec(function(err, client){
         if(err) return done(errorBuilder(err));
         return done({operationResult: 0, result: client});
     });
@@ -77,10 +77,7 @@ exports.report = function (period, done){
             _id : { controllerId : "$controllerId", yearMonthDay : "$yearMonthDay" },
             total : {$sum:1}
         } },
-        // { $group : {
-        //     _id : { controllerId : "$_id.controllerId", yearMonthDay : "$_id.yearMonthDay" },
-        //     total : { $sum : 1 }
-        // } },
+
         function(err, result){
             if(err) return done(errorBuilder(err));
             return done({operationResult: 0, result: result});

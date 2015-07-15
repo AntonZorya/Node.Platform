@@ -1,21 +1,24 @@
 var billingApplication = angular.module('billingApplication', ['indexedDB',"highcharts-ng",'commonModule','ngRoute','i18nModule','ngCookies', 'angularify.semantic.checkbox', 'ui.grid'])
 .config(['$routeProvider', function (routeProvider) {
 	routeProvider
-	// .otherwise({
-	// 	redirectTo: '/main'
-	// })
+	 .otherwise({
+	 	redirectTo: '/main'
+	 })
 	.when("/main", {
-		templateUrl: "./app/admin/main/main.html"
+		templateUrl: "./app/admin/main/mainView.html"
 	})
 	.when("/administration/translate", {
-		templateUrl: "./app/admin/translate/translate.html"
+		templateUrl: "./app/admin/translate/translateView.html"
 	})
 	.when("/administration/languages", {
-		templateUrl: "./app/admin/languages/languages.html"
+		templateUrl: "./app/admin/languages/languagesView.html"
 	})
 	.when("/reports/report1", {
-		templateUrl: "./app/admin/reports/report1.html"
+		templateUrl: "./app/admin/reports/report1View.html"
 	})
+		.when("/reports/report2", {
+			templateUrl: "./app/admin/reports/report2View.html"
+		})
 
 	.when("/login", {
 		templateUrl: "./app/login/login.html"

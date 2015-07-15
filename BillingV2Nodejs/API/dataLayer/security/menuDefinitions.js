@@ -32,7 +32,7 @@ module.exports = [
         roles: [roleDefinitions.admin, roleDefinitions.organizationAdmin]
     },
     {
-        url: "/administration",
+        url: "/administration/translate",
         name: "Администрирование",
         roles: [roleDefinitions.admin, roleDefinitions.organizationAdmin],
         iconClass: "configure icon",

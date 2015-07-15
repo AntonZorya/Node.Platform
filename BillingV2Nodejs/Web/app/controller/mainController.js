@@ -1,12 +1,21 @@
 /// <reference path="../../../typings/jquery/jquery.d.ts"/>
-billingApplication.controller('mainController', ['$rootScope','dataService', '$scope', '$cookieStore','validationSvc', '$location', '$indexedDB', 'modalSvc', mainController]);
+billingApplication.controller('mainController', ['$window','$rootScope','dataService', '$scope', '$cookieStore','validationSvc', '$location', '$indexedDB', 'modalSvc', mainController]);
 
-function mainController($rootScope, dataSvc, $scope, $cookie, valSvc, $location, $indexedDB, modalSvc) {
+function mainController($window, $rootScope, dataSvc, $scope, $cookie, valSvc, $location, $indexedDB, modalSvc) {
 
+    $indexedDB.openStore('user',function(store) {
+        store.count().then(function(count) {
+            if(count < 1){
+                $window.location = "/#/login";
+            }
+        });
+    });
 
     $indexedDB.openStore('user',function(store) {
         store.getAll().then(function (obj) {
-            $scope.controllerName = obj[0].fullName;
+            if(obj[0]) {
+                $scope.controllerName = obj[0].fullName;
+            }
         });
 
     });

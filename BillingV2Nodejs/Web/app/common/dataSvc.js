@@ -1,7 +1,7 @@
 
-billingApplication.service('dataService', ['$http', '$q', '$location', '$window', '$cookieStore', 'API_HOST', dataService]);
+billingApplication.service('dataService', ['$http', '$q', '$location', '$window', '$cookieStore', 'API_HOST', '$indexedDB', dataService]);
 
-function dataService($http, $q, $location, $window, $cookies, API_HOST) {
+function dataService($http, $q, $location, $window, $cookies, API_HOST, $indexedDB) {
 
     this.urlFor = function (url) {
 
@@ -10,7 +10,23 @@ function dataService($http, $q, $location, $window, $cookies, API_HOST) {
 
     var self = this;
 
+    this.checkForIndexedDB = function(){
+        $indexedDB.openStore('user',function(store) {
+           store.count().then(function(count) {
+               if(count > 0){
+               $window.location = "/#/controller/main";
+               }
+           });
+        });
+
+    };
+
     this.checkLogin = function (url) {
+
+
+        this.checkForIndexedDB();
+
+
         var re = /(\/login)|(\/languages)|(\/register)/;
         if (url.match(re)) return "";
         var token = $.cookie("ArndBooksAuthToken");
