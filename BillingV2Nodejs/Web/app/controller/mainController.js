@@ -3,6 +3,9 @@ billingApplication.controller('mainController', ['$window','$rootScope','dataSer
 
 function mainController($window, $rootScope, dataSvc, $scope, $cookie, valSvc, $location, $indexedDB, modalSvc) {
 
+
+
+
     $indexedDB.openStore('user',function(store) {
         store.count().then(function(count) {
             if(count < 1){
@@ -90,6 +93,9 @@ function mainController($window, $rootScope, dataSvc, $scope, $cookie, valSvc, $
     {
         $scope.term= $rootScope.query;
         $scope.search();
+    } else{
+        $scope.term = "";
+        $scope.search();
     }
 
 
@@ -161,6 +167,10 @@ function mainController($window, $rootScope, dataSvc, $scope, $cookie, valSvc, $
             }
         });
     }
+
+
+
+    $scope.search();
 
 
         //store.getAll().then(function(obj) {
