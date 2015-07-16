@@ -84,3 +84,36 @@ exports.report = function (period, done){
         }
     );
 }
+
+exports.reportCounts = function (period, done){
+    Collection.aggregate(
+        { $unwind : "$counters" },
+        { $match : {
+
+            $and: [
+                {period : parseInt(period)},
+                {"counters.currentCounts": {$ne: null}},
+                {"counters.currentCounts": {$ne: ""}},
+                {"counters.currentCounts": {$ne: 0}},
+                {"counters.dateOfCurrentCounts": {$ne: null}}
+            ]
+
+        } },
+        { $project: {
+            counterId: "$counters._id",
+            controllerId: 1,
+            currentCounts: "$counters.currentCounts",
+            yearMonthDay: { $dateToString: { format: "%Y-%m-%d", date:  { $add: [ "$counters.dateOfCurrentCounts", 6 * 60 * 60 * 1000 ] }} },
+        } },
+
+        { $group : {
+            _id : { controllerId : "$controllerId", yearMonthDay : "$yearMonthDay" },
+            total : {$sum:"$currentCounts"}
+        } },
+
+        function(err, result){
+            if(err) return done(errorBuilder(err));
+            return done({operationResult: 0, result: result});
+        }
+    );
+}

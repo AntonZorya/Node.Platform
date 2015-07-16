@@ -7,4 +7,12 @@ module.exports = function (router) {
             operationResultBuilder(data, res);
         });
     });
+
+
+    router.route("/reportCounts")
+        .get(function (req, res) {
+            ReportLogic.getCounts(req.query.period, function (data) {
+                operationResultBuilder(data, res);
+            });
+        });
 }

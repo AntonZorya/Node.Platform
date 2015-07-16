@@ -1,0 +1,21 @@
+<div ng-controller="report2Ctrl" id="container">
+
+<h4>Отчет по контролерам (кол-во пройденых объектов)</h4>
+
+	<div>
+		<highchart config="karimovChartConfig"></highchart>
+	</div>
+
+	<table class="ui very compact celled  table">
+		
+		<tr>
+			<td >Дата/Контролер</td>
+			<td  ng-repeat="con in controllersList">{{con.fullName}}</td>
+		</tr>
+		<tr ng-repeat="day in days">
+			<td style="font-size: 12px;">{{day}}</td>
+			<td  ng-repeat="con in controllersList">{{getCounts(day,con.fullName)}}</td>
+		</tr>
+	</table>
+
+</div>
