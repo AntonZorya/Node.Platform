@@ -122,6 +122,7 @@ function mainController($window, $rootScope, dataSvc, $scope, $cookie, valSvc, $
                     cursor.continue();
                 } else{
                     alert("На отправку " + result.length);
+                    if(result.length>0){
                     dataSvc.post("/syncClients", {clients:result}, $("#loginForm"), $scope).then(function(){
                         _.each(result, function(item){
                             item.uploaded = true;
@@ -136,6 +137,7 @@ function mainController($window, $rootScope, dataSvc, $scope, $cookie, valSvc, $
 
                         $scope.search();
                     });
+                    }
 
 
                 }
