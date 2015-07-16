@@ -33,6 +33,14 @@ function loginCtrl(dataSvc, $scope,$cookie, valSvc, $location, $indexedDB) {
 
 								store.clear().then(function () {
 
+									_.each(data.result, function(facility){
+										if(_.all(facility.counters, function(item){
+												return (item.currentCounts>item.lastCounts || item.hasProblems);
+											})){
+											facility.uploaded = true;
+										}
+									});
+
 									store.insert(data.result).then(function(e) {
 
 
