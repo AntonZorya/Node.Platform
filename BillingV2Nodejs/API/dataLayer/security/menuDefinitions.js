@@ -5,8 +5,7 @@ module.exports = [
     {
         url: '/main',
         name: 'Главная',
-        childs: [
-        ],
+        childs: [],
         roles: null,
         iconClass: "icon home"
     },
@@ -44,18 +43,18 @@ module.exports = [
                 iconClass: "translate icon",
                 loadFirstChild: true,
                 childs: [{
-                        url: "/administration/translate",
-                        name: "Переводы",
-                        roles: null,
-                        childs: []
-                    },
-                     {
+                    url: "/administration/translate",
+                    name: "Переводы",
+                    roles: null,
+                    childs: []
+                },
+                    {
                         url: "/administration/languages",
                         name: "Языки",
                         roles: null,
                         childs: []
                     }]
-        
+
             },
             {
                 url: "/administration/users",
@@ -65,5 +64,11 @@ module.exports = [
                 childs: []
             }
         ]
+    },
+    {
+        url: "/operator/juridical",
+        name: "Юр. оператор",
+        roles: null,
+        childs: []
     }
 ];

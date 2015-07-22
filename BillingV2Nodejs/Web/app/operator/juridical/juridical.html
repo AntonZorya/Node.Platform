@@ -1,0 +1,143 @@
+<div ng-controller="juridicalController" class="ui padded segment">
+
+    <div>
+        <div class="ui grid">
+            <div class="eight wide column">
+                <h3>{{ '#Объекты' | translate }}&nbsp;&nbsp;&nbsp;Оператор - <i>{{controllerName}}</i></h3>
+
+            </div>
+            <div class="right floated eight wide column">
+                <div class="right floated ui buttons">
+                    <div class="ui button" ng-click="add()">
+                        <i class="icon line chart"></i>
+                        {{ '#stistics' | translate }}
+                    </div>
+                    <div class="ui button" ng-click="exit()">
+                        <i class="icon sign out"></i>
+                        {{ '#Exit' | translate }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="ui form">
+
+
+            <div class="field">
+                <form ng-submit="search()">
+                    <label>{{ '#Поиск' | translate }}</label>
+
+                    <div class="ui action input">
+                        <input type="text" ng-model="searchTerm" placeholder="{{ '#Поиск кнопка'  | translate }}"/>
+                        <input type="submit" id="submit" class="ui button" value="{{ '#Поиск кнопка' | translate }}"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="ui divided items" style="background-color: #fafafa;">
+        <div class="item" ng-repeat="item in data" style="background-color: {{item.color}}">
+
+            <div class="content">
+                <a class="header">{{item.name}}</a>
+
+                <div>
+                    <div class="ui grid">
+                        <!--<div class="row">-->
+                        <div class="four wide column">
+                            {{item.address}}
+                        </div>
+                        <div class="four wide column">
+                            {{item.bin}}
+                        </div>
+                        <div class="three wide column">
+                            <div class="ui black basic button" ng-click="showCounters(item)" style="cursor:pointer;">
+                                <i class="dashboard icon"></i> {{item.counters.length}}
+                            </div>
+                        </div>
+
+                        <!-- <div class="two wide column" style="padding: 0px;">
+                            <div class="right floated ui right labeled icon button" ng-click="toEnter(item)"
+                                 ng-hide="item.state==0">
+                                <i class="right arrow icon"></i>
+                                {{'#к вводу' | translate}}
+                            </div>
+                        </div> -->
+
+                        <div class="two wide column" style="padding: 0px;">
+                            <i class="right floated big icon cloud upload" ng-show="item.state==1"></i>
+                            <i class="right floated big icon lock" ng-show="item.state==2"></i>
+                            <i class="right floated big icon wait" ng-show="item.state==3"></i>
+                            <i class="right floated big icon checkmark" ng-show="item.state==0"></i>
+                        </div>
+
+                        <!--</div>-->
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="sixteen wide column" style="padding-top: 23px;">
+                        <div class="description" ng-show="item.isShowCounters">
+
+                            <table class="ui table">
+                                <thead>
+                                <th>{{'#counterNumber'|translate}}</th>
+                                <th>{{'#counterPlumb'|translate}}</th>
+                                <th>{{'#lastCounts'|translate}}</th>
+                                <th>{{'#dateOfLast'|translate}}</th>
+                                <th>{{'#currentCounts'|translate}}</th>
+                                <th>{{'#dateOfCurrent'|translate}}</th>
+                                <th>{{'#problemDescription'|translate}}</th>
+                                <th></th>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="counter in item.counters" style="background-color: {{counter.color}}">
+                                    <td>
+                                        <span ng-bind="counter.counterNumber"></span>
+                                    </td>
+                                    <td>
+                                        <span ng-bind="counter.plumbNumber"></span>
+                                    </td>
+                                    <td>
+                                        <span ng-bind="counter.lastCounts"></span> &nbsp; м3
+                                    </td>
+                                    <td>
+                                        <span ng-bind="counter.dateOfLastCounts"></span>
+                                    </td>
+
+                                    <td>
+                                        <div class="ui small input">
+                                            <input type="text" ng-model="counter.currentCounts">
+                                        </div>
+                                        &nbsp; м3
+                                    </td>
+
+                                    <td>
+                                        <span ng-bind='counter.dateOfCurrentCounts | date:"dd.MM.yyyy HH:mm:ss":"+0600"'></span>
+                                    </td>
+
+                                    <td>
+                                        <textarea ng-model="counter.problemDescription"></textarea>
+                                    </td>
+                                    <td>
+                                        <div class="ui small basic icon buttons right floated">
+                                            <button class="ui button" ng-click="updateCounter(item._id, counter)"><i
+                                                    class="large save icon"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+</div>
