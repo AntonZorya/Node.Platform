@@ -6,6 +6,7 @@ var phones = require(_modelsPath + 'client/phones').definition;
 var clientCounters = require(_modelsPath + 'client/clientCounters').definition;
 
 exports.definition = _.extend({
+    accountNumber: {type: String},
     number: {type: String},
     name: {type: String, required: "#name required"},
     bin: {type: String, required: "#bin required"},

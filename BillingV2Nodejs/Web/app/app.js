@@ -1,4 +1,4 @@
-var billingApplication = angular.module('billingApplication', ['indexedDB', "highcharts-ng", 'commonModule', 'ngRoute', 'i18nModule', 'ngCookies', 'angularify.semantic.checkbox', 'ui.grid', 'ngAnimate', 'toastr'])
+var billingApplication = angular.module('billingApplication', ['indexedDB', "highcharts-ng", 'commonModule', 'ngRoute', 'i18nModule', 'ngCookies', 'angularify.semantic.checkbox', 'ui.grid', 'ngAnimate', 'toastr', 'ui.date', 'angularify.semantic.dropdown', 'angularify.semantic.modal' ])
     .config(['$routeProvider', function (routeProvider) {
         routeProvider
             .otherwise({
@@ -33,7 +33,7 @@ var billingApplication = angular.module('billingApplication', ['indexedDB', "hig
                 templateUrl: "./app/controller/sub.html"
             })
             .when('/operator/juridical', {
-                templateUrl: './app/operator/juridical/juridical.html'
+                templateUrl: './app/operator/juridical/juridicalView.html'
             })
         ;
     }]).config(['$translatePartialLoaderProvider', function (translatePartialLoader) {

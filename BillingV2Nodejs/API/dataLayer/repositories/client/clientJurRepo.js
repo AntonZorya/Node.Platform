@@ -160,7 +160,8 @@ exports.updateClientCounter = function (body, done) {
             $set: {
                 'counters.$.currentCounts': body.counter.currentCounts,
                 'counters.$.problemDescription': body.counter.problemDescription,
-                'counters.$.dateOfCurrentCounts': body.counter.dateOfCurrentCounts
+                'counters.$.dateOfCurrentCounts': body.counter.dateOfCurrentCounts,
+                'counters.$.hasProblem': body.counter.hasProblem
             }
         },
         options = {

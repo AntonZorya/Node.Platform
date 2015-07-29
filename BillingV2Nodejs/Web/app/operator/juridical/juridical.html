@@ -1,27 +1,16 @@
+<style>
+    .selectedBlock {
+        background-color: white !important;
+        border: 1px solid rgba(39, 41, 43, .15) !important;
+        padding: 5px !important;
+    }
+</style>
+
 <div ng-controller="juridicalController" class="ui padded segment">
 
     <div>
-        <div class="ui grid">
-            <div class="eight wide column">
-                <h3>{{ '#Объекты' | translate }}&nbsp;&nbsp;&nbsp;Оператор - <i>{{controllerName}}</i></h3>
-
-            </div>
-            <div class="right floated eight wide column">
-                <div class="right floated ui buttons">
-                    <div class="ui button" ng-click="add()">
-                        <i class="icon line chart"></i>
-                        {{ '#stistics' | translate }}
-                    </div>
-                    <div class="ui button" ng-click="exit()">
-                        <i class="icon sign out"></i>
-                        {{ '#Exit' | translate }}
-                    </div>
-                </div>
-            </div>
-        </div>
 
         <div class="ui form">
-
 
             <div class="field">
                 <form ng-submit="search()">
@@ -40,7 +29,7 @@
     <div class="ui divided items" style="background-color: #fafafa;">
         <div class="item" ng-repeat="item in data" style="background-color: {{item.color}}">
 
-            <div class="content">
+            <div class="content" ng-class="{'selectedBlock': item.isShowCounters}">
                 <a class="header">{{item.name}}</a>
 
                 <div>
@@ -57,23 +46,6 @@
                                 <i class="dashboard icon"></i> {{item.counters.length}}
                             </div>
                         </div>
-
-                        <!-- <div class="two wide column" style="padding: 0px;">
-                            <div class="right floated ui right labeled icon button" ng-click="toEnter(item)"
-                                 ng-hide="item.state==0">
-                                <i class="right arrow icon"></i>
-                                {{'#к вводу' | translate}}
-                            </div>
-                        </div> -->
-
-                        <div class="two wide column" style="padding: 0px;">
-                            <i class="right floated big icon cloud upload" ng-show="item.state==1"></i>
-                            <i class="right floated big icon lock" ng-show="item.state==2"></i>
-                            <i class="right floated big icon wait" ng-show="item.state==3"></i>
-                            <i class="right floated big icon checkmark" ng-show="item.state==0"></i>
-                        </div>
-
-                        <!--</div>-->
                     </div>
                 </div>
 
@@ -81,16 +53,20 @@
                     <div class="sixteen wide column" style="padding-top: 23px;">
                         <div class="description" ng-show="item.isShowCounters">
 
-                            <table class="ui table">
+                            <table class="ui basic table">
                                 <thead>
-                                <th>{{'#counterNumber'|translate}}</th>
-                                <th>{{'#counterPlumb'|translate}}</th>
-                                <th>{{'#lastCounts'|translate}}</th>
-                                <th>{{'#dateOfLast'|translate}}</th>
-                                <th>{{'#currentCounts'|translate}}</th>
-                                <th>{{'#dateOfCurrent'|translate}}</th>
-                                <th>{{'#problemDescription'|translate}}</th>
-                                <th></th>
+                                <tr>
+                                    <th>{{'#counterNumber'|translate}}</th>
+                                    <th>{{'#counterPlumb'|translate}}</th>
+                                    <th>{{'#lastCounts'|translate}}</th>
+                                    <th>{{'#dateOfLast'|translate}}</th>
+                                    <th>{{'#Показания по среднему' | translate}}</th>
+                                    <th>{{'#currentCounts'|translate}}</th>
+                                    <th>{{'#dateOfCurrent'|translate}}</th>
+                                    <th>{{'#problemDescription'|translate}}</th>
+                                    <th></th>
+                                </tr>
+
                                 </thead>
                                 <tbody>
                                 <tr ng-repeat="counter in item.counters" style="background-color: {{counter.color}}">
@@ -108,6 +84,11 @@
                                     </td>
 
                                     <td>
+                                        <checkbox type="toggle ">
+                                        </checkbox>
+                                    </td>
+
+                                    <td>
                                         <div class="ui small input">
                                             <input type="text" ng-model="counter.currentCounts">
                                         </div>
@@ -115,11 +96,18 @@
                                     </td>
 
                                     <td>
-                                        <span ng-bind='counter.dateOfCurrentCounts | date:"dd.MM.yyyy HH:mm:ss":"+0600"'></span>
+                                        <div class="ui small input">
+                                            <input ui-date="dateOptions" ng-model='counter.dateOfCurrentCounts'>
+                                        </div>
+                                        <!--<input type="date" ng-model='counter.dateOfCurrentCounts'-->
+
+                                        <!--<span ng-bind='counter.dateOfCurrentCounts | date:"dd.MM.yyyy HH:mm:ss":"+0600"'></span>-->
                                     </td>
 
                                     <td>
-                                        <textarea ng-model="counter.problemDescription"></textarea>
+                                        <checkbox ng-model="counter.hasProblem"></checkbox>
+                                         <textarea ng-model="counter.problemDescription"
+                                                   ng-disabled="!counter.hasProblem"></textarea>
                                     </td>
                                     <td>
                                         <div class="ui small basic icon buttons right floated">
@@ -128,8 +116,47 @@
                                         </div>
                                     </td>
                                 </tr>
+                                <!--<tr>
+                                    <td colspan="8">
+
+
+
+                                    </td>
+                                    <td colspan="7"></td>
+                                </tr>-->
                                 </tbody>
                             </table>
+
+                            <div class="ui compact menu">
+                                <div class="ui compact menu">
+
+                                    <div class="ui simple dropdown item">
+                                        <span ng-bind="'#Акт' | translate"></span>
+                                        <i class="dropdown icon"></i>
+
+                                        <div class="menu">
+                                            <div class="item" ng-bind="'#Штрафы' | translate"></div>
+                                            <div class="item" ng-bind="'#Списание долга' | translate"></div>
+                                            <div class="item"
+                                                 ng-bind="'#Установка нового счетчика' | translate"></div>
+                                            <div class="item"
+                                                 ng-bind="'#Установка новой пломбы' | translate"></div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="ui basic buttons">
+                                <button class="ui basic button" ng-click="showModalPayment(item)">{{'#Оплата' |
+                                    translate}}
+                                </button>
+
+                                <button class="ui basic button">{{'#Просмотр текущего сальдо' | translate}}</button>
+                                <button class="ui basic button" ng-bind="'#Анализ отклонений' | translate"></button>
+                                <button class="ui basic button" ng-bind="'#Технические данные' | translate" ng-click="editTechData()"></button>
+                                <button class="ui basic button" ng-bind="'#Паспортные данные' | translate"></button>
+                            </div>
 
                         </div>
                     </div>
@@ -139,5 +166,56 @@
         </div>
     </div>
 
+    <modal ng-model="isShowModalPayment">
+        <i class="close icon" ng-click="closeModalPayment()"></i>
+
+        <div class="header">
+            {{'#Оплата' | translate }}. {{paymentClientName}}
+        </div>
+        <div class="content">
+
+            <form class="ui form">
+                <div class="field">
+                    <label>Сумма</label>
+                    <input type="text" name="sum" placeholder="Сумма" ng-model="$parent.enteredSum">
+                </div>
+            </form>
+
+
+        </div>
+        <div class="actions">
+            <div class="two fluid ui buttons">
+                <div class="ui negative labeled icon button">
+                    <i class="remove icon"></i>
+                    Закрыть
+                </div>
+                <div class="ui positive right labeled icon button" ng-click="sendPayment()">
+                    <span ng-bind="'#Оплатил' | translate"></span>
+                    <i class="checkmark icon"></i>
+                </div>
+            </div>
+        </div>
+    </modal>
+
+
+    <script type="text/ng-template" id="paymentInvoice.html">
+        <table>
+            <thead>
+            <tr>
+                <td>Клиент: {{paymentClientName}}</td>
+            </tr>
+            <tr>
+                <td>Сумма: {{payment.sum}}</td>
+            </tr>
+            <tr>
+                <td>Дата: {{payment.date | date: 'dd.MM.yyyy hh:mm:ss'}}</td>
+            </tr>
+            </thead>
+        </table>
+    </script>
+
+    <div id="paymentInvoice" style="display: none" ng-include="'paymentInvoice.html'"></div>
 
 </div>
+
+

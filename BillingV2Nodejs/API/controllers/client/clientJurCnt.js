@@ -1,4 +1,6 @@
-var Logic = require('../../logicLayer/client/clientJurLogic');
+var Logic = require('../../logicLayer/client/clientJurLogic'),
+    PaymentLogic = require('../../logicLayer/payment/paymentLogic');
+
 
 module.exports = function (router) {
     router.route('/clientJur/add').
@@ -57,9 +59,16 @@ module.exports = function (router) {
             });
         });
 
-    router.route('/client/updateClientCounter')
+    router.route('/clientJur/updateClientCounter')
         .post(function (req, res) {
             Logic.updateClientCounter(req.body, function (data) {
+                operationResultBuilder(data, res);
+            });
+        });
+
+    router.route('/clientJur/paymentAdd')
+        .post(function (req, res) {
+            PaymentLogic.add(req.body, function (data) {
                 operationResultBuilder(data, res);
             });
         });

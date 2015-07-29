@@ -19,7 +19,7 @@ function languagesCtrl(dataSvc, $scope, valSvc, modalSvc) {
   });
   $scope.addLanguage = function(){
 
-    modalSvc.showModal("/app/admin/languages/addLanguage.html",'languageAddModal', $scope).then(function(data){
+    modalSvc.showModal("/app/admin/languages/addLanguage.html",'languageAddModal', $scope).then(function(){
       dataSvc.get("/languages", null, $("#languagesGrid")).then(function(data){
         $scope.models = data.result;
       });

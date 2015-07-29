@@ -1,0 +1,95 @@
+<div class="ui fullscreen modal" ng-controller="editTechDataController">
+    <i class="close icon" ng-click="closeModalPayment()"></i>
+
+    <div class="header">
+        {{'#Технические данные' | translate }}. {{selectedItem.name}}
+    </div>
+    <div class="content">
+
+        <form class="ui form">
+            <div class="fields">
+                <div class=" three wide field">
+                    <label>{{'#Процент водоснабжения' | translate}}</label>
+                    <input type="text" name="waterPercent" placeholder="{{'#Процент водоснабжения' | translate}}"
+                           ng-model="modalItem.waterPercent">
+                </div>
+                <div class=" three wide field">
+                    <label>{{'#Процент канализации' | translate}}</label>
+                    <input type="text" name="canalPercent" placeholder="{{'#Процент канализации' | translate}}"
+                           ng-model="modalItem.canalPercent">
+                </div>
+                <div class=" three wide field">
+                    <label>{{'#Тариф на воду' | translate}}</label>
+                    <input type="text" name="canalPercent" placeholder="{{'#Процент канализации' | translate}}"
+                           ng-model="modalItem.canalPercent">
+                </div>
+                <div class=" three wide field">
+                    <label>{{'#Тариф на канализацию' | translate}}</label>
+                    <input type="text" name="canalPercent" placeholder="{{'#Процент канализации' | translate}}"
+                           ng-model="modalItem.canalPercent">
+                </div>
+            </div>
+        </form>
+
+        <table class="ui basic celled  table">
+            <thead>
+            <tr>
+                <th>{{'#counterNumber'|translate}}</th>
+                <th>Дата след поверки или замены счетчика ?</th>
+
+                <th>{{'#counterPlumb'|translate}}</th>
+                <th> Дата установки пломбы ?</th>
+                <th> Марка счетчика (из справочника) ?</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="counter in selectedItem.counters">
+                <td>
+                    <div class="ui input">
+                        <input type="text" ng-model="counter.counterNumber"/>
+                    </div>
+                </td>
+                <td>
+                    <div class="ui input">
+                        <!--<input type="text" class="ng-pristine ng-valid ng-touched" ng-model="counter."/>-->
+                    </div>
+                </td>
+                <td>
+                    <div class="ui input">
+                        <input type="text" class="ng-pristine ng-valid ng-touched" ng-model="counter.plumbNumber"/>
+                    </div>
+                </td>
+                <td>
+                    <div class="ui input">
+                        <!--<input type="text" class="ng-pristine ng-valid ng-touched" ng-model="counter."/>-->
+                    </div>
+                </td>
+                <td>
+                    <div class="ui input">
+                        <!--<input type="text" class="ng-pristine ng-valid ng-touched" ng-model="counter."/>-->
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+    <div class="actions">
+        <div class="ui button red" ng-click="cancel()">{{'#cancel' | translate}}</div>
+        <div class="ui green button" ng-click="save()">{{'#save' | translate}}</div>
+    </div>
+
+    <!--<div class="actions">
+        <div class="two fluid ui buttons">
+            <div class="ui negative labeled icon button" ng-click="cancel()">
+                <i class="remove icon"></i>
+                {{'#cancel' | translate}}
+            </div>
+            <div class="ui positive right labeled icon button" ng-click="save()">
+                <span ng-bind="'#save' | translate"></span>
+                <i class="checkmark icon"></i>
+            </div>
+        </div>
+    </div>-->
+</div>

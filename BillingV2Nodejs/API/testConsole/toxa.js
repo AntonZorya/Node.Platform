@@ -95,6 +95,7 @@ console.log('reading');
 				controllerRepo.getByName(row[29], function(controller) {
 					clientTypeRepo.getByName(row[27], function (clientType){
 					clientJurLogic.add({
+						accountNumber: 1,
 						number: row[0],
 						name: row[3],
 						bin: row[2] ? row[2] : 'No bin',
