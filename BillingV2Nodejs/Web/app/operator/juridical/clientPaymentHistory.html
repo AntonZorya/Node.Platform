@@ -1,0 +1,32 @@
+<div class="ui modal" ng-controller="clientPaymentHistoryController">
+    <i class="close icon"></i>
+
+    <div class="header">
+        {{'#История оплаты' | translate }}. {{selectedItem.name}}
+    </div>
+    <div class="content">
+        <table class="ui basic table">
+            <thead>
+            <tr>
+                <th>Дата</th>
+                <th>Сумма</th>
+                <th>Номер квитанции</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="item in clientPayments">
+                <td>{{item.date | date:'dd.MM.yyyy hh:mm:ss'}}</td>
+                <td>{{item.sum}}</td>
+                <td>{{item.receiptNumber}}</td>
+                <td>
+                    <div class="ui small basic icon buttons right floated">
+                        <button class="ui button" ng-click="printFromHistory(item, selectedItem.name);"><i
+                                class="large print icon"></i></button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,5 +1,5 @@
 <div class="ui fullscreen modal" ng-controller="editTechDataController">
-    <i class="close icon" ng-click="closeModalPayment()"></i>
+    <i class="close icon"></i>
 
     <div class="header">
         {{'#Технические данные' | translate }}. {{selectedItem.name}}
@@ -8,25 +8,31 @@
 
         <form class="ui form">
             <div class="fields">
-                <div class=" three wide field">
+                <div class=" two wide field">
                     <label>{{'#Процент водоснабжения' | translate}}</label>
                     <input type="text" name="waterPercent" placeholder="{{'#Процент водоснабжения' | translate}}"
                            ng-model="modalItem.waterPercent">
                 </div>
-                <div class=" three wide field">
+                <div class=" two wide field">
                     <label>{{'#Процент канализации' | translate}}</label>
                     <input type="text" name="canalPercent" placeholder="{{'#Процент канализации' | translate}}"
                            ng-model="modalItem.canalPercent">
                 </div>
-                <div class=" three wide field">
-                    <label>{{'#Тариф на воду' | translate}}</label>
-                    <input type="text" name="canalPercent" placeholder="{{'#Процент канализации' | translate}}"
-                           ng-model="modalItem.canalPercent">
+                <div class="three wide field">
+                    <label>{{'#Выберите Тариф на воду' | translate}}</label>
+
+                    <div class="ui input">
+                        <select class="ui search dropdown" ng-model="modalItem.tariff"
+                                ng-options="tariff as tariff.name for tariff in $parent.tariffs track by tariff._id"></select>
+                    </div>
                 </div>
-                <div class=" three wide field">
+                <div class=" one wide field">
+                    <label>{{'#Тариф на воду' | translate}}</label>
+                    <div class="ui large label">{{modalItem.tariff.water}}</div>
+                </div>
+                <div class=" two wide field">
                     <label>{{'#Тариф на канализацию' | translate}}</label>
-                    <input type="text" name="canalPercent" placeholder="{{'#Процент канализации' | translate}}"
-                           ng-model="modalItem.canalPercent">
+                    <div class="ui large label">{{modalItem.tariff.canal}}</div>
                 </div>
             </div>
         </form>
@@ -35,11 +41,11 @@
             <thead>
             <tr>
                 <th>{{'#counterNumber'|translate}}</th>
-                <th>Дата след поверки или замены счетчика ?</th>
-
+                <th>{{'#Дата установки счетчика'|translate}}</th>
+                <th>{{'#Дата след. поверки/замены счетчика'|translate}}</th>
                 <th>{{'#counterPlumb'|translate}}</th>
-                <th> Дата установки пломбы ?</th>
-                <th> Марка счетчика (из справочника) ?</th>
+                <th>{{'#Дата установки пломбы'|translate}}</th>
+                <th>{{'#Марка счетчика'|translate}}</th>
             </tr>
             </thead>
             <tbody>
@@ -51,7 +57,14 @@
                 </td>
                 <td>
                     <div class="ui input">
-                        <!--<input type="text" class="ng-pristine ng-valid ng-touched" ng-model="counter."/>-->
+                        <input ui-date="dateOptions" type="text" class="ng-pristine ng-valid ng-touched"
+                               ng-model="counter.installDate"/>
+                    </div>
+                </td>
+                <td>
+                    <div class="ui input">
+                        <input ui-date="dateOptions" type="text" class="ng-pristine ng-valid ng-touched"
+                               ng-model="counter.checkDate"/>
                     </div>
                 </td>
                 <td>
@@ -61,12 +74,14 @@
                 </td>
                 <td>
                     <div class="ui input">
-                        <!--<input type="text" class="ng-pristine ng-valid ng-touched" ng-model="counter."/>-->
+                        <input ui-date="dateOptions" type="text" class="ng-pristine ng-valid ng-touched"
+                               ng-model="counter.plumbInstallDate"/>
                     </div>
                 </td>
                 <td>
                     <div class="ui input">
-                        <!--<input type="text" class="ng-pristine ng-valid ng-touched" ng-model="counter."/>-->
+                        <select class="ui search dropdown" ng-model="counter.markId"
+                                ng-options="mark._id as mark.name for mark in $parent.counterMarks track by mark._id"></select>
                     </div>
                 </td>
             </tr>

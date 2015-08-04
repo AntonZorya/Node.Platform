@@ -3,6 +3,7 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/API/dataLayer/models/payment/payment.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/API/dataLayer/repositories/payment/paymentRepo.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/API/dataLayer/repositories/references/kskRepo.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/API/logicLayer/payment/paymentLogic.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/API/testConsole/toxa.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/Web/app/controller/subController.js" charset="UTF-8" />

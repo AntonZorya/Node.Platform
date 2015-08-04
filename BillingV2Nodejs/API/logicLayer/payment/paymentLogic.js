@@ -15,3 +15,15 @@ exports.add = function (payment, done) {
             done(validationRes);
     });
 };
+
+exports.getByClientId = function (clientId, done) {
+    PaymentRepo.getByClientId(clientId, function (data) {
+        done(data);
+    });
+};
+
+exports.getByPeriod = function (dateFrom, dateTo, done) {
+    PaymentRepo.getByPeriod(dateFrom, dateTo, function (data) {
+        done(data);
+    });
+};

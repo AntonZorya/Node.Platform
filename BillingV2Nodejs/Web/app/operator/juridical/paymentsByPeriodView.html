@@ -1,0 +1,29 @@
+<div ng-include="'app/admin/menu/mainMenu.html'"></div>
+
+<div style="padding: 0em 1rem;">
+    <div class="ui grid">
+
+        <div class="sixteen wide mobile five wide tablet three wide computer column"
+             ng-if="$root.currentTopMenuItem.childs.length">
+
+            <div ng-include="'app/admin/menu/leftSideMenu.html'"></div>
+
+        </div>
+
+        <div class="sixteen wide mobile eleven wide tablet thirteen wide computer column"
+             ng-if="$root.currentTopMenuItem && $root.currentTopMenuItem.childs.length > 0">
+            <div class=" ui segment" style="box-shadow: 0px 5px 15px rgba(0,0,0,.2);">
+                <div ng-include="'app/operator/juridical/paymentsByPeriod.html'"></div>
+            </div>
+        </div>
+
+        <div class="sixteen wide mobile eleven wide tablet sixteen wide computer column"
+             ng-if="!$root.currentTopMenuItem || $root.currentTopMenuItem.childs.length == 0">
+            <div class=" ui segment" style="box-shadow: 0px 5px 15px rgba(0,0,0,.2);">
+                <div ng-include="'app/operator/juridical/paymentsByPeriod.html'"></div>
+            </div>
+        </div>
+
+
+    </div>
+</div>

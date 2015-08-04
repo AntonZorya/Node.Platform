@@ -16,7 +16,7 @@ exports.add = function (client, done) {
 };
 
 exports.getAll = function (orgId, done) {
-    Collection.find({isDeleted: false}).populate("clientTypeId").populate("controllerId").exec(function (err, clients) {
+    Collection.find({isDeleted: false}).populate("clientTypeId").populate("controllerId").populate('streetId').exec(function (err, clients) {
         if (err) return done(errorBuilder(err));
         return done({operationResult: 0, result: clients});
     });
@@ -146,7 +146,7 @@ exports.reportCounts = function (period, done) {
 
 
 exports.search = function (searchTerm, done) {
-    Collection.aggregate({$match: {$text: {$search: searchTerm}}}, function (err, clients) {
+    Collection.aggregate({$match: {$text: {$search: searchTerm}}}, {'$limit':50}, function (err, clients) {
         if (err)
             return done(errorBuilder(err));
         return done({operationResult: 0, result: clients});
@@ -161,7 +161,9 @@ exports.updateClientCounter = function (body, done) {
                 'counters.$.currentCounts': body.counter.currentCounts,
                 'counters.$.problemDescription': body.counter.problemDescription,
                 'counters.$.dateOfCurrentCounts': body.counter.dateOfCurrentCounts,
-                'counters.$.hasProblem': body.counter.hasProblem
+                'counters.$.hasProblem': body.counter.hasProblem,
+                'counters.$.isCountsByAvg': body.counter.isCountsByAvg,
+                'counters.$.countsByAvg': body.counter.countsByAvg
             }
         },
         options = {
