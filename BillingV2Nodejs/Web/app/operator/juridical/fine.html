@@ -1,0 +1,28 @@
+<div class="ui modal" ng-controller="fineController">
+    <i class="close icon"></i>
+
+    <div class="header">
+        {{'#Выписать штраф' | translate }}. {{selectedItem.name}}
+    </div>
+    <div class="content">
+        <form class="ui form">
+            <div class="field">
+                <label>{{'#Сумма' | translate}}</label>
+                <input type="text" name="sum" placeholder="{{'#Сумма' | translate}}" ng-model="$parent.enteredSum"
+                       ng-required="true">
+            </div>
+            <div class="field">
+                <label>{{'#Комментарий' | translate}} </label>
+                <textarea></textarea>
+            </div>
+            <div class="field">
+                <label>{{'#Файл' | translate}} </label>
+                <input type="file"/>
+            </div>
+        </form>
+    </div>
+    <div class="actions">
+        <div class="ui button red" ng-click="cancel()">{{'#cancel' | translate}}</div>
+        <div class="ui green button" ng-click="save()">{{'#Выписать' | translate}}</div>
+    </div>
+</div>

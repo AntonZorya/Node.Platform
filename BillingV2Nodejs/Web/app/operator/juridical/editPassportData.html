@@ -24,6 +24,11 @@
                            ng-model="modalItem.bin">
                 </div>
                 <div class="two wide field">
+                    <label>{{'#Адрес' | translate}}</label>
+                    <span ng-bind="modalItem.address"></span>
+
+                </div>
+                <div class="two wide field">
                     <label>{{'#Улица' | translate}}</label>
                     <select class="ui search dropdown" ng-model="modalItem.streetId"
                             ng-options="street._id as street.name for street in $parent.streets track by street._id"></select>

@@ -156,7 +156,12 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
             counter.currentCounts = 0;
             counter.countsByAvg = 0;
         }
-    }
+    };
+
+
+    $scope.fined = function () {
+        modalSvc.showModal('/app/operator/juridical/fine.html', 'fineModal', $scope);
+    };
 
 
 }

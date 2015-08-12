@@ -14,7 +14,7 @@ app.use(cors());
 
 //var corsOptions = {
 //  origin: 'http://example.com'
-//};
+//};cd
 
 
 

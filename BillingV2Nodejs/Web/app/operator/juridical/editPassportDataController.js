@@ -7,7 +7,8 @@ function editPassportDataController($scope, dataService, modalSvc, toastr) {
     $scope.modalItem = {
         accountNumber: selectedItem.accountNumber,
         name: selectedItem.name,
-        streetId: selectedItem.streetId
+        streetId: selectedItem.streetId,
+        address: selectedItem.address
     };
 
     $scope.save = function () {
@@ -25,12 +26,12 @@ function editPassportDataController($scope, dataService, modalSvc, toastr) {
 
 
         /*dataService.post('/clientJur/update', selectedItem).then(function (response) {
-            if (response.operationResult === 0) {
-                modalSvc.closeModal('passportDataModal');
-            } else {
-                toastr.error('Ошибка', 'Данные не сохранены');
-            }
-        });*/
+         if (response.operationResult === 0) {
+         modalSvc.closeModal('passportDataModal');
+         } else {
+         toastr.error('Ошибка', 'Данные не сохранены');
+         }
+         });*/
 
 
     };

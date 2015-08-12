@@ -13,10 +13,11 @@ exports.definition = _.extend({
     bin: {type: String, required: "#bin required"},
     rnn: {type: String},
     //location
+    addressId: {type: Schema.Types.ObjectId, ref:'Address', required: true},
     address: {type: String, required: "#address required"},
-    districtId: {type: Schema.Types.ObjectId}, //TODO: справочник –айонов и ref к ним
+    /*districtId: {type: Schema.Types.ObjectId}, //TODO: справочник –айонов и ref к ним
     streetId: {type: Schema.Types.ObjectId, ref: 'Street'},
-    house: {type: String}, //TODO: справочник домов и ref к ним
+    house: {type: String}, //TODO: справочник домов и ref к ним*/
     floor: {type: Number},//этаж
     floorsTotal: {type: Number}, //всего этажей
     ap: {type: String},//TODO: справочник квартир и ref к ним
@@ -32,8 +33,7 @@ exports.definition = _.extend({
     waterPercent: {type: Number},
     canalPercent: {type: Number},
     kskId: {type: Schema.Types.ObjectId, ref: 'ksk'},
-    abonentEntryDate: {type: Date},
-    tariff: tariff
+    abonentEntryDate: {type: Date}
 }, ModelBase);
 
 

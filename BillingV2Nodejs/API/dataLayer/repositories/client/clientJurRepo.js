@@ -1,7 +1,23 @@
 var ClientJurDef = require('../../models/client/clientJur');
 var clientTypeDef = require('../../models/client/clientType');
+var CollectionSchema = new require('../../../helpers/mongoose/modelBuilder')('ClientJur', ClientJurDef, true);
 var Collection = new require('../../../helpers/mongoose/modelBuilder')('ClientJur', ClientJurDef);
 var ClientType = new require('../../../helpers/mongoose/modelBuilder')('ClientType', clientTypeDef);
+
+var addressDef = require('../../models/location/address');
+var Address = new require('../../../helpers/mongoose/modelBuilder')('Address', addressDef);
+
+var tariffDef = require('../../models/tariff/tariff');
+var Tariff = new require('../../../helpers/mongoose/modelBuilder')('Tariff', tariffDef);
+
+var mongoose = require('mongoose');
+var deepPopulate = require('mongoose-deep-populate')(mongoose);
+CollectionSchema.plugin(deepPopulate, {
+    whitelist: [
+        'clientTypeId.tariffId',
+        'addressId'
+    ]
+} /* more on options below */);
 
 //require('../../../helpers/mongoose/modelBuilder')('ClientJur', ClientJurDef, true).index({ "$**": "text" },
 //    { name: "TextIndex" });
@@ -16,7 +32,7 @@ exports.add = function (client, done) {
 };
 
 exports.getAll = function (orgId, done) {
-    Collection.find({isDeleted: false}).populate("clientTypeId").populate("controllerId").populate('streetId').exec(function (err, clients) {
+    Collection.find({isDeleted: false}).populate("clientTypeId").populate("controllerId").populate('addressId').exec(function (err, clients) {
         if (err) return done(errorBuilder(err));
         return done({operationResult: 0, result: clients});
     });
@@ -144,14 +160,56 @@ exports.reportCounts = function (period, done) {
     );
 };
 
-
 exports.search = function (searchTerm, done) {
-    Collection.aggregate({$match: {$text: {$search: searchTerm}}}, {'$limit':50}, function (err, clients) {
-        if (err)
-            return done(errorBuilder(err));
-        return done({operationResult: 0, result: clients});
-    });
+    Collection
+        .find(
+        {$text: {$search: searchTerm }},
+        {score: {$meta: "textScore"}},
+        {'$limit': 50}
+    )
+        .sort({score: {$meta: 'textScore'}})
+        //.lean()
+        .deepPopulate('clientTypeId.tariffId addressId')
+        .exec(function (err, docs) {
+            if (err) return done(errorBuilder(err));
+            return done({operationResult: 0, result: docs});
+
+        });
 };
+
+
+/*exports.search = function (searchTerm, done) {
+ Collection.aggregate({$match: {$text: {$search: searchTerm}}}, {'$limit':50}, function (err, clients) {
+ if (err)
+ return done(errorBuilder(err));
+ return done({operationResult: 0, result: clients});
+ });
+ };*/
+/*exports.search = function (searchTerm, done) {
+ Collection
+ .find(
+ {$text: {$search: searchTerm}},
+ {score: {$meta: "textScore"}},
+ {'$limit': 50}
+ )
+ .sort({score: {$meta: 'textScore'}})
+ .lean()
+ .populate('clientTypeId').populate('addressId')
+ .exec(function (err, docs) {
+ if (err) return done(errorBuilder(err));
+
+
+ Collection.populate(docs,
+ {
+ path: 'clientTypeId.tariffId',
+ models: 'Tariff'
+ }, function (clients) {
+ if (err) return done(errorBuilder(err));
+ return done({operationResult: 0, result: clients});
+ });
+
+ });
+ };*/
 
 
 exports.updateClientCounter = function (body, done) {
