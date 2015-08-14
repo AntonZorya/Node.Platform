@@ -23,6 +23,7 @@ _ = require('underscore');
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://192.168.66.27/BillingController'); // connect to our database
 
+
 // configure app to use bodyParser()
 // this will let us get the data from a POST
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -82,7 +83,7 @@ console.log('Magic happens on port ' + port);
 
 
 //require('./testConsole/toxa').main();
-//require('./testConsole/vasya').main();
+require('./testConsole/vasya').main();
 
 
 // var menu = require('node-menu');

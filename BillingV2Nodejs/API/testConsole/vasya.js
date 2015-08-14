@@ -1,13 +1,23 @@
-var ClientJurRepo = require('../dataLayer/repositories/client/clientJurRepo');
-var controllerRepo = require('../dataLayer/repositories/identity/controllerRepo');
-var ObjectId     = require('mongoose').Types.ObjectId;
+var TestRepo = require('../dataLayer/repositories/test/TestRepo');
 
 exports.main = function () {
-	var date = new Date();
 
-
-	ClientJurRepo.reportCounts(201506, function(data){
+	TestRepo.testDP(function(data){
 		console.log(data);
-	})
+	});
+	
+	// TestRepo.test(function(data){
+	// 	console.log(data);
+	// });
+	
+	// TestRepo.testMR(function(data){
+	// 	console.log(data);
+	// });
+	
+	// TestRepo.testJoin(function(data){
+	// 	console.log(data);
+	// });
+	
+	
 
 }
