@@ -17,10 +17,9 @@ CollectionSchema.plugin(deepPopulate, {
         'clientTypeId.tariffId',
         'addressId'
     ]
-} /* more on options below */);
+});
 
-//require('../../../helpers/mongoose/modelBuilder')('ClientJur', ClientJurDef, true).index({ "$**": "text" },
-//    { name: "TextIndex" });
+
 
 
 exports.add = function (client, done) {

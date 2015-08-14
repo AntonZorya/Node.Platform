@@ -160,7 +160,7 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
 
 
     $scope.fined = function () {
-        modalSvc.showModal('/app/operator/juridical/fine.html', 'fineModal', $scope);
+        modalSvc.showModal('/app/operator/juridical/forfeit.html', 'forfeitModal', $scope);
     };
 
 

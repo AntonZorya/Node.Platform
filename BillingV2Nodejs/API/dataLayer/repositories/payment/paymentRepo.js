@@ -1,5 +1,5 @@
-var paymentDef = require('../../models/payment/payment');
-var Collection = new require('../../../helpers/mongoose/modelBuilder')('payment', paymentDef);
+var paymentDef = require('../../models/paymentDetails/paymentDetails');
+var Collection = new require('../../../helpers/mongoose/modelBuilder')('paymentDetails', paymentDef);
 
 exports.add = function (payment, done) {
     var model = Collection(payment);

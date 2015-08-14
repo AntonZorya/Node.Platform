@@ -8,7 +8,8 @@ function editTechDataController($scope, dataService, modalSvc, toastr) {
         waterPercent: selectedItem.waterPercent,
         canalPercent: selectedItem.canalPercent,
         markId: selectedItem.markId,
-        tariff: selectedItem.tariff
+        tariff: selectedItem.clientTypeId.tariffId,
+        clientType: selectedItem.clientTypeId
     };
 
     $scope.save = function () {
