@@ -25,6 +25,7 @@
     "mongoose-deep-populate": "^2.0.0",
     "mongoose-id-validator": "^0.1.8",
     "multer": "^0.1.8",
+    "node-odata": "^0.7.6",
     "passport": "^0.2.2",
     "passport-http-bearer": "^1.0.1",
     "q": "^1.4.1",
