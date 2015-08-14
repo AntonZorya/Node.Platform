@@ -1,8 +1,5 @@
 var ClientJurDef = require('../../models/client/clientJur');
 var ClientCollection = new require('../../../helpers/mongoose/modelBuilder')('ClientJur', ClientJurDef);
-var ClientTypeDef = require('../../models/client/clientType');
-var ClientTypesCollection = new require('../../../helpers/mongoose/modelBuilder')('ClientType', ClientTypeDef);
-
 var mongoose = require('mongoose');
 var CollectionSchema = new require('../../../helpers/mongoose/modelBuilder')('ClientJur', ClientJurDef, true);
 var deepPopulate = require('mongoose-deep-populate')(mongoose);
@@ -13,10 +10,10 @@ CollectionSchema.plugin(deepPopulate, {
         'controllerId'
     ]
 });
-var mongodb = require('mongodb');
-var Db = mongodb.Db;
-var Server = mongodb.Server;
 var async = require('async');
+var Schema = mongoose.Schema;
+var MixedSchema = new Schema({ any: Schema.Types.Mixed }, { strict: false });
+var ClientJoined = mongoose.model('_ClientJoined', MixedSchema);
 
 
 exports.testDP = function (done) {
@@ -36,9 +33,6 @@ exports.testDP = function (done) {
                     console.log("DROP COLLECTION ERROR!!!");
                 }
                 console.log("DROP COLLECTION SUCCESS!!!");
-                var Schema = mongoose.Schema;
-                var MixedSchema = new Schema({ any: Schema.Types.Mixed }, { strict: false });
-                var ClientJoined = mongoose.model('_ClientJoined', MixedSchema);
                 console.log("DEEP SAVE BEGIN!!!");
                 async.eachSeries(docs, function (doc, callback) {
                     var model = ClientJoined(doc);

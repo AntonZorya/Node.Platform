@@ -4,7 +4,7 @@ module.exports = function (router) {
 
     router.route('/test').
         get(function (req, res) {
-            TestRepo.test(function (data) {
+            TestRepo.testDP(function (data) {
                 operationResultBuilder(data, res);
             });
         });
