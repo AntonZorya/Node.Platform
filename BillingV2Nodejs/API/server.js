@@ -83,7 +83,7 @@ console.log('Magic happens on port ' + port);
 
 
 //require('./testConsole/toxa').main();
-require('./testConsole/vasya').main();
+require('./testConsole/vasya').main2();
 
 
 // var menu = require('node-menu');

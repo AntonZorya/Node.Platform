@@ -29,6 +29,7 @@
     "passport": "^0.2.2",
     "passport-http-bearer": "^1.0.1",
     "q": "^1.4.1",
+    "simple-odata-server": "^0.1.4",
     "underscore": "^1.8.3",
     "xlsjs": "^0.7.5"
   }
