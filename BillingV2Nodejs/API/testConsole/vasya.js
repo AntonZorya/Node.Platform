@@ -78,32 +78,32 @@ MongoClient.connect('mongodb://192.168.66.27/BillingController', function(err, d
 exports.main2 = function(){
 
 // require('./model.js');
-$data.Entity.extend("Todo", {
-    Id: { type: "id", key: true, computed: true },
-    Task: { type: String, required: true, maxLength: 200 },
-    DueDate: { type: Date },
-    Completed: { type: Boolean }
-});
+// $data.Entity.extend("Todo", {
+//     Id: { type: "id", key: true, computed: true },
+//     Task: { type: String, required: true, maxLength: 200 },
+//     DueDate: { type: Date },
+//     Completed: { type: Boolean }
+// });
 
-$data.EntityContext.extend("TodoDatabase", {
-    Todos: { type: $data.EntitySet, elementType: Todo }
-});
+// $data.EntityContext.extend("TodoDatabase", {
+//     Todos: { type: $data.EntitySet, elementType: Todo }
+// });
 
 
 
-$data.createODataServer({
-    responseLimit: 1000,
-    provider: {
-        server: [{ address: '192.168.66.27', port: 27017 }]
-    },    
-    checkPermission: function (access, user, entitySets, callback) {
-        console.log(access);
-        if (access & $data.Access.Read) {
-            callback.success();
-        } 
-        else callback.error('Data is read only.');
-    }
-}, '/todo', 52999);
+// $data.createODataServer({
+//     responseLimit: 1000,
+//     provider: {
+//         server: [{ address: '192.168.66.27', port: 27017 }]
+//     },    
+//     checkPermission: function (access, user, entitySets, callback) {
+//         console.log(access);
+//         if (access & $data.Access.Read) {
+//             callback.success();
+//         } 
+//         else callback.error('Data is read only.');
+//     }
+// }, '/todo', 52999);
 
 
     // $data.createODataServer(
