@@ -9,8 +9,12 @@ function forfeitController($scope, dataService, modalSvc, toastr) {
         clientId: id
     };
 
-    $scope.fofeitDetailsAdd = function () {
+    $scope.forfeitDetailsAdd = function () {
         dataService.post('/forfeitDetails/add', $scope.forfeitDetails).then(function (response) {
+
+            $scope.$parent.getBalanceForClient(id);
+            $scope.$parent.getAllBalance();
+
             console.log(response.result);
         });
     };

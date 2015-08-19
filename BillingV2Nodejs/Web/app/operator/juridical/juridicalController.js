@@ -28,7 +28,8 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
         item.isShowCounters = !item.isShowCounters;
         $scope.selectedItem = item;
 
-        $scope.getBalanceForClient(item._id);
+        if (item.isShowCounters)
+            $scope.getBalanceForClient(item._id);
     };
 
     $scope.updateCounter = function (clientId, counter) {
@@ -43,6 +44,8 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
             }).then(function (response) {
                 toastr.success('', 'Данные успешно сохранены');
                 console.log(response.result);
+                $scope.getBalanceForClient(clientId);
+                $scope.getAllBalance();
             });
         }
         else {
@@ -84,6 +87,8 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
             if (response.operationResult === 0) {
                 $scope.paymentResult = response.result;
                 $scope.print();
+                $scope.getBalanceForClient($scope.payment.clientId);
+                $scope.getAllBalance();
             }
         });
     };

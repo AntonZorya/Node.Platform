@@ -51,10 +51,13 @@
                         <div class="four wide column">
                             {{item.bin}}
                         </div>
-                        <div class="two wide column">
+                        <div class="tree wide column">
                             <div class="ui black basic button" ng-click="showCounters(item)" style="cursor:pointer;">
                                 <i class="dashboard icon"></i> {{item.counters.length}}
                             </div>
+                        </div>
+                        <div class="two wide column">
+                            <span ng-bind="item.controllerId.fullName"></span>
                         </div>
 
                     </div>
@@ -144,16 +147,13 @@
                                         {{bal.name}} :
                                         {{bal.sum | number:2}}
                                     </td>
+                                    <td>Сальдо:
+                                        {{item.balances[0].sum +
+                                        item.balances[1].sum +
+                                        item.balances[2].sum | number: 2}}
+                                    </td>
                                     <td colspan="6"></td>
                                 </tr>
-                                <!--<tr>
-                                    <td colspan="8">
-
-
-
-                                    </td>
-                                    <td colspan="7"></td>
-                                </tr>-->
                                 </tbody>
                             </table>
 

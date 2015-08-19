@@ -120,7 +120,7 @@ exports.updateClientCounter = function (body, done) {
 
         BalanceLogic.add(balance, function (balanceResp) {
             CalculationLogic.add(calculation, function (calcResp) {
-                ClientJurRepo.updateClientCounter(counter, function (counterResp) {
+                ClientJurRepo.updateClientCounter(body, function (counterResp) {
                     done(counterResp);
                 });
             });

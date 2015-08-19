@@ -15,7 +15,8 @@ var deepPopulate = require('mongoose-deep-populate')(mongoose);
 CollectionSchema.plugin(deepPopulate, {
     whitelist: [
         'clientTypeId.tariffId',
-        'addressId'
+        'addressId',
+        'controllerId'
     ]
 });
 
@@ -167,7 +168,7 @@ exports.search = function (searchTerm, done) {
         {'$limit': 50}
     )
         .sort({score: {$meta: 'textScore'}})
-        .deepPopulate('clientTypeId.tariffId addressId')
+        .deepPopulate('clientTypeId.tariffId addressId controllerId')
         .exec(function (err, docs) {
             if (err) return done(errorBuilder(err));
             return done({operationResult: 0, result: docs});
