@@ -48,7 +48,7 @@ exports.getByClientJurId = function (clientJurId, done) {
         var balances = response.result;
 
         var groupedBalances = _(balances).groupBy(function (bal) {
-            return bal.balanceTypeId;
+            return bal.balanceTypeId.name;
         });
 
         var balancesRes = [];

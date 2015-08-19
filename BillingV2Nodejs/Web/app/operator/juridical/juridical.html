@@ -139,6 +139,13 @@
                                         </div>
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td ng-repeat="bal in item.balances">
+                                        {{bal.name}} :
+                                        {{bal.sum | number:2}}
+                                    </td>
+                                    <td colspan="6"></td>
+                                </tr>
                                 <!--<tr>
                                     <td colspan="8">
 

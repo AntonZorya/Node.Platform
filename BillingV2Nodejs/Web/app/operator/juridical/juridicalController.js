@@ -212,7 +212,7 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
 
             if (foundItem) {
                 foundItem.balances = [];
-                foundItem.balances.push(response.result);
+                foundItem.balances = response.result;
             }
 
         });
