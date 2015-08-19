@@ -73,7 +73,7 @@ module.exports = [
     },
     {
         url: "/operator/juridical/paymentsByPeriod",
-        name: "Платежи",
+        name: "Баланс",
         roles: null,
         childs: []
     }

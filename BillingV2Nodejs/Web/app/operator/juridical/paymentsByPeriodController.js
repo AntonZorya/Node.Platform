@@ -11,13 +11,36 @@ function paymentsByPeriodController($scope, dataService, modalSvc, toastr) {
         yearRange: '2015:2020'
     };
 
-    $scope.payments = [];
-    $scope.paymentsByPeriod = function () {
-        dataService.get('/paymentsByPeriod', {
+    $scope.balances = [];
+    $scope.balancesByPeriod = function () {
+        dataService.get('/balance/getByPeriod', {
             dateFrom: $scope.dateFrom,
             dateTo: $scope.dateTo
         }).then(function (response) {
-            $scope.payments = response.result;
+            var balances = response.result;
+
+            $scope.groupedBalances = _(balances).groupBy(function (bal) {
+                return bal.clientJurId.name;
+            });
+
+            $scope.balancesRes = [];
+
+            for (var key in $scope.groupedBalances) {
+
+                var clientName = key;
+                var balanceByClient = {
+                    name: clientName,
+                    sum: 0
+                };
+
+                _.each($scope.groupedBalances[clientName], function (bal) {
+                    balanceByClient.sum = balanceByClient.sum + bal.sum;
+                });
+
+                $scope.balancesRes.push(balanceByClient);
+            }
+
+
         });
     };
 

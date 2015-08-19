@@ -9,6 +9,7 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
     $scope.counterMarks = [];
     $scope.ksks = [];
     $scope.tariffs = [];
+    $scope.allBalance = [];
 
 
     $scope.dateOptions = {
@@ -26,6 +27,8 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
     $scope.showCounters = function (item) {
         item.isShowCounters = !item.isShowCounters;
         $scope.selectedItem = item;
+
+        $scope.getBalanceForClient(item._id);
     };
 
     $scope.updateCounter = function (clientId, counter) {
@@ -161,6 +164,59 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
 
     $scope.fined = function () {
         modalSvc.showModal('/app/operator/juridical/forfeit.html', 'forfeitModal', $scope);
+    };
+
+
+    $scope.getAllBalance = function () {
+        dataService.get('/balance/getAllBalance').then(function (response) {
+
+            var groupedBalances = _(response.result).groupBy(function (bal) {
+                return bal.balanceTypeId.name;
+            });
+
+            $scope.nachisl = {
+                name: 'Начисления',
+                sum: 0
+            };
+            _.each(groupedBalances['Начисление'], function (bal) {
+                $scope.nachisl.sum = $scope.nachisl.sum + bal.sum;
+            });
+
+            $scope.forfeit = {
+                name: 'Штрафы',
+                sum: 0
+            };
+            _.each(groupedBalances['Штраф'], function (bal) {
+                $scope.forfeit.sum = $scope.forfeit.sum + bal.sum;
+            });
+
+            $scope.payment = {
+                name: 'Оплата',
+                sum: 0
+            };
+            _.each(groupedBalances['Оплата'], function (bal) {
+                $scope.payment.sum = $scope.payment.sum + bal.sum;
+            });
+
+        });
+    };
+    $scope.getAllBalance();
+
+    $scope.getBalanceForClient = function (id) {
+
+        dataService.get('/balance/getByClientJurId', {clientJurId: id}).then(function (response) {
+
+            var foundItem = _.find($scope.data, function (item) {
+                return item._id === id;
+            });
+
+            if (foundItem) {
+                foundItem.balances = [];
+                foundItem.balances.push(response.result);
+            }
+
+        });
+
     };
 
 

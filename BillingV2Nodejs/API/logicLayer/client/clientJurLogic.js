@@ -3,6 +3,10 @@ var clientJurValidator = require(_helpersMongoosePath + 'validator');
 var clientJurDefinition = require(_modelsPath + 'client/clientJur');
 var async = require('async');
 
+var BalanceLogic = require('../../logicLayer/balance/balanceLogic');
+var CalculationLogic = require('../../logicLayer/calculations/calculationLogic');
+mongoose = require('mongoose');
+
 exports.add = function (clientJur, orgId, done) {
 
     clientJur.organizationId = orgId;
@@ -78,8 +82,53 @@ exports.search = function (searchTerm, done) {
 };
 
 exports.updateClientCounter = function (body, done) {
-    ClientJurRepo.updateClientCounter(body, function (res) {
-        return done(res);
+
+    var counter = body.counter;
+
+    ClientJurRepo.get(body.clientId, function (clientJur) {
+
+        var tariff = clientJur.result.clientTypeId.tariffId;
+
+        var waterCalcCubicMeters = (counter.currentCounts - counter.lastCounts) * (clientJur.result.waterPercent / 100);
+        var canalCalcCubicMetersCount = (counter.currentCounts - counter.lastCounts) * (clientJur.result.canalPercent / 100);
+
+        var waterSum = 0;
+        var canalSum = 0;
+        if (counter.currentCounts > 0) {
+            waterSum = waterCalcCubicMeters * tariff.water;
+            canalSum = canalCalcCubicMetersCount * tariff.canal;
+        }
+
+        var balanceId = mongoose.Types.ObjectId();
+        var balanceTypeId = '55cdf641fb777624231ab6d9'; // начисление
+        var balance = {
+            _id: balanceId,
+            balanceTypeId: balanceTypeId,
+            clientJurId: body.clientId,
+            date: new Date(),
+            sum: (waterSum + canalSum) * -1
+        };
+
+        var calculation = {
+            balanceId: balanceId,
+            waterCalcCubicMeters: waterCalcCubicMeters,
+            canalCalcCubicMetersCount: canalCalcCubicMetersCount,
+            tariff: tariff,
+            waterSum: waterSum,
+            canalSum: canalSum
+        };
+
+        BalanceLogic.add(balance, function (balanceResp) {
+            CalculationLogic.add(calculation, function (calcResp) {
+                ClientJurRepo.updateClientCounter(counter, function (counterResp) {
+                    done(counterResp);
+                });
+            });
+        });
+
+
     });
+
+
 };
 

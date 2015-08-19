@@ -9,6 +9,16 @@
 <div ng-controller="juridicalController" class="ui padded segment">
 
     <div>
+        <table class="ui basic table">
+            <tr>
+                <td>Период: июль 2015</td>
+                <td>{{nachisl.name}} : {{nachisl.sum | number:2 }} тг.</td>
+                <td>{{forfeit.name}} : {{forfeit.sum | number:2 }} тг.</td>
+                <td>{{payment.name}} : {{payment.sum | number:2 }} тг.</td>
+                <td>Всего должны : {{payment.sum + nachisl.sum + forfeit.sum | number:2}} тг.</td>
+            </tr>
+        </table>
+
 
         <div class="ui form">
 
@@ -46,9 +56,7 @@
                                 <i class="dashboard icon"></i> {{item.counters.length}}
                             </div>
                         </div>
-                        <div class="two wide column">
-                            <label>Сальдо: 500</label>
-                        </div>
+
                     </div>
                 </div>
 
@@ -94,7 +102,7 @@
                                         <input type="checkbox" checked="{{counter.isCountsByAvg}}"
                                                ng-model="counter.isCountsByAvg" ng-checked="counter.isCountsByAvg"
                                                ng-change="byAverage(counter)"/>
-                                        <b> (+ {{counter.countsByAvg}} м3)</b>
+                                        <b> (+ {{counter.countsByAvg = 3}} м3)</b>
 
                                     </td>
 
@@ -183,6 +191,22 @@
                                 <button class="ui basic button" ng-bind="'#Паспортные данные' | translate"
                                         ng-click="editPassportData()"></button>
                             </div>
+
+
+                            <select class="ui search dropdown">
+                                <option>Выберите контроллера</option>
+                                <option>Даяров Алмабек</option>
+                                <option>Баитова Жамал</option>
+                                <option>Жубатырова Роза</option>
+                                <option>Шектибаева Айжамал</option>
+                                <option>Жакып Асылхан</option>
+                                <option>Дуйсенгазиева Замза</option>
+                                <option>Бекбалаев Максат</option>
+                                <option>Убеева Урзия</option>
+                                <option>Оразбеков Ынтымак</option>
+                                <option>Камалова Гульжан</option>
+                            </select>
+
 
                         </div>
                     </div>

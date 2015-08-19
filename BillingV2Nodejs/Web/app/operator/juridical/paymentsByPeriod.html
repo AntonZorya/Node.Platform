@@ -2,6 +2,7 @@
 
     <div class="header">
         <b>{{'#История оплаты клиентов за период' | translate }}: </b>
+
         <div class="ui small input">
             <input ui-date="dateOptions"
                    ng-model='dateFrom'>
@@ -10,24 +11,22 @@
             <input ui-date="dateOptions"
                    ng-model='dateTo'>
         </div>
-        <button class="ui button" ng-click="paymentsByPeriod();">OK</button>
+        <button class="ui button" ng-click="balancesByPeriod();">OK</button>
     </div>
     <div class="content">
         <table class="ui basic table">
             <thead>
             <tr>
                 <th>Клиент</th>
-                <th>Дата</th>
-                <th>Сумма</th>
-                <th>Номер квитанции</th>
+                <th>Сальдо</th>
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="item in payments">
-                <td>{{item.clientId.name}}</td>
-                <td>{{item.date | date:'dd.MM.yyyy hh:mm:ss'}}</td>
-                <td>{{item.sum}}</td>
-                <td>{{item.receiptNumber}}</td>
+            <tr ng-repeat="item in balancesRes">
+
+                <td>{{item.name}}</td>
+                <td>{{item.sum | number:2}}</td>
+
             </tr>
             </tbody>
         </table>

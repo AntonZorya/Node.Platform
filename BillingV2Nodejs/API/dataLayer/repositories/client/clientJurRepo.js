@@ -45,7 +45,7 @@ exports.getAllByCtrlId = function (ctrlId, done) {
 };
 
 exports.get = function (id, done) {
-    Collection.findById(id, {isDeleted: false}).populate("clientTypeId").populate("controllerId").exec(function (err, client) {
+    Collection.findById(id, {isDeleted: false}).deepPopulate('clientTypeId.tariffId addressId').exec(function (err, client) {
         if (err) return done(errorBuilder(err));
         return done({operationResult: 0, result: client});
     });
@@ -167,7 +167,6 @@ exports.search = function (searchTerm, done) {
         {'$limit': 50}
     )
         .sort({score: {$meta: 'textScore'}})
-        //.lean()
         .deepPopulate('clientTypeId.tariffId addressId')
         .exec(function (err, docs) {
             if (err) return done(errorBuilder(err));
