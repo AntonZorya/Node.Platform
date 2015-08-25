@@ -2,7 +2,10 @@ var BalanceRepo = require('../../dataLayer/repositories/balance/balanceRepo'),
     validator = require(_helpersMongoosePath + 'validator'),
     balanceDefinition = require(_modelsPath + 'balances/balance'),
     mongoose = require('mongoose'),
-    _ = require('underscore');
+    _ = require('underscore'),
+    PaymentDetailsRepo = require('../../dataLayer/repositories/payment/paymentRepo'),
+    CalculationRepo = require('../../dataLayer/repositories/calculations/calculationRepo'),
+    ForfeitDetailsRepo = require('../../dataLayer/repositories/forfeitDetails/forfeitDetailsRepo');
 
 
 exports.add = function (balance, done) {
@@ -42,7 +45,7 @@ exports.getAllBalance = function (done) {
     });
 };
 
-exports.getByClientJurId = function (clientJurId, done) {
+exports.getTotalByClientJurId = function (clientJurId, done) {
     BalanceRepo.getByClientJurId(clientJurId, function (response) {
 
         var balances = response.result;
@@ -70,6 +73,34 @@ exports.getByClientJurId = function (clientJurId, done) {
 
         done({operationResult: 0, result: balancesRes});
     });
+};
+
+
+exports.getByClientJurId = function (clientJurId, done) {
+
+    BalanceRepo.getByPeriodAndByClientJurId(clientJurId, function (response) {
+        done(response);
+    });
+
+    var balanceData = [];
+    var balanceDetails = {
+        name: "",
+        data: []
+    };
+
+    PaymentDetailsRepo.getByPeriodAndClientId(dateFrom, dateTo, clientJurId, function (paymentsResp) {
+
+        balanceData.push({
+            name: "Оплата",
+            data: paymentsResp.result
+        });
+
+        //ForfeitDetailsRepo.add
+
+
+    });
+
+
 };
 
 

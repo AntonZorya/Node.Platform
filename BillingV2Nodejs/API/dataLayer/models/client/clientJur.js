@@ -3,8 +3,10 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var _ = require('underscore');
 var phones = require(_modelsPath + 'client/phones').definition;
-var clientCounters = require(_modelsPath + 'client/clientCounters').definition;
+var clientCounters = require(_modelsPath + 'client/pipelineCounter').definition;
 var tariff = require(_modelsPath + 'tariff/tariff').definition;
+var clientType = require(_modelsPath + 'client/clientType').definition;
+var clientPipelines = require(_modelsPath + 'client/clientPipelines').definition;
 
 exports.definition = _.extend({
     accountNumber: {type: String},
@@ -13,25 +15,22 @@ exports.definition = _.extend({
     bin: {type: String, required: "#bin required"},
     rnn: {type: String},
     //location
-    addressId: {type: Schema.Types.ObjectId, ref:'Address', required: true},
+    addressId: {type: Schema.Types.ObjectId, ref: 'Address', required: true},
     address: {type: String, required: "#address required"},
-    /*districtId: {type: Schema.Types.ObjectId}, //TODO: справочник Районов и ref к ним
-    streetId: {type: Schema.Types.ObjectId, ref: 'Street'},
-    house: {type: String}, //TODO: справочник домов и ref к ним*/
     floor: {type: Number},//этаж
     floorsTotal: {type: Number}, //всего этажей
-    ap: {type: String},//TODO: справочник квартир и ref к ним
     area: {type: Number},//площадь
     phone: {type: String},
     email: {type: String},
     //!location
     period: {type: Number},
-    counters: clientCounters,
+    pipelines: clientPipelines,
+    //counters: clientCounters,
     controllerId: {type: Schema.Types.ObjectId, ref: 'Controller', required: true},
-    clientTypeId: {type: Schema.Types.ObjectId, ref: 'ClientType', required: true},
-    isCounter: {type: Boolean},
-    waterPercent: {type: Number},
-    canalPercent: {type: Number},
+    clientType: {type: Schema.Types.ObjectId, ref: 'ClientType', required: true},
+    /*    isCounter: {type: Boolean},
+     waterPercent: {type: Number},
+     canalPercent: {type: Number},*/
     kskId: {type: Schema.Types.ObjectId, ref: 'ksk'},
     abonentEntryDate: {type: Date}
 }, ModelBase);

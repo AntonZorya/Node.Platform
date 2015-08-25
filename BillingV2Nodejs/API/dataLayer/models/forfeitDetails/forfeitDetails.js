@@ -7,7 +7,12 @@ exports.definition = _.extend({
 
     balanceId: {type: Schema.Types.ObjectId, ref: 'Balance', required: true},
     comment: {type: String},
-    filesIds: {type: Array}
+    filesIds: {type: Array},
+    clientJurId: {type: Schema.Types.ObjectId, ref: 'ClientJur'},
+
+    //аудит
+    date: {type: Date, required: '#date required'},
+    userId: {type: Schema.Types.ObjectId, required: true}
 
     /*clientJurId: {type: Schema.Types.ObjectId, ref: 'ClientJur'},
      clientFizId: {type: Schema.Types.ObjectId, ref: 'ClientFiz'},

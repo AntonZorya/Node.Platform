@@ -164,53 +164,101 @@ exports.main = function () {
                  return row[27];
                  });*/
 
-                var clientTypes = [];
+                var clientTypeNames = [];
 
                 _.each(someData, function (itemArray) {
                     _.each(itemArray, function (row, i) {
                         if (i === 30)
                             if (typeof row != 'undefined') {
                                 row = row.toString().trim();
-                                clientTypes.push(row);
+                                clientTypeNames.push(row);
                             }
                     });
                 });
 
-                var uniqClientTypes = _.uniq(clientTypes);
+                var uniqClientTypeNames = _.uniq(clientTypeNames);
 
-                async.each(uniqClientTypes, function (clientType, callback) {
 
-                    var tariffId = null;
+                //var newObjectIdForParentMsb = mongoose.Types.ObjectId(); //МСБ
 
-                    switch (clientType) {
+                /* clientTypeRepo.add({
+                 _id: newObjectIdForParentMsb,
+                 name: "МСБ",
+                 tariffId: '55bf41dad39a83c1a4ea83c9',//МСБ
+                 parentId: null,
+                 isDeleted: false,
+                 createDateTime: new Date()
+                 }, function (result) {
+                 console.log('clientType: ' + "МСБ" + '  added');
+                 });*/
 
+
+                async.each(uniqClientTypeNames, function (clientTypeName, callback) {
+
+                    var newObjectIdForParentMsb = '55db1a16f96bf62c7635ae1b'; //МСБ
+
+                    var clientType = {
+                        name: clientTypeName
+                        /*tariffId: null,
+                         parentId: null,
+                         minConsumption: null*/
+                    };
+
+                    switch (clientTypeName) {
                         case 'респ.бюджет':
-                            tariffId = '55bf43bad39a83c1a4ea83cb';
+                            clientType.tariffId = '55bf43bad39a83c1a4ea83cb';
                             break;
                         case 'гор.бюджет':
-                            tariffId = '55bf43bad39a83c1a4ea83cb';
+                            clientType.tariffId = '55bf43bad39a83c1a4ea83cb';
                             break;
                         case 'хоз.субъекты':
-                            tariffId = '55bf441dd39a83c1a4ea83cf';
+                            clientType.tariffId = '55bf441dd39a83c1a4ea83cf';
                             break;
                         case 'район':
-                            tariffId = '55bf43ecd39a83c1a4ea83cd';
+                            clientType.tariffId = '55bf43ecd39a83c1a4ea83cd';
                             break;
                         case 'талсуат':
-                            tariffId = '55c9976dd39aa4ea934245a0';
+                            clientType.tariffId = '55c9976dd39aa4ea934245a0';
+                            break;
+                        case 'кафе':
+                            clientType.tariffId = '55bf41dad39a83c1a4ea83c9';//МСБ
+                            clientType.parentId = newObjectIdForParentMsb;
+                            clientType.minConsumption = 25;
+                            break;
+                        case 'рестораны':
+                            clientType.tariffId = '55bf41dad39a83c1a4ea83c9';//МСБ
+                            clientType.parentId = newObjectIdForParentMsb;
+                            clientType.minConsumption = 110;
+                            break;
+                        case 'гостиницы':
+                            clientType.tariffId = '55bf41dad39a83c1a4ea83c9';//МСБ
+                            clientType.parentId = newObjectIdForParentMsb;
+                            clientType.minConsumption = 70;
+                            break;
+                        case 'азс и автомойки':
+                            clientType.tariffId = '55bf41dad39a83c1a4ea83c9';//МСБ
+                            clientType.parentId = newObjectIdForParentMsb;
+                            clientType.minConsumption = 160;
+                            break;
+                        case 'сауны':
+                            clientType.tariffId = '55bf41dad39a83c1a4ea83c9';//МСБ
+                            clientType.parentId = newObjectIdForParentMsb;
+                            clientType.minConsumption = 80;
+                            break;
+                        case 'бани':
+                            clientType.tariffId = '55bf41dad39a83c1a4ea83c9';//МСБ
+                            clientType.parentId = newObjectIdForParentMsb;
+                            clientType.minConsumption = 50;
                             break;
                         default:
-                            tariffId = '55bf41dad39a83c1a4ea83c9';//МСБ
+                            clientType.tariffId = '55bf41dad39a83c1a4ea83c9';//МСБ
+                            clientType.parentId = newObjectIdForParentMsb;
                             break;
                     }
 
-                    clientTypeRepo.add({
-                        name: clientType,
-                        tariffId: tariffId
-                        /*priceWater: (row[27] == "респ.бюджет" || row[27] == "гор.бюджет" || row[27] == "обл.бюджет") ? 60.31 : 127.14,
-                         priceKanal: (row[27] == "респ.бюджет" || row[27] == "гор.бюджет" || row[27] == "обл.бюджет") ? 87.36 : 165.49*/
-                    }, function (result) {
-                        console.log('clientType:' + clientType + '  added');
+
+                    clientTypeRepo.add(clientType, function (result) {
+                        console.log('clientType: ' + clientTypeName + '  added');
                         callback();
                     });
 
@@ -268,6 +316,23 @@ exports.main = function () {
                             });
                         });
 
+                        var pipelines = [];
+                        _.each(tmpCntArr, function (counter, index) {
+                            pipelines.push({
+                                number: index + 1,
+                                description: "Ввод(трубопровод) по адресу: " + row[4],
+                                addressId: null, //TODO addressId
+                                counter: counter,
+
+                                isByCounter: row[11] == "счетчик",//row[11] == "по норме" ? false : true,
+                                waterPercent: row[14] ? row[14].replace('%', '') : 0,
+                                canalPercent: row[15] ? row[15].replace('%', '') : 0,
+
+                                isActive: true
+                            });
+                        });
+
+
                         controllerRepo.getByName(row[32], function (controller) {
                             clientTypeRepo.getByName(row[30], function (clientType) {
 
@@ -281,18 +346,14 @@ exports.main = function () {
                                     rnn: row[1],
                                     address: row[4] ? row[4] : 'No address',
                                     addressId: '000000000000000000000000',
-                                    /*streetId: street.result ? street.result._id : null,
-                                     house: row[6],
-                                     ap: row[7],*/
                                     period: 201507,
-                                    counters: tmpCntArr,
+                                    pipelines: pipelines,
+                                    //counters: tmpCntArr,
                                     controllerId: controller.result ? controller.result._id : null,
-                                    clientTypeId: clientType.result ? clientType.result._id : null,
-                                    isCounter: row[11] != "норма",//row[11] == "норма" ? false : true,
-                                    waterPercent: row[14] ? row[14].replace('%', '') : 0,
-                                    canalPercent: row[15] ? row[15].replace('%', '') : 0
+                                    clientType: clientType.result ? clientType.result : null
                                 };
 
+                                //функция вызывается ниже
                                 function clientJurAdd() {
                                     clientJurLogic.add(clientJur, 22, function (result) {
                                         console.log('Added ' + row[3] + ' number ' + row[0]);
@@ -300,7 +361,6 @@ exports.main = function () {
                                     });
                                 }
 
-//var str = null;
                                 if (row[5]) {
                                     var streetName = row[5];
                                     streetName = streetName.toString().trim();

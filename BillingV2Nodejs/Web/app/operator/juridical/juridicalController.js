@@ -209,7 +209,7 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
 
     $scope.getBalanceForClient = function (id) {
 
-        dataService.get('/balance/getByClientJurId', {clientJurId: id}).then(function (response) {
+        dataService.get('/balance/getTotalByClientJurId', {clientJurId: id}).then(function (response) {
 
             var foundItem = _.find($scope.data, function (item) {
                 return item._id === id;

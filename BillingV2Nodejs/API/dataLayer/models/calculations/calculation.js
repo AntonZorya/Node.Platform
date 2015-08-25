@@ -5,13 +5,22 @@ var modelBase = require('../base/modelBase'),
     tariff = require(_modelsPath + 'tariff/tariff').definition;
 
 exports.definition = _.extend({
-    counterId: {type: schema.Types.ObjectId},
+    clientJurId: {type: schema.Types.ObjectId, ref: 'ClientJur', required: true},
+    pipelineId: {type: schema.Types.ObjectId},
     balanceId: {type: schema.Types.ObjectId, ref: 'Balance', required: true},
     cubicMetersCount: {type: Number},
-    //tariffId: {type: schema.Types.ObjectId, ref: 'Tariff', required: true},
     tariff: tariff,
     waterSum: {type: Number},
-    canalSum: {type: Number}
+    canalSum: {type: Number},
+
+    isShortage: {type: Boolean}, //добор/недобор,
+    shortageCubicMeters: {type: Number}, //недобор м3,
+    shortageSum: {type: Number}, //недобор тг
+
+    //аудит
+    date: {type: Date, required: '#date required'},
+    userId: {type: schema.Types.ObjectId, required: true}
+
 }, modelBase);
 
 

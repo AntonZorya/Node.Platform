@@ -21,8 +21,6 @@ CollectionSchema.plugin(deepPopulate, {
 });
 
 
-
-
 exports.add = function (client, done) {
     var model = Collection(client);
     model.save(function (err) {
@@ -163,7 +161,7 @@ exports.reportCounts = function (period, done) {
 exports.search = function (searchTerm, done) {
     Collection
         .find(
-        {$text: {$search: searchTerm }},
+        {$text: {$search: searchTerm}},
         {score: {$meta: "textScore"}},
         {'$limit': 50}
     )

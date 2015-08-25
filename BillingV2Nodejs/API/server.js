@@ -83,7 +83,7 @@ console.log('Magic happens on port ' + port);
 
 
 //require('./testConsole/toxa').main();
-require('./testConsole/vasya').main();
+//require('./testConsole/vasya').main();
 require('./odata/odataSvc');
 
 

@@ -6,5 +6,6 @@ var _ = require('underscore');
 exports.definition = _.extend({
     addressTypeId: {type: Schema.Types.ObjectId, ref: 'AddressType', required: true}, /*, */
     value: {type: String, required: true},
-    parentId: {type: Schema.Types.ObjectId}
+    parentId: {type: Schema.Types.ObjectId},
+    parentAddresses: []
 }, ModelBase);

@@ -17,6 +17,13 @@ module.exports = function (router) {
         });
 
 
+    router.route('/balance/getTotalByClientJurId').
+        get(function (req, res) {
+            Logic.getTotalByClientJurId(req.query.clientJurId, function (data) {
+                operationResultBuilder(data, res);
+            });
+        });
+
     router.route('/balance/getByClientJurId').
         get(function (req, res) {
             Logic.getByClientJurId(req.query.clientJurId, function (data) {

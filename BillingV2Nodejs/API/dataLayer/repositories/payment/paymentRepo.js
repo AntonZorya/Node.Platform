@@ -17,8 +17,23 @@ exports.getByClientId = function (clientId, done) {
 };
 
 exports.getByPeriod = function (dateFrom, dateTo, done) {
-    Collection.find({date: {$gte: dateFrom, $lte: dateTo}}).populate('clientId').exec( function (err, res) {
+    Collection.find({date: {$gte: dateFrom, $lte: dateTo}}).populate('clientId').exec(function (err, res) {
         if (err)return done(errorBuilder(err));
         done({operationResult: 0, result: res});
     });
+};
+
+
+exports.getByPeriodAndClientId = function (dateFrom, dateTo, clientId, done) {
+    Collection.find(
+        {
+            $and: [
+                {date: {$gte: dateFrom, $lte: dateTo}},
+                {clientId: clientId}
+            ]
+        }
+    ).populate('clientId').exec(function (err, res) {
+            if (err)return done(errorBuilder(err));
+            done({operationResult: 0, result: res});
+        });
 };
