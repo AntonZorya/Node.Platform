@@ -205,6 +205,7 @@ exports.main = function () {
                     };
 
                     switch (clientTypeName) {
+                        //TODO обласной бюджет ???
                         case 'респ.бюджет':
                             clientType.tariffId = '55bf43bad39a83c1a4ea83cb';
                             break;
@@ -312,7 +313,8 @@ exports.main = function () {
                                 problemDescription: cntRow[26] ? cntRow[26] : "",
                                 lastCounts: cntRow[12] ? cntRow[12] : 0,
                                 dateOfLastCounts: null,
-                                isCountsByAvg: false
+                                isCountsByAvg: false,
+                                isActive: true
                             });
                         });
 
@@ -322,7 +324,7 @@ exports.main = function () {
                                 number: index + 1,
                                 description: "Ввод(трубопровод) по адресу: " + row[4],
                                 addressId: null, //TODO addressId
-                                counter: counter,
+                                counters: [counter],
 
                                 isByCounter: row[11] == "счетчик",//row[11] == "по норме" ? false : true,
                                 waterPercent: row[14] ? row[14].replace('%', '') : 0,
@@ -330,6 +332,7 @@ exports.main = function () {
 
                                 isActive: true
                             });
+
                         });
 
 

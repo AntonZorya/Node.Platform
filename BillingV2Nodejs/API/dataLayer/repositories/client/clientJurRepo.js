@@ -163,7 +163,7 @@ exports.search = function (searchTerm, done) {
         .find(
         {$text: {$search: searchTerm}},
         {score: {$meta: "textScore"}},
-        {'$limit': 50}
+        {'$limit': 20}
     )
         .sort({score: {$meta: 'textScore'}})
         .deepPopulate('clientTypeId.tariffId addressId controllerId')
