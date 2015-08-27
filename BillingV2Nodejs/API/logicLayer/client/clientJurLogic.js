@@ -87,7 +87,7 @@ exports.updateClientCounter = function (body, done) {
 
     ClientJurRepo.get(body.clientId, function (clientJur) {
 
-        var tariff = clientJur.result.clientTypeId.tariffId;
+        var tariff = clientJur.result.clientType.tariffId;
 
         var waterCalcCubicMeters = (counter.currentCounts - counter.lastCounts) * (clientJur.result.waterPercent / 100);
         var canalCalcCubicMetersCount = (counter.currentCounts - counter.lastCounts) * (clientJur.result.canalPercent / 100);

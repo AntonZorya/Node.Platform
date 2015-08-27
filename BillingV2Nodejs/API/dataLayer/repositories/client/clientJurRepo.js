@@ -14,7 +14,7 @@ var mongoose = require('mongoose');
 var deepPopulate = require('mongoose-deep-populate')(mongoose);
 CollectionSchema.plugin(deepPopulate, {
     whitelist: [
-        'clientTypeId.tariffId',
+        'tariffId',
         'addressId',
         'controllerId'
     ]
@@ -30,7 +30,7 @@ exports.add = function (client, done) {
 };
 
 exports.getAll = function (orgId, done) {
-    Collection.find({isDeleted: false}).populate("clientTypeId").populate("controllerId").populate('addressId').exec(function (err, clients) {
+    Collection.find({isDeleted: false}).populate("controllerId").populate('addressId').exec(function (err, clients) {
         if (err) return done(errorBuilder(err));
         return done({operationResult: 0, result: clients});
     });
@@ -44,7 +44,7 @@ exports.getAllByCtrlId = function (ctrlId, done) {
 };
 
 exports.get = function (id, done) {
-    Collection.findById(id, {isDeleted: false}).deepPopulate('clientTypeId.tariffId addressId').exec(function (err, client) {
+    Collection.findById(id, {isDeleted: false}).deepPopulate('tariffId addressId').exec(function (err, client) {
         if (err) return done(errorBuilder(err));
         return done({operationResult: 0, result: client});
     });
@@ -166,7 +166,10 @@ exports.search = function (searchTerm, done) {
         {'$limit': 20}
     )
         .sort({score: {$meta: 'textScore'}})
-        .deepPopulate('clientTypeId.tariffId addressId controllerId')
+        .populate('clientType.tariffId')
+        .populate('addressId')
+        .populate('controllerId')
+        //.deepPopulate('tariffId addressId controllerId')
         .exec(function (err, docs) {
             if (err) return done(errorBuilder(err));
             return done({operationResult: 0, result: docs});
@@ -174,51 +177,18 @@ exports.search = function (searchTerm, done) {
         });
 };
 
-
-/*exports.search = function (searchTerm, done) {
- Collection.aggregate({$match: {$text: {$search: searchTerm}}}, {'$limit':50}, function (err, clients) {
- if (err)
- return done(errorBuilder(err));
- return done({operationResult: 0, result: clients});
- });
- };*/
-/*exports.search = function (searchTerm, done) {
- Collection
- .find(
- {$text: {$search: searchTerm}},
- {score: {$meta: "textScore"}},
- {'$limit': 50}
- )
- .sort({score: {$meta: 'textScore'}})
- .lean()
- .populate('clientTypeId').populate('addressId')
- .exec(function (err, docs) {
- if (err) return done(errorBuilder(err));
-
-
- Collection.populate(docs,
- {
- path: 'clientTypeId.tariffId',
- models: 'Tariff'
- }, function (clients) {
- if (err) return done(errorBuilder(err));
- return done({operationResult: 0, result: clients});
- });
-
- });
- };*/
-
-
 exports.updateClientCounter = function (body, done) {
-    var conditions = {'_id': body.clientId, 'counters._id': body.counter._id},
+    var pipelineIndex = body.pipelineIndex;
+    var conditions = {'_id': body.clientId, 'pipelines.counters._id': body.counter._id},
         update = {
             $set: {
-                'counters.$.currentCounts': body.counter.currentCounts,
-                'counters.$.problemDescription': body.counter.problemDescription,
-                'counters.$.dateOfCurrentCounts': body.counter.dateOfCurrentCounts,
-                'counters.$.hasProblem': body.counter.hasProblem,
-                'counters.$.isCountsByAvg': body.counter.isCountsByAvg,
-                'counters.$.countsByAvg': body.counter.countsByAvg
+                'pipelines.$.counters.$': body.counter
+                //'pipelines.0.counters.$.currentCounts': body.counter.currentCounts,
+                /*'counters.$.problemDescription': body.counter.problemDescription,
+                 'counters.$.dateOfCurrentCounts': body.counter.dateOfCurrentCounts,
+                 'counters.$.hasProblem': body.counter.hasProblem,
+                 'counters.$.isCountsByAvg': body.counter.isCountsByAvg,
+                 'counters.$.countsByAvg': body.counter.countsByAvg*/
             }
         },
         options = {
@@ -228,7 +198,7 @@ exports.updateClientCounter = function (body, done) {
     Collection.update(
         conditions,
         update,
-        //options,
+        options,
         callback
     );
 

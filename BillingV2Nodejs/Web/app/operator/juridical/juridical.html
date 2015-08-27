@@ -70,7 +70,8 @@
                             <table class="ui basic table">
                                 <tbody>
                                 <tr ng-repeat="pipeline in item.pipelines">
-                                    <td style="width: 20px;">Ввод №: {{pipeline.number + " " + pipeline.description}}</td>
+                                    <td style="width: 20px;">Ввод №: {{pipeline.number + " " + pipeline.description}}
+                                    </td>
                                     <td colspan="8">
                                         <table class="ui basic table">
                                             <thead>
@@ -141,7 +142,7 @@
                                                 <td>
                                                     <div class="ui small basic icon buttons right floated">
                                                         <button class="ui button"
-                                                                ng-click="updateCounter(item._id, counter)"><i
+                                                                ng-click="updateClient(item, counter)"><i
                                                                 class="large save icon"></i></button>
                                                     </div>
                                                 </td>

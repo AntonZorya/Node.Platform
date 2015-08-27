@@ -8,81 +8,117 @@
 
         <form class="ui form">
             <div class="fields">
-                <div class=" two wide field">
-                    <label>{{'#Процент водоснабжения' | translate}}</label>
-                    <input type="text" name="waterPercent" placeholder="{{'#Процент водоснабжения' | translate}}"
-                           ng-model="modalItem.waterPercent">
-                </div>
-                <div class=" two wide field">
-                    <label>{{'#Процент канализации' | translate}}</label>
-                    <input type="text" name="canalPercent" placeholder="{{'#Процент канализации' | translate}}"
-                           ng-model="modalItem.canalPercent">
-                </div>
+
                 <div class="three wide field">
                     <label>{{'#Выберите Тариф на воду' | translate}}</label>
 
                     <div class="ui input">
-                        <select class="ui search dropdown" ng-model="modalItem.tariff"
+                        <select class="ui search dropdown" ng-model="modalItem.clientType.tariffId"
                                 ng-options="tariff as tariff.name for tariff in $parent.tariffs track by tariff._id"></select>
                     </div>
                 </div>
                 <div class=" one wide field">
                     <label>{{'#Тариф на воду' | translate}}</label>
-                    <div class="ui large label">{{modalItem.tariff.water}}</div>
+
+                    <div class="ui large label">{{modalItem.clientType.tariffId.water}}</div>
                 </div>
                 <div class=" two wide field">
                     <label>{{'#Тариф на канализацию' | translate}}</label>
-                    <div class="ui large label">{{modalItem.tariff.canal}}</div>
+
+                    <div class="ui large label">{{modalItem.clientType.tariffId.canal}}</div>
                 </div>
             </div>
         </form>
 
-        <table class="ui basic celled  table">
-            <thead>
-            <tr>
-                <th>{{'#counterNumber'|translate}}</th>
-                <th>{{'#Дата установки счетчика'|translate}}</th>
-                <th>{{'#Дата след. поверки/замены счетчика'|translate}}</th>
-                <th>{{'#counterPlumb'|translate}}</th>
-                <th>{{'#Дата установки пломбы'|translate}}</th>
-                <th>{{'#Марка счетчика'|translate}}</th>
-            </tr>
-            </thead>
+
+        <table class="ui basic celled table">
+
             <tbody>
-            <tr ng-repeat="counter in selectedItem.counters">
-                <td>
-                    <div class="ui input">
-                        <input type="text" ng-model="counter.counterNumber"/>
-                    </div>
+
+            <tr ng-repeat="pipeline in modalItem.pipelines">
+                <td style="width: 60px;">
+
+                    <form class="ui form">
+
+
+                        <div class="fields">
+                            <b>Ввод № {{pipeline.number}}</b>
+
+                            <label>{{'#Процент водоснабжения' | translate}}</label>
+                            <input type="text" name="waterPercent"
+                                   placeholder="{{'#Процент водоснабжения' | translate}}"
+                                   ng-model="pipeline.waterPercent">
+
+                            <label>{{'#Процент канализации' | translate}}</label>
+                            <input type="text" name="canalPercent" placeholder="{{'#Процент канализации' | translate}}"
+                                   ng-model="modalItem.canalPercent">
+                        </div>
+                    </form>
                 </td>
-                <td>
-                    <div class="ui input">
-                        <input ui-date="dateOptions" type="text" class="ng-pristine ng-valid ng-touched"
-                               ng-model="counter.installDate"/>
-                    </div>
-                </td>
-                <td>
-                    <div class="ui input">
-                        <input ui-date="dateOptions" type="text" class="ng-pristine ng-valid ng-touched"
-                               ng-model="counter.checkDate"/>
-                    </div>
-                </td>
-                <td>
-                    <div class="ui input">
-                        <input type="text" class="ng-pristine ng-valid ng-touched" ng-model="counter.plumbNumber"/>
-                    </div>
-                </td>
-                <td>
-                    <div class="ui input">
-                        <input ui-date="dateOptions" type="text" class="ng-pristine ng-valid ng-touched"
-                               ng-model="counter.plumbInstallDate"/>
-                    </div>
-                </td>
-                <td>
-                    <div class="ui input">
-                        <select class="ui search dropdown" ng-model="counter.markId"
-                                ng-options="mark._id as mark.name for mark in $parent.counterMarks track by mark._id"></select>
-                    </div>
+                <td colspan="6">
+
+                    <button class="ui button" ng-click="addNewCounter($index)">Добавить счетчик</button>
+                    <table class="ui basic celled table">
+                        <thead>
+                        <tr>
+                            <th>{{'#counterNumber'|translate}}</th>
+                            <th>{{'#Дата установки счетчика'|translate}}</th>
+                            <th>{{'#Дата след. поверки/замены счетчика'|translate}}</th>
+                            <th>{{'#counterPlumb'|translate}}</th>
+                            <th>{{'#Дата установки пломбы'|translate}}</th>
+                            <th>{{'#Марка счетчика'|translate}}</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <tr ng-repeat="counter in pipeline.counters" ng-class="{
+                        'error disabled': !counter.isActive,
+                        'positive': counter.isActive
+                        }">
+                            <td>
+                                <div class="ui input">
+                                    <input type="text" ng-model="counter.counterNumber"/>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="ui input">
+                                    <input ui-date="dateOptions" type="text" class="ng-pristine ng-valid ng-touched"
+                                           ng-model="counter.installDate"/>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="ui input">
+                                    <input ui-date="dateOptions" type="text" class="ng-pristine ng-valid ng-touched"
+                                           ng-model="counter.checkDate"/>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="ui input">
+                                    <input type="text" class="ng-pristine ng-valid ng-touched"
+                                           ng-model="counter.plumbNumber"/>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="ui input">
+                                    <input ui-date="dateOptions" type="text" class="ng-pristine ng-valid ng-touched"
+                                           ng-model="counter.plumbInstallDate"/>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="ui input">
+                                    <select class="ui search dropdown" ng-model="counter.markId"
+                                            ng-options="mark._id as mark.name for mark in $parent.counterMarks track by mark._id"></select>
+                                </div>
+                            </td>
+                            <td>
+                                <button class="ui button" ng-click="disableCounter($parent.$index, $index)">Снять
+                                </button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
                 </td>
             </tr>
             </tbody>

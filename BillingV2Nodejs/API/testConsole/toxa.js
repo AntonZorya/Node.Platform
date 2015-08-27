@@ -353,7 +353,7 @@ exports.main = function () {
                                     pipelines: pipelines,
                                     //counters: tmpCntArr,
                                     controllerId: controller.result ? controller.result._id : null,
-                                    clientType: clientType.result ? clientType.result : null
+                                    clientType: clientType.result ? clientType.result._doc : null
                                 };
 
                                 //функция вызывается ниже

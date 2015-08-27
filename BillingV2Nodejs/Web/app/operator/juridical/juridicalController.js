@@ -32,19 +32,16 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
             $scope.getBalanceForClient(item._id);
     };
 
-    $scope.updateCounter = function (clientId, counter) {
+    $scope.updateClient = function (client, counter) {
 
         if (counter.currentCounts >= counter.lastCounts) {
             if (!counter.hasProblem)
                 counter.problemDescription = '';
 
-            dataService.post('/clientJur/updateClientCounter', {
-                clientId: clientId,
-                counter: counter
-            }).then(function (response) {
+            dataService.post('/clientJur/update', client).then(function (response) {
                 toastr.success('', 'Данные успешно сохранены');
                 console.log(response.result);
-                $scope.getBalanceForClient(clientId);
+                $scope.getBalanceForClient(client._id);
                 $scope.getAllBalance();
             });
         }
@@ -52,6 +49,14 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
             toastr.error('Текущие показания должны быть больше или равны последним!', 'Данные не сохранены');
         }
     };
+
+
+    $scope.updateClientPassportData = function (client) {
+        dataService.post('/clientJur/update', client).then(function (response) {
+            toastr.success('', 'Данные успешно сохранены');
+        });
+    };
+
 
     //TODO: вынести в отдельный контроллер
     //payment
