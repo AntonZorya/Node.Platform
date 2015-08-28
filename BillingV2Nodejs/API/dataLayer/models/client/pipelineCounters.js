@@ -14,8 +14,8 @@ exports.definition =
         dateOfLastCounts: {type: Date},
         hasProblem: {type: Boolean},
 
-        isCountsByAvg: {type: Boolean},
-        countsByAvg: {type: Number},
+        //isCountsByAvg: {type: Boolean},
+        //countsByAvg: {type: Number},
 
         installDate: {type: Date},
         checkDate: {type: Date},
@@ -24,6 +24,9 @@ exports.definition =
         markId: {type: Schema.Types.ObjectId, ref: 'CounterMark'},
         fileIds: [], //акт снятия, акт установки
 
-        isActive: {type: Boolean}
+        isActive: {type: Boolean},
+
+        removeDate: {type: Date},
+
 
     }];

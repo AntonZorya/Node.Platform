@@ -23,7 +23,11 @@ exports.add = function (payment, done) {
 
     var paymentDetails = {
         balanceId: balanceId,
-        receiptNumber: payment.receiptNumber
+        receiptNumber: payment.receiptNumber,
+        clientJurId: payment.clientId,
+        //аудит
+        date: new Date(),
+        userId: "557f15402af16cc42c2cc351" //TODO: вытаскивать текущего юзера
     };
 
     BalanceLogic.add(balance, function (response) {

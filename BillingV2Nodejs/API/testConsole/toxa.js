@@ -313,7 +313,7 @@ exports.main = function () {
                                 problemDescription: cntRow[26] ? cntRow[26] : "",
                                 lastCounts: cntRow[12] ? cntRow[12] : 0,
                                 dateOfLastCounts: null,
-                                isCountsByAvg: false,
+                                //isCountsByAvg: false,
                                 isActive: true
                             });
                         });

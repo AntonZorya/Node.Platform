@@ -8,12 +8,17 @@ exports.add = function (forfeitDetails, done) {
 
 
     var balanceId = mongoose.Types.ObjectId();
-    var balanceTypeId = '55cdf5c5bd2c5768423c5796';//�����
+    var balanceTypeId = '55cdf5c5bd2c5768423c5796';//штраф
 
     var forfeitDetailsForDb = {
         balanceId: balanceId,
         comment: forfeitDetails.comment,
-        files: forfeitDetails.files
+        files: forfeitDetails.files,
+        clientJurId: forfeitDetails.clientId,
+        //аудит
+        date: new Date(),
+        userId: "557f15402af16cc42c2cc351" //TODO: вытаскивать текущего юзера
+
     };
 
     var balance = {

@@ -32,13 +32,19 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
             $scope.getBalanceForClient(item._id);
     };
 
-    $scope.updateClient = function (client, counter) {
+    $scope.updateClient = function (client, counter, pipeline) {
 
         if (counter.currentCounts >= counter.lastCounts) {
             if (!counter.hasProblem)
                 counter.problemDescription = '';
 
-            dataService.post('/clientJur/update', client).then(function (response) {
+            var body = {
+                client: client,
+                pipeline: pipeline,
+                counter: counter
+            };
+
+            dataService.post('/clientJur/updateClientCounter', body).then(function (response) {
                 toastr.success('', 'Данные успешно сохранены');
                 console.log(response.result);
                 $scope.getBalanceForClient(client._id);
@@ -160,15 +166,27 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
         modalSvc.showModal('/app/operator/juridical/clientPaymentHistory.html', 'clientPaymentHistoryModal', $scope);
     };
 
-    $scope.byAverage = function (counter) {
-        if (counter.isCountsByAvg == true) {
-            var avg = 3; //TODO: расчеты "по среднему"
-            counter.currentCounts = counter.lastCounts + avg;
-            counter.countsByAvg = avg;
-        } else {
-            counter.currentCounts = 0;
-            counter.countsByAvg = 0;
+    $scope.byAverage = function (pipeline) {
+
+        if (!pipeline.avg && pipeline.isCountsByAvg === true)
+            alert('Нет данных "По среднему" ');
+        else {
+            var foundCounter = _.find(pipeline.counters, function (counter) {
+                return counter.isActive === true;
+            });
+
+            if (!foundCounter)
+                alert("Нет активного счетчика");
+
+            else if (foundCounter && pipeline.isCountsByAvg === true) {
+                foundCounter.currentCounts = foundCounter.lastCounts + pipeline.avg;
+                //counter.countsByAvg = avg;
+            }
+            else if (foundCounter && pipeline.isCountsByAvg === false) {
+                foundCounter.currentCounts = 0;
+            }
         }
+
     };
 
 

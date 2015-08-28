@@ -182,7 +182,7 @@ exports.updateClientCounter = function (body, done) {
     var conditions = {'_id': body.clientId, 'pipelines.counters._id': body.counter._id},
         update = {
             $set: {
-                'pipelines.$.counters.$': body.counter
+                //'pipelines.$.counters.$': body.counter
                 //'pipelines.0.counters.$.currentCounts': body.counter.currentCounts,
                 /*'counters.$.problemDescription': body.counter.problemDescription,
                  'counters.$.dateOfCurrentCounts': body.counter.dateOfCurrentCounts,

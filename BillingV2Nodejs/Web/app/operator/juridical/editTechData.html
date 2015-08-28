@@ -4,7 +4,7 @@
     <div class="header">
         {{'#Технические данные' | translate }}. {{selectedItem.name}}. Категория: {{modalItem.clientType.name}}
     </div>
-    <div class="content">
+    <div class="content" style="overflow: auto; height: 600px;">
 
         <form class="ui form">
             <div class="fields">
@@ -36,28 +36,49 @@
             <tbody>
 
             <tr ng-repeat="pipeline in modalItem.pipelines">
-                <td style="width: 60px;">
 
-                    <form class="ui form">
-
-
-                        <div class="fields">
-                            <b>Ввод № {{pipeline.number}}</b>
-
-                            <label>{{'#Процент водоснабжения' | translate}}</label>
-                            <input type="text" name="waterPercent"
-                                   placeholder="{{'#Процент водоснабжения' | translate}}"
-                                   ng-model="pipeline.waterPercent">
-
-                            <label>{{'#Процент канализации' | translate}}</label>
-                            <input type="text" name="canalPercent" placeholder="{{'#Процент канализации' | translate}}"
-                                   ng-model="modalItem.canalPercent">
-                        </div>
-                    </form>
-                </td>
                 <td colspan="6">
 
-                    <button class="ui button" ng-click="addNewCounter($index)">Добавить счетчик</button>
+                    <table class="ui table">
+                        <tr>
+                            <td>
+                                <b>Ввод № {{pipeline.number}}</b>
+                            </td>
+                            <td>
+                                <label>{{'% вод.' | translate}}</label>
+
+                                <div class="ui input">
+                                    <input type="text" name="waterPercent" ng-model="pipeline.waterPercent">
+                                </div>
+                            </td>
+                            <td>
+                                <label>{{'% кан.' | translate}}</label>
+
+                                <div class="ui input">
+                                    <input type="text" name="canalPercent" ng-model="modalItem.canalPercent">
+                                </div>
+                            </td>
+                            <td>
+                                {{'#Норма' | translate}}
+                                <div class="ui input">
+                                    <input type="text" name="norm" ng-model="pipeline.norm">
+                                </div>
+
+                            </td>
+                            <td>
+                                {{'#Среднее' | translate}}
+                                <div class="ui input">
+                                    <input type="text" name="norm" ng-model="pipeline.avg">
+                                </div>
+                            </td>
+                            <td>
+                                <button class="ui button" ng-click="addNewCounter($index)">Добавить счетчик</button>
+                            </td>
+                        </tr>
+                    </table>
+
+
+
                     <table class="ui basic celled table">
                         <thead>
                         <tr>
@@ -72,23 +93,26 @@
                         </thead>
                         <tbody>
 
-                        <tr ng-repeat="counter in pipeline.counters" ng-class="{
-                        'error disabled': !counter.isActive,
-                        'positive': counter.isActive
-                        }">
+                        <tr ng-repeat="counter in pipeline.counters"
+                            ng-class="{
+                            'error disabled': !counter.isActive,
+                            'positive': counter.isActive
+                            }">
                             <td>
                                 <div class="ui input">
                                     <input type="text" ng-model="counter.counterNumber"/>
                                 </div>
                             </td>
                             <td>
-                                <div class="ui input">
+                                <div class="ui icon input">
+                                    <i class="calendar icon"></i>
                                     <input ui-date="dateOptions" type="text" class="ng-pristine ng-valid ng-touched"
                                            ng-model="counter.installDate"/>
                                 </div>
                             </td>
                             <td>
-                                <div class="ui input">
+                                <div class="ui icon input">
+                                    <i class="calendar icon"></i>
                                     <input ui-date="dateOptions" type="text" class="ng-pristine ng-valid ng-touched"
                                            ng-model="counter.checkDate"/>
                                 </div>
@@ -100,7 +124,8 @@
                                 </div>
                             </td>
                             <td>
-                                <div class="ui input">
+                                <div class="ui icon input">
+                                    <i class="calendar icon"></i>
                                     <input ui-date="dateOptions" type="text" class="ng-pristine ng-valid ng-touched"
                                            ng-model="counter.plumbInstallDate"/>
                                 </div>

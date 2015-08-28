@@ -9,13 +9,16 @@ exports.definition = [{
     addressId: {type: Schema.Types.ObjectId, ref: 'Address'},
     counters: counters,
 
-    isByCounter: {type: Boolean},//по норме или по счетчику
     waterPercent: {type: Number},
     canalPercent: {type: Number},
 
     isActive: {type: Boolean},
 
-    fileIds: []//счет фактуры
+    fileIds: [],//счет фактуры,
+
+    isByCounter: {type: Boolean},//по норме или по счетчику
+    avg: {type: Number}, //среднее - должно расчитыватьс€ на основе предыдущих мес€цев или пользователь может вбить сам
+    norm: {type: Number} //норма
 
 }];
 
