@@ -10,13 +10,9 @@ exports.definition = _.extend({
     filesIds: {type: Array},
     clientJurId: {type: Schema.Types.ObjectId, ref: 'ClientJur'},
 
+    period: {type: Number, required: true},
     //аудит
     date: {type: Date, required: '#date required'},
     userId: {type: Schema.Types.ObjectId, required: true}
-
-    /*clientJurId: {type: Schema.Types.ObjectId, ref: 'ClientJur'},
-     clientFizId: {type: Schema.Types.ObjectId, ref: 'ClientFiz'},
-     sum: {type: Number},
-     date: {type: Date},*/
 
 }, ModelBase);

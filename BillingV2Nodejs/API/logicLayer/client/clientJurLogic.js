@@ -87,6 +87,7 @@ exports.updateClientCounter = function (body, done) {
     var clientJur = body.client;
     var pipeline = body.pipeline;
     var counter = body.counter;
+    var period = body.period;
 
 
     //ClientJurRepo.get(body.clientId, function (clientJur) {
@@ -109,8 +110,12 @@ exports.updateClientCounter = function (body, done) {
         _id: balanceId,
         balanceTypeId: balanceTypeId,
         clientJurId: clientJur._id,
+        sum: (waterSum + canalSum) * -1,
+        period: period,
+        //аудит
         date: new Date(),
-        sum: (waterSum + canalSum) * -1
+        userId: "557f15402af16cc42c2cc351" //TODO: вытаскивать текущего юзера,
+
     };
 
     //добор/недобор
@@ -141,6 +146,7 @@ exports.updateClientCounter = function (body, done) {
         shortageCubicMeters: shortageCubicMeters, //недобор м3,
         shortageSum: shortageSum, //недобор тг
 
+        period: period,
         //аудит
         date: new Date(),
         userId: "557f15402af16cc42c2cc351" //TODO: вытаскивать текущего юзера

@@ -10,6 +10,12 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
     $scope.ksks = [];
     $scope.tariffs = [];
     $scope.allBalance = [];
+    $scope.balanceDetailsByClient = [];
+
+    $scope.period = 201506;
+    //TODO добавить период int во все details и в баланс для более простой логики селекта данных
+    $scope.dateFrom = moment().month();
+    $scope.dateTo = moment().add(1, 'months');
 
 
     $scope.dateOptions = {
@@ -41,12 +47,13 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
             var body = {
                 client: client,
                 pipeline: pipeline,
-                counter: counter
+                counter: counter,
+                period: $scope.period
             };
 
             dataService.post('/clientJur/updateClientCounter', body).then(function (response) {
                 toastr.success('', 'Данные успешно сохранены');
-                console.log(response.result);
+                //console.log(response.result);
                 $scope.getBalanceForClient(client._id);
                 $scope.getAllBalance();
             });
@@ -79,7 +86,8 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
             clientId: item._id,
             personType: 1,
             //sum: $scope.enteredSum,
-            date: new Date()
+            date: new Date(),
+            period: $scope.period
         };
 
         $scope.isShowModalPayment = true;
@@ -162,7 +170,7 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
     $scope.getTariffs();
 
 
-    $scope.getClientPaymentHistory = function () {
+    $scope.getClientBalanceDetails = function () {
         modalSvc.showModal('/app/operator/juridical/clientPaymentHistory.html', 'clientPaymentHistoryModal', $scope);
     };
 
@@ -179,7 +187,7 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
                 alert("Нет активного счетчика");
 
             else if (foundCounter && pipeline.isCountsByAvg === true) {
-                foundCounter.currentCounts = foundCounter.lastCounts + pipeline.avg;
+                foundCounter.currentCounts = foundCounter.lastCounts + pipeline.avg * 1;
                 //counter.countsByAvg = avg;
             }
             else if (foundCounter && pipeline.isCountsByAvg === false) {

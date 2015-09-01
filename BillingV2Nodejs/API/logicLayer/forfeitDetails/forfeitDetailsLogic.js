@@ -9,12 +9,15 @@ exports.add = function (forfeitDetails, done) {
 
     var balanceId = mongoose.Types.ObjectId();
     var balanceTypeId = '55cdf5c5bd2c5768423c5796';//штраф
+    var period = forfeitDetails.period;
 
     var forfeitDetailsForDb = {
         balanceId: balanceId,
         comment: forfeitDetails.comment,
         files: forfeitDetails.files,
         clientJurId: forfeitDetails.clientId,
+
+        period: period,
         //аудит
         date: new Date(),
         userId: "557f15402af16cc42c2cc351" //TODO: вытаскивать текущего юзера
@@ -25,8 +28,12 @@ exports.add = function (forfeitDetails, done) {
         _id: balanceId,
         balanceTypeId: balanceTypeId,
         clientJurId: forfeitDetails.clientId,
-        date: forfeitDetails.date,
-        sum: (forfeitDetails.sum) * (-1)
+        sum: (forfeitDetails.sum) * (-1),
+
+        period: period,
+        //аудит
+        date: new Date(),
+        userId: "557f15402af16cc42c2cc351" //TODO: вытаскивать текущего юзера
     };
 
     balanceLogic.add(balance, function (response) {

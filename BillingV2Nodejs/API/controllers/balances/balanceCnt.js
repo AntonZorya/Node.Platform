@@ -31,4 +31,12 @@ module.exports = function (router) {
             });
         });
 
+    router.route('/balance/getByPeriodAndClientIdWithDetails').
+        get(function (req, res) {
+            Logic.getByPeriodAndClientIdWithDetails(req.query.clientId, req.query.period, function (data) {
+                operationResultBuilder(data, res);
+            });
+        });
+
+
 };

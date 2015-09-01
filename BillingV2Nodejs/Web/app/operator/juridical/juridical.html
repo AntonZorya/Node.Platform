@@ -196,8 +196,6 @@
                                         <div class="menu">
                                             <div class="item" ng-bind="'#Принять' | translate"
                                                  ng-click="showModalPayment(item)"></div>
-                                            <div class="item" ng-bind="'#История' | translate"
-                                                 ng-click="getClientPaymentHistory();"></div>
                                         </div>
                                     </div>
 
@@ -212,6 +210,9 @@
                                         ng-click="editTechData()"></button>
                                 <button class="ui basic button" ng-bind="'#Паспортные данные' | translate"
                                         ng-click="editPassportData()"></button>
+                                <button class="ui basic button" ng-bind="'#История' | translate"
+                                        ng-click="getClientBalanceDetails()"></button>
+
                             </div>
 
 

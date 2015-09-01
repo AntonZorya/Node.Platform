@@ -18,6 +18,7 @@ exports.definition = _.extend({
     shortageCubicMeters: {type: Number}, //недобор м3,
     shortageSum: {type: Number}, //недобор тг
 
+    period: {type: Number, required: true},
     //аудит
     date: {type: Date, required: '#date required'},
     userId: {type: schema.Types.ObjectId, required: true}

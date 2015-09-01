@@ -9,22 +9,28 @@ BalanceTypeRepo = require('../../dataLayer/repositories/balance/balanceTypeRepo'
 exports.add = function (payment, done) {
 
     var balanceId = mongoose.Types.ObjectId();
+    var period = payment.period;
 
     var balanceTypeId = '55cdf61a2a5acf103fc2b6ed'; // Оплата
     var balance = {
         _id: balanceId,
         balanceTypeId: balanceTypeId,
         clientJurId: payment.clientId,
-        date: payment.date,
         sum: payment.sum,
-        isDeleted: false,
-        createDateTime: new Date()
+
+        period: period,
+        //аудит
+        date: new Date(),
+        userId: "557f15402af16cc42c2cc351" //TODO: вытаскивать текущего юзера
+
     };
 
     var paymentDetails = {
         balanceId: balanceId,
         receiptNumber: payment.receiptNumber,
         clientJurId: payment.clientId,
+
+        period: period,
         //аудит
         date: new Date(),
         userId: "557f15402af16cc42c2cc351" //TODO: вытаскивать текущего юзера

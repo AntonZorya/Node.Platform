@@ -76,26 +76,34 @@ exports.getTotalByClientJurId = function (clientJurId, done) {
 };
 
 
-exports.getByClientJurId = function (clientJurId, done) {
-
-    BalanceRepo.getByPeriodAndByClientJurId(clientJurId, function (response) {
-        done(response);
-    });
+exports.getByPeriodAndClientIdWithDetails = function (clientJurId, period, done) {
 
     var balanceData = [];
-    var balanceDetails = {
-        name: "",
-        data: []
-    };
 
-    PaymentDetailsRepo.getByPeriodAndClientId(dateFrom, dateTo, clientJurId, function (paymentsResp) {
+    PaymentDetailsRepo.getByPeriodAndClientId(period, clientJurId, function (paymentsResp) {
 
         balanceData.push({
             name: "Оплата",
             data: paymentsResp.result
         });
 
-        //ForfeitDetailsRepo.add
+        ForfeitDetailsRepo.getByPeriodAndClientId(period, clientJurId, function (forfeitResp) {
+            balanceData.push({
+                name: "Штрафы",
+                data: forfeitResp.result
+            });
+
+            CalculationRepo.getByPeriodAndClientId(period, clientJurId, function (calculationsResp) {
+                balanceData.push({
+                    name: "Начисления",
+                    data: calculationsResp.result
+                });
+
+                done({operationResult: 0, result: balanceData});
+
+            });
+
+        });
 
 
     });
