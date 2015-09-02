@@ -4,7 +4,7 @@
     <div class="header">
         {{'#Технические данные' | translate }}. {{selectedItem.name}}. Категория: {{modalItem.clientType.name}}
     </div>
-    <div class="content" style="overflow: auto; height: 600px;">
+    <div class="content" style="height: 500px; overflow: auto;">
 
         <form class="ui form">
             <div class="fields">
@@ -55,7 +55,7 @@
                                 <label>{{'% кан.' | translate}}</label>
 
                                 <div class="ui input">
-                                    <input type="text" name="canalPercent" ng-model="modalItem.canalPercent">
+                                    <input type="text" name="canalPercent" ng-model="pipeline.canalPercent">
                                 </div>
                             </td>
                             <td>
@@ -76,7 +76,6 @@
                             </td>
                         </tr>
                     </table>
-
 
 
                     <table class="ui basic celled table" style="margin-top: 0 !important;">

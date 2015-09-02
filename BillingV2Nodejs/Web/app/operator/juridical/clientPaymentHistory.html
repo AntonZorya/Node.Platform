@@ -1,8 +1,8 @@
-<div class="ui modal" ng-controller="clientPaymentHistoryController">
+<div class="ui fullscreen modal" ng-controller="clientPaymentHistoryController">
     <i class="close icon"></i>
 
     <div class="header">
-        {{'#История оплаты' | translate }}. {{selectedItem.name}}
+        {{'#История' | translate }}. {{selectedItem.name}}
     </div>
     <div class="content">
 
@@ -27,7 +27,7 @@
                         <td>
                             <div class="ui small basic icon buttons right floated">
                                 <button class="ui button" ng-click="printFromHistory(data, selectedItem.name);">
-                                    <i class="large print icon"></i></button>
+                                    <i class="print icon"></i></button>
                             </div>
                         </td>
                     </tr>
@@ -76,13 +76,13 @@
                     <tbody>
                     <tr ng-repeat="data in item.data">
                         <td>{{data.date | date:'dd.MM.yyyy hh:mm:ss'}}</td>
-                        <td>{{data.waterSum}}</td>
-                        <td>{{data.canalSum}}</td>
+                        <td>{{data.waterSum | number:2}}</td>
+                        <td>{{data.canalSum | number:2}}</td>
                         <td>{{data.waterCubicMetersCount}}</td>
                         <td>{{data.canalCubicMetersCount}}</td>
                         <td>{{data.shortageSum}}</td>
                         <td>{{data.shortageCubicMeters}}</td>
-                        <td>{{data.balanceId.sum}}</td>
+                        <td>{{data.balanceId.sum | number:2}}</td>
                     </tr>
                     </tbody>
                 </table>

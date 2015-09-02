@@ -2,10 +2,14 @@ billingApplication.controller('editTechDataController', ['$scope', 'dataService'
 
 function editTechDataController($scope, dataService, modalSvc, toastr) {
 
-    $scope.modalItem = $scope.$parent.selectedItem;
+    $scope.modalItem = {};
+    $scope.modalItem = _.extend($scope.modalItem, $scope.$parent.selectedItem);
 
     $scope.save = function () {
-        $scope.$parent.updateClientPassportData($scope.modalItem);
+        dataService.post('/clientJur/update', $scope.modalItem).then(function (response) {
+            toastr.success('', 'Данные успешно сохранены');
+            _.extend($scope.$parent.selectedItem, $scope.modalItem);
+        });
     };
 
     $scope.cancel = function () {

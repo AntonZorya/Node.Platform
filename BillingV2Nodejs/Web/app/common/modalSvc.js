@@ -71,6 +71,9 @@ function modalSvc($http, $q, $location, $window, $cookies, API_HOST, $compile) {
                 }, onHidden: function () {
                     deferred.resolve(that.isOkClicked(modalName));
                     that.removeModal(modalName);
+                },
+                onVisible: function () {
+                    element.modal("refresh");
                 }
             }).modal('show');
         });

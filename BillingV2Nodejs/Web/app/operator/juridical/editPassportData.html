@@ -1,5 +1,5 @@
 <div class="ui fullscreen modal" ng-controller="editPassportDataController">
-    <i class="close icon"></i>
+    <i class="close icon" ng-click="close()"></i>
 
     <div class="header">
         {{'#Паспортные данные' | translate }}. {{selectedItem.name}}
@@ -70,6 +70,25 @@
                     <select class="ui search dropdown" ng-model="modalItem.kskId"
                             ng-options="ksk._id as ksk.name for ksk in $parent.ksks track by ksk._id"></select>
                 </div>
+
+
+                <div class="two wide field">
+                    <label>{{'#Контроллер' | translate}}</label>
+                    <select class="ui search dropdown">
+                        <option>Выберите контроллера</option>
+                        <option>Даяров Алмабек</option>
+                        <option>Баитова Жамал</option>
+                        <option>Жубатырова Роза</option>
+                        <option>Шектибаева Айжамал</option>
+                        <option>Жакып Асылхан</option>
+                        <option>Дуйсенгазиева Замза</option>
+                        <option>Бекбалаев Максат</option>
+                        <option>Убеева Урзия</option>
+                        <option>Оразбеков Ынтымак</option>
+                        <option>Камалова Гульжан</option>
+                    </select>
+                </div>
+
             </div>
         </form>
 

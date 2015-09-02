@@ -64,13 +64,6 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
     };
 
 
-    $scope.updateClientPassportData = function (client) {
-        dataService.post('/clientJur/update', client).then(function (response) {
-            toastr.success('', 'Данные успешно сохранены');
-        });
-    };
-
-
     //TODO: вынести в отдельный контроллер
     //payment
     $scope.isShowModalPayment = false;

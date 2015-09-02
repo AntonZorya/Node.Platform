@@ -189,7 +189,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="ui simple dropdown item">
+                                    <!--<div class="ui simple dropdown item">
                                         <span ng-bind="'#Оплата' | translate"></span>
                                         <i class="dropdown icon"></i>
 
@@ -197,7 +197,7 @@
                                             <div class="item" ng-bind="'#Принять' | translate"
                                                  ng-click="showModalPayment(item)"></div>
                                         </div>
-                                    </div>
+                                    </div>-->
 
                                 </div>
                             </div>
@@ -205,7 +205,9 @@
                             <div class="ui basic buttons">
 
                                 <!-- <button class="ui basic button">{{'#Просмотр текущего сальдо' | translate}}</button> -->
-                                <button class="ui basic button" ng-bind="'#Анализ отклонений' | translate"></button>
+                                <!-- <button class="ui basic button" ng-bind="'#Анализ отклонений' | translate"></button> -->
+                                <button class="ui basic button" ng-click="showModalPayment(item)"
+                                        ng-bind="'#Принять оплату' | translate"></button>
                                 <button class="ui basic button" ng-bind="'#Технические данные' | translate"
                                         ng-click="editTechData()"></button>
                                 <button class="ui basic button" ng-bind="'#Паспортные данные' | translate"
@@ -213,23 +215,9 @@
                                 <button class="ui basic button" ng-bind="'#История' | translate"
                                         ng-click="getClientBalanceDetails()"></button>
 
+
+
                             </div>
-
-
-                            <select class="ui search dropdown">
-                                <option>Выберите контроллера</option>
-                                <option>Даяров Алмабек</option>
-                                <option>Баитова Жамал</option>
-                                <option>Жубатырова Роза</option>
-                                <option>Шектибаева Айжамал</option>
-                                <option>Жакып Асылхан</option>
-                                <option>Дуйсенгазиева Замза</option>
-                                <option>Бекбалаев Максат</option>
-                                <option>Убеева Урзия</option>
-                                <option>Оразбеков Ынтымак</option>
-                                <option>Камалова Гульжан</option>
-                            </select>
-
 
                         </div>
                     </div>
