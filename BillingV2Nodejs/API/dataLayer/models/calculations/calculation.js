@@ -7,6 +7,7 @@ var modelBase = require('../base/modelBase'),
 exports.definition = _.extend({
     clientJurId: {type: schema.Types.ObjectId, ref: 'ClientJur', required: true},
     pipelineId: {type: schema.Types.ObjectId},
+    counterId: {type: schema.Types.ObjectId},
     balanceId: {type: schema.Types.ObjectId, ref: 'Balance', required: true},
     waterCubicMetersCount: {type: Number},
     canalCubicMetersCount: {type: Number},

@@ -85,7 +85,7 @@
                                             <tr>
                                                 <th>{{'#counterNumber'|translate}}</th>
                                                 <th>{{'#counterPlumb'|translate}}</th>
-                                                <th>{{'#lastCounts'|translate}}</th>
+                                                <th>{{'#lastCounts'|translate}} &nbsp; (м3)</th>
                                                 <th>{{'#dateOfLast'|translate}}</th>
                                                 <th>{{'#currentCounts'|translate}} &nbsp; (м3)</th>
                                                 <th>{{'#dateOfCurrent'|translate}}</th>
@@ -108,7 +108,13 @@
                                                     <span ng-bind="counter.plumbNumber"></span>
                                                 </td>
                                                 <td>
-                                                    <span ng-bind="counter.lastCounts"></span> &nbsp; м3
+                                                    <div ng-if="!counter.isCounterNew">
+                                                        <span ng-bind="counter.lastCounts"></span>
+                                                    </div>
+                                                    <div ng-if="counter.isCounterNew" class="ui input">
+                                                        <input type="text" ng-model="counter.lastCounts"/>
+                                                    </div>
+
                                                 </td>
                                                 <td>
                                                     <span ng-bind="counter.dateOfLastCounts"></span>
@@ -117,7 +123,7 @@
                                                 <td>
                                                     <div class="ui form">
                                                         <div class="one fields">
-                                                            <div ng-class="{'disabled field': counter.isCountsByAvg}">
+                                                            <div ng-class="{'disabled field': pipeline.isCountsByAvg}">
                                                                 <input type="text" ng-model="counter.currentCounts"
                                                                        ng-disabled="counter.isCountsByAvg">
                                                             </div>
@@ -214,7 +220,6 @@
                                         ng-click="editPassportData()"></button>
                                 <button class="ui basic button" ng-bind="'#История' | translate"
                                         ng-click="getClientBalanceDetails()"></button>
-
 
 
                             </div>

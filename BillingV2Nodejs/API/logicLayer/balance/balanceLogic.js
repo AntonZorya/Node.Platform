@@ -21,7 +21,20 @@ exports.add = function (balance, done) {
     });
 };
 
-exports.getBytId = function (id, done) {
+exports.update = function (balance, done) {
+    validator('balance', balanceDefinition, balance, function (validationRes) {
+        if (validationRes.operationResult == 0) {
+            BalanceRepo.update(balance, function (res) {
+                return done(res);
+            });
+        }
+        else {
+            done(validationRes);
+        }
+    });
+};
+
+exports.getById = function (id, done) {
     BalanceRepo.getById(id, function (data) {
         done(data);
     });

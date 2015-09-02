@@ -15,6 +15,18 @@ exports.add = function (balance, done) {
     });
 };
 
+exports.update = function (balance, done) {
+    if (balance._id) {
+        Collection.findOneAndUpdate({_id: balance._id}, balance, function (err, res) {
+            if (err) return done(errorBuilder(err));
+            return done({operationResult: 0, result: res});
+        });
+    }
+    else {
+        return done({operationResult: 1, result: "#balanceNotFound"});
+    }
+};
+
 exports.getById = function (id, done) {
     Collection.find({_id: id}, function (err, res) {
         if (err)return done(errorBuilder(err));
@@ -62,13 +74,12 @@ exports.getByPeriod = function (dateFrom, dateTo, done) {
         });
 };
 
-exports.getAllBalance= function (done) {
+exports.getAllBalance = function (done) {
     Collection.find().deepPopulate('clientJurId balanceTypeId').exec(function (err, res) {
-            if (err)return done(errorBuilder(err));
-            done({operationResult: 0, result: res});
-        });
+        if (err)return done(errorBuilder(err));
+        done({operationResult: 0, result: res});
+    });
 };
-
 
 
 exports.getByPeriodAndByClientFizId = function (dateFrom, dateTo, clientFizId, done) {

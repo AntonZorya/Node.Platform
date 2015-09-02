@@ -52,6 +52,7 @@ exports.update = function (clientJur, done) {
         }
     });
 };
+
 exports.sync = function (clientJurArr, done) {
     async.each(clientJurArr, function (clientJur, callback) {
         clientJurValidator('clientJur', clientJurDefinition, clientJur, function (validationRes) {
@@ -83,14 +84,10 @@ exports.search = function (searchTerm, done) {
 
 exports.updateClientCounter = function (body, done) {
 
-
     var clientJur = body.client;
     var pipeline = body.pipeline;
     var counter = body.counter;
     var period = body.period;
-
-
-    //ClientJurRepo.get(body.clientId, function (clientJur) {
 
     var tariff = clientJur.clientType.tariffId;
 
@@ -134,6 +131,7 @@ exports.updateClientCounter = function (body, done) {
     var calculation = {
         clientJurId: clientJur._id,
         pipelineId: pipeline._id,
+        counterId: counter._id,
         balanceId: balanceId,
         waterCubicMetersCount: waterCalcCubicMeters,
         canalCubicMetersCount: canalCalcCubicMetersCount,
@@ -153,16 +151,34 @@ exports.updateClientCounter = function (body, done) {
 
     };
 
-    BalanceLogic.add(balance, function (balanceResp) {
-        CalculationLogic.add(calculation, function (calcResp) {
-            ClientJurRepo.update(clientJur, function (counterResp) {
-                done(counterResp);
+    //находим предыдущие показания в этом периоде
+    CalculationLogic.getByCounterId(counter._id, period, function (calcByCounterResp) {
+        //если показания есть, то обновляем
+        if (calcByCounterResp.operationResult === 0 && calcByCounterResp.result) {
+            var calcRes = calcByCounterResp.result._doc;
+            balance._id = calcRes.balanceId;
+            calculation._id = calcRes._id;
+            calculation.balanceId = calcRes.balanceId;
+
+            BalanceLogic.update(balance, function (balanceResp) {
+                CalculationLogic.update(calculation, function (calcResp) {
+                    ClientJurRepo.update(clientJur, function (counterResp) {
+                        done(counterResp);
+                    });
+                });
             });
-        });
+
+        } else {//иначе добавляем новые показания
+            BalanceLogic.add(balance, function (balanceResp) {
+                CalculationLogic.add(calculation, function (calcResp) {
+                    ClientJurRepo.update(clientJur, function (counterResp) {
+                        done(counterResp);
+                    });
+                });
+            });
+        }
+
     });
-
-
-    //});
 
 
 };

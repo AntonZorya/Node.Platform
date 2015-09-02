@@ -9,6 +9,18 @@ exports.add = function (calculation, done) {
     });
 };
 
+exports.update = function (calculation, done) {
+    if (calculation._id) {
+        calcCollection.findOneAndUpdate({_id: calculation._id}, calculation, function (err, res) {
+            if (err) return done(errorBuilder(err));
+            return done({operationResult: 0, result: res});
+        });
+    }
+    else {
+        return done({operationResult: 1, result: "#calculationNotFound"});
+    }
+};
+
 
 exports.getByPeriodAndClientId = function (period, clientId, done) {
     calcCollection.find(
@@ -23,4 +35,17 @@ exports.getByPeriodAndClientId = function (period, clientId, done) {
             if (err)return done(errorBuilder(err));
             done({operationResult: 0, result: res});
         });
+};
+
+
+exports.getByCounterId = function (counterId, period, done) {
+    calcCollection.findOne({
+        $and: [
+            {period: period},
+            {counterId: counterId}
+        ]
+    }, function (err, res) {
+        if (err)return done(errorBuilder(err));
+        done({operationResult: 0, result: res});
+    });
 };

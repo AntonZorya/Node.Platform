@@ -4,7 +4,6 @@ var Schema = mongoose.Schema;
 exports.definition =
     [{
         counterNumber: {type: String},
-
         currentStatus: {type: String},
         currentCounts: {type: Number},
         dateOfCurrentCounts: {type: Date},
@@ -13,20 +12,12 @@ exports.definition =
         lastCounts: {type: Number},
         dateOfLastCounts: {type: Date},
         hasProblem: {type: Boolean},
-
-        //isCountsByAvg: {type: Boolean},
-        //countsByAvg: {type: Number},
-
         installDate: {type: Date},
-        checkDate: {type: Date},
+        checkDate: {type: Date},//дата след. проверки
         plumbNumber: {type: String},
         plumbInstallDate: {type: Date},
-        markId: {type: Schema.Types.ObjectId, ref: 'CounterMark'},
+        markId: {type: Schema.Types.ObjectId, ref: 'CounterMark'},//марка счетчика
         fileIds: [], //акт снятия, акт установки
-
         isActive: {type: Boolean},
-
-        removeDate: {type: Date},
-
-
+        isCounterNew: {type: Boolean} //TODO: При закрытии периода делать false (новый добавленный счетчик в данном периоде)
     }];

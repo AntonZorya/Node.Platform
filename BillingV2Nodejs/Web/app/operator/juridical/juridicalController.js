@@ -180,7 +180,7 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
                 alert("Нет активного счетчика");
 
             else if (foundCounter && pipeline.isCountsByAvg === true) {
-                foundCounter.currentCounts = foundCounter.lastCounts + pipeline.avg * 1;
+                foundCounter.currentCounts = foundCounter.lastCounts * 1 + pipeline.avg * 1;
                 //counter.countsByAvg = avg;
             }
             else if (foundCounter && pipeline.isCountsByAvg === false) {

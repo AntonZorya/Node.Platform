@@ -15,3 +15,23 @@ exports.add = function (calculation, done) {
             done(validationRes);
     });
 };
+
+exports.update = function (calculation, done) {
+    validator('calculation', calcDefinition, calculation, function (validationRes) {
+        if (validationRes.operationResult == 0) {
+            CalcRepo.update(calculation, function (res) {
+                return done(res);
+            });
+        }
+        else {
+            done(validationRes);
+        }
+    });
+};
+
+exports.getByCounterId = function (counterId, period, done) {
+    CalcRepo.getByCounterId(counterId, period, function (data) {
+        return done(data);
+    });
+};
+
