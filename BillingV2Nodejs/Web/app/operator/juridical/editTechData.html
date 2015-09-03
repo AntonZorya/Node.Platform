@@ -87,6 +87,7 @@
                             <th>{{'#counterPlumb'|translate}}</th>
                             <th>{{'#Дата установки пломбы'|translate}}</th>
                             <th>{{'#Марка счетчика'|translate}}</th>
+                            <th>{{'#Предыдущие показания'|translate}}</th>
                             <th></th>
                         </tr>
                         </thead>
@@ -133,6 +134,11 @@
                                 <div class="ui input">
                                     <select class="ui search dropdown" ng-model="counter.markId"
                                             ng-options="mark._id as mark.name for mark in $parent.counterMarks track by mark._id"></select>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="ui input" ng-show="counter.isCounterNew">
+                                    <input type="text" ng-model="counter.lastCounts"/>
                                 </div>
                             </td>
                             <td>

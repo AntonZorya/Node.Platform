@@ -4,7 +4,7 @@ module.exports = function (router) {
 
     router.route('/payment/paymentAdd')
         .post(function (req, res) {
-            PaymentLogic.add(req.body, function (data) {
+            PaymentLogic.add(req.body, req.user._id, function (data) {
                 operationResultBuilder(data, res);
             });
         });

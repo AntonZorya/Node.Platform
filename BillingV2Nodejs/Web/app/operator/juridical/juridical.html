@@ -108,13 +108,9 @@
                                                     <span ng-bind="counter.plumbNumber"></span>
                                                 </td>
                                                 <td>
-                                                    <div ng-if="!counter.isCounterNew">
+                                                    <div>
                                                         <span ng-bind="counter.lastCounts"></span>
                                                     </div>
-                                                    <div ng-if="counter.isCounterNew" class="ui input">
-                                                        <input type="text" ng-model="counter.lastCounts"/>
-                                                    </div>
-
                                                 </td>
                                                 <td>
                                                     <span ng-bind="counter.dateOfLastCounts"></span>
@@ -123,8 +119,7 @@
                                                 <td>
                                                     <div class="ui form">
                                                         <div class="one fields">
-                                                            <div ng-if="!counter.isCounterNew"
-                                                                 ng-class="{'disabled field': pipeline.isCountsByAvg}">
+                                                            <div ng-class="{'disabled field': pipeline.isCountsByAvg}">
                                                                 <input type="text" ng-model="counter.currentCounts"
                                                                        ng-disabled="counter.isCountsByAvg">
                                                             </div>
@@ -245,7 +240,7 @@
                 <div class="field">
                     <label>{{'#Сумма' | translate}}</label>
                     <input type="text" name="sum" placeholder="{{'#Сумма' | translate}}" ng-model="$parent.enteredSum"
-                           ng-required="true">
+                           required>
                 </div>
                 <div class="field">
                     <label>{{'#Номер квитанции' | translate}} </label>

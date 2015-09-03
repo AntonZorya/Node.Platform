@@ -12,12 +12,13 @@ exports.definition =
         lastCounts: {type: Number},
         dateOfLastCounts: {type: Date},
         hasProblem: {type: Boolean},
-        installDate: {type: Date},
+        installDate: {type: Date},//дата установки счетчика
         checkDate: {type: Date},//дата след. проверки
+        removeDate: {type: Date},//дата снятия счетчика
         plumbNumber: {type: String},
         plumbInstallDate: {type: Date},
         markId: {type: Schema.Types.ObjectId, ref: 'CounterMark'},//марка счетчика
         fileIds: [], //акт снятия, акт установки
         isActive: {type: Boolean},
-        isCounterNew: {type: Boolean} //TODO: При закрытии периода делать false (новый добавленный счетчик в данном периоде)
+        isCounterNew: {type: Boolean}
     }];

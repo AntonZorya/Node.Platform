@@ -13,10 +13,7 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
     $scope.balanceDetailsByClient = [];
 
     $scope.period = 201506;
-    //TODO добавить период int во все details и в баланс для более простой логики селекта данных
-    $scope.dateFrom = moment().month();
-    $scope.dateTo = moment().add(1, 'months');
-
+    //TODO: дропдаун лист для периода
 
     $scope.dateOptions = {
         changeYear: true,
@@ -40,33 +37,33 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
 
     $scope.updateClient = function (client, counter, pipeline) {
 
-        /*if (counter.currentCounts >= counter.lastCounts) {*/
-        if (!counter.hasProblem)
-            counter.problemDescription = '';
+        if (counter.currentCounts >= counter.lastCounts) {
+            if (!counter.hasProblem)
+                counter.problemDescription = '';
 
-        var body = {
-            client: client,
-            pipeline: pipeline,
-            counter: counter,
-            period: $scope.period
-        };
+            var body = {
+                client: client,
+                pipeline: pipeline,
+                counter: counter,
+                period: $scope.period
+            };
 
-        dataService.post('/clientJur/updateClientCounter', body).then(function (response) {
-            if (response.operationResult === 0) {
-                toastr.success('', 'Данные успешно сохранены');
-                counter.isCounterNew = false;
-                $scope.getBalanceForClient(client._id);
-                $scope.getAllBalance();
-            } else {
-                toastr.error('', 'Произошла ошибка');
-            }
+            dataService.post('/clientJur/updateClientCounter', body).then(function (response) {
+                if (response.operationResult === 0) {
+                    toastr.success('', 'Данные успешно сохранены');
+                    counter.isCounterNew = false;
+                    $scope.getBalanceForClient(client._id);
+                    $scope.getAllBalance();
+                } else {
+                    toastr.error('', 'Произошла ошибка');
+                }
 
 
-        });
-        /*}
-         else {
-         toastr.error('Текущие показания должны быть больше или равны последним!', 'Данные не сохранены');
-         }*/
+            });
+        }
+        else {
+            toastr.error('Текущие показания должны быть больше или равны последним!', 'Данные не сохранены');
+        }
     };
 
 
@@ -99,16 +96,16 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
 
     $scope.paymentResult = {};
     $scope.sendPayment = function () {
-        $scope.payment.sum = $scope.enteredSum;
-        $scope.payment.receiptNumber = $scope.enteredReceiptNumber;
-        dataService.post('/payment/paymentAdd', $scope.payment).then(function (response) {
-            if (response.operationResult === 0) {
-                $scope.paymentResult = response.result;
-                $scope.print();
-                $scope.getBalanceForClient($scope.payment.clientId);
-                $scope.getAllBalance();
-            }
-        });
+            $scope.payment.sum = $scope.enteredSum;
+            $scope.payment.receiptNumber = $scope.enteredReceiptNumber;
+            dataService.post('/payment/paymentAdd', $scope.payment).then(function (response) {
+                if (response.operationResult === 0) {
+                    $scope.paymentResult = response.result;
+                    $scope.print();
+                    $scope.getBalanceForClient($scope.payment.clientId);
+                    $scope.getAllBalance();
+                }
+            });
     };
     //!payment
 

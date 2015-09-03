@@ -4,7 +4,7 @@ var forfeitDefinition = require(_modelsPath + 'forfeitDetails/forfeitDetails');
 var balanceLogic = require('../../logicLayer/balance/balanceLogic');
 var mongoose = require('mongoose');
 
-exports.add = function (forfeitDetails, done) {
+exports.add = function (forfeitDetails, userId, done) {
 
 
     var balanceId = mongoose.Types.ObjectId();
@@ -20,7 +20,7 @@ exports.add = function (forfeitDetails, done) {
         period: period,
         //аудит
         date: new Date(),
-        userId: "557f15402af16cc42c2cc351" //TODO: вытаскивать текущего юзера
+        userId: userId
 
     };
 
@@ -33,7 +33,7 @@ exports.add = function (forfeitDetails, done) {
         period: period,
         //аудит
         date: new Date(),
-        userId: "557f15402af16cc42c2cc351" //TODO: вытаскивать текущего юзера
+        userId: userId
     };
 
     balanceLogic.add(balance, function (response) {

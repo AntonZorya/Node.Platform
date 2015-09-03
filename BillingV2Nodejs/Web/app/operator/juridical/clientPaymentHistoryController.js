@@ -17,9 +17,6 @@ function clientPaymentHistoryController($scope, dataService, modalSvc, toastr) {
         }).then(function (response) {
             $scope.modalItem.clientBalanceDetails = response.result;
         });
-
-        //TODO методы с dateFrom, dateTo Переделать на period int, $scope.period (будет dropdown list)
-
     };
     $scope.getByPeriodAndClientIdWithDetails();
 

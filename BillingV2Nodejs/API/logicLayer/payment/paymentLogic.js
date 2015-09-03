@@ -6,7 +6,7 @@ var PaymentRepo = require('../../dataLayer/repositories/payment/paymentRepo'),
 BalanceTypeRepo = require('../../dataLayer/repositories/balance/balanceTypeRepo');
 
 
-exports.add = function (payment, done) {
+exports.add = function (payment, userId, done) {
 
     var balanceId = mongoose.Types.ObjectId();
     var period = payment.period;
@@ -21,7 +21,7 @@ exports.add = function (payment, done) {
         period: period,
         //аудит
         date: new Date(),
-        userId: "557f15402af16cc42c2cc351" //TODO: вытаскивать текущего юзера
+        userId: userId
 
     };
 
@@ -33,7 +33,7 @@ exports.add = function (payment, done) {
         period: period,
         //аудит
         date: new Date(),
-        userId: "557f15402af16cc42c2cc351" //TODO: вытаскивать текущего юзера
+        userId: userId
     };
 
     BalanceLogic.add(balance, function (response) {

@@ -59,7 +59,7 @@ module.exports = function (router) {
 
     router.route('/clientJur/updateClientCounter')
         .post(function (req, res) {
-            Logic.updateClientCounter(req.body, function (data) {
+            Logic.updateClientCounter(req.body, req.user._id, function (data) {
                 operationResultBuilder(data, res);
             });
         });

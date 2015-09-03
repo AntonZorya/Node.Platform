@@ -43,6 +43,13 @@ exports.get = function (id, done) {
 exports.update = function (clientJur, done) {
     clientJurValidator('clientJur', clientJurDefinition, clientJur, function (validationRes) {
         if (validationRes.operationResult == 0) {
+
+            for (var i = 0; i < clientJur.pipelines.length; i++)
+                for (var j = 0; j < clientJur.pipelines[i].counters.length; j++) {
+                    if (clientJur.pipelines[i].counters[j].isCounterNew)
+                        clientJur.pipelines[i].counters[j].isCounterNew = false;
+                }
+
             ClientJurRepo.update(clientJur, function (res) {
                 return done(res);
             });
@@ -82,7 +89,7 @@ exports.search = function (searchTerm, done) {
     });
 };
 
-exports.updateClientCounter = function (body, done) {
+exports.updateClientCounter = function (body, userId, done) {
 
     var clientJur = body.client;
     var pipeline = body.pipeline;
@@ -92,27 +99,16 @@ exports.updateClientCounter = function (body, done) {
     var tariff = clientJur.clientType.tariffId;
     var waterCalcCubicMeters = 0;
     var canalCalcCubicMetersCount = 0;
-    if (counter.isCounterNew) {
-        waterCalcCubicMeters = counter.lastCounts * (pipeline.waterPercent / 100);
-        canalCalcCubicMetersCount = counter.lastCounts * (pipeline.canalPercent / 100);
 
-        for (var i = 0; i < clientJur.pipelines.length; i++)
-            for (var j = 0; j < clientJur.pipelines[i].counters.length; j++) {
-                if (clientJur.pipelines[i].counters[j]._id === counter._id)
-                    clientJur.pipelines[i].counters[j].isCounterNew = false;
-            }
-
-    } else {
-        waterCalcCubicMeters = (counter.currentCounts - counter.lastCounts) * (pipeline.waterPercent / 100);
-        canalCalcCubicMetersCount = (counter.currentCounts - counter.lastCounts) * (pipeline.canalPercent / 100);
-    }
+    waterCalcCubicMeters = (counter.currentCounts - counter.lastCounts) * (pipeline.waterPercent / 100);
+    canalCalcCubicMetersCount = (counter.currentCounts - counter.lastCounts) * (pipeline.canalPercent / 100);
 
 
     var waterSum = 0;
     var canalSum = 0;
     //if (counter.currentCounts > 0) {
-        waterSum = waterCalcCubicMeters * tariff.water;
-        canalSum = canalCalcCubicMetersCount * tariff.canal;
+    waterSum = waterCalcCubicMeters * tariff.water;
+    canalSum = canalCalcCubicMetersCount * tariff.canal;
     //}
 
     var balanceId = mongoose.Types.ObjectId();
@@ -125,8 +121,7 @@ exports.updateClientCounter = function (body, done) {
         period: period,
         //аудит
         date: new Date(),
-        userId: "557f15402af16cc42c2cc351" //TODO: вытаскивать текущего юзера,
-
+        userId: userId
     };
 
     //добор/недобор
@@ -161,7 +156,7 @@ exports.updateClientCounter = function (body, done) {
         period: period,
         //аудит
         date: new Date(),
-        userId: "557f15402af16cc42c2cc351" //TODO: вытаскивать текущего юзера
+        userId: userId
 
     };
 
