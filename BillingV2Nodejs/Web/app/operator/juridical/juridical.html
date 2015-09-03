@@ -123,7 +123,8 @@
                                                 <td>
                                                     <div class="ui form">
                                                         <div class="one fields">
-                                                            <div ng-class="{'disabled field': pipeline.isCountsByAvg}">
+                                                            <div ng-if="!counter.isCounterNew"
+                                                                 ng-class="{'disabled field': pipeline.isCountsByAvg}">
                                                                 <input type="text" ng-model="counter.currentCounts"
                                                                        ng-disabled="counter.isCountsByAvg">
                                                             </div>
@@ -240,7 +241,7 @@
         </div>
         <div class="content">
 
-            <form class="ui form">
+            <form name="paymentForm" novalidate class="ui form">
                 <div class="field">
                     <label>{{'#Сумма' | translate}}</label>
                     <input type="text" name="sum" placeholder="{{'#Сумма' | translate}}" ng-model="$parent.enteredSum"
@@ -249,7 +250,7 @@
                 <div class="field">
                     <label>{{'#Номер квитанции' | translate}} </label>
                     <input type="text" name="receiptNumber" placeholder="{{'#Номер квитанции' | translate}}"
-                           ng-model="$parent.enteredReceiptNumber">
+                           ng-model="$parent.enteredReceiptNumber" required>
                 </div>
             </form>
 
@@ -261,7 +262,8 @@
                     <i class="remove icon"></i>
                     Закрыть
                 </div>
-                <div class="ui positive right labeled icon button" ng-click="sendPayment()">
+                <div class="ui positive right labeled icon button"
+                     ng-click="sendPayment()">
                     <span ng-bind="'#Оплатил' | translate"></span>
                     <i class="checkmark icon"></i>
                 </div>

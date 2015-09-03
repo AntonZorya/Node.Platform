@@ -21,7 +21,8 @@ function editTechDataController($scope, dataService, modalSvc, toastr) {
         var newCounter = {
             lastCounts: 0,
             isActive: true,
-            isCounterNew: true
+            isCounterNew: true,
+            currentCounts: 0
         };
         $scope.modalItem.pipelines[pipelineIndex].counters.push(newCounter);
     };

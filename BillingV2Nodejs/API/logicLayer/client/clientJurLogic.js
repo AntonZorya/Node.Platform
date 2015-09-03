@@ -90,16 +90,30 @@ exports.updateClientCounter = function (body, done) {
     var period = body.period;
 
     var tariff = clientJur.clientType.tariffId;
+    var waterCalcCubicMeters = 0;
+    var canalCalcCubicMetersCount = 0;
+    if (counter.isCounterNew) {
+        waterCalcCubicMeters = counter.lastCounts * (pipeline.waterPercent / 100);
+        canalCalcCubicMetersCount = counter.lastCounts * (pipeline.canalPercent / 100);
 
-    var waterCalcCubicMeters = (counter.currentCounts - counter.lastCounts) * (pipeline.waterPercent / 100);
-    var canalCalcCubicMetersCount = (counter.currentCounts - counter.lastCounts) * (pipeline.canalPercent / 100);
+        for (var i = 0; i < clientJur.pipelines.length; i++)
+            for (var j = 0; j < clientJur.pipelines[i].counters.length; j++) {
+                if (clientJur.pipelines[i].counters[j]._id === counter._id)
+                    clientJur.pipelines[i].counters[j].isCounterNew = false;
+            }
+
+    } else {
+        waterCalcCubicMeters = (counter.currentCounts - counter.lastCounts) * (pipeline.waterPercent / 100);
+        canalCalcCubicMetersCount = (counter.currentCounts - counter.lastCounts) * (pipeline.canalPercent / 100);
+    }
+
 
     var waterSum = 0;
     var canalSum = 0;
-    if (counter.currentCounts > 0) {
+    //if (counter.currentCounts > 0) {
         waterSum = waterCalcCubicMeters * tariff.water;
         canalSum = canalCalcCubicMetersCount * tariff.canal;
-    }
+    //}
 
     var balanceId = mongoose.Types.ObjectId();
     var balanceTypeId = '55cdf641fb777624231ab6d9'; // начисление

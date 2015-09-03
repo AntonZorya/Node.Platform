@@ -40,27 +40,33 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
 
     $scope.updateClient = function (client, counter, pipeline) {
 
-        if (counter.currentCounts >= counter.lastCounts) {
-            if (!counter.hasProblem)
-                counter.problemDescription = '';
+        /*if (counter.currentCounts >= counter.lastCounts) {*/
+        if (!counter.hasProblem)
+            counter.problemDescription = '';
 
-            var body = {
-                client: client,
-                pipeline: pipeline,
-                counter: counter,
-                period: $scope.period
-            };
+        var body = {
+            client: client,
+            pipeline: pipeline,
+            counter: counter,
+            period: $scope.period
+        };
 
-            dataService.post('/clientJur/updateClientCounter', body).then(function (response) {
+        dataService.post('/clientJur/updateClientCounter', body).then(function (response) {
+            if (response.operationResult === 0) {
                 toastr.success('', 'Данные успешно сохранены');
-                //console.log(response.result);
+                counter.isCounterNew = false;
                 $scope.getBalanceForClient(client._id);
                 $scope.getAllBalance();
-            });
-        }
-        else {
-            toastr.error('Текущие показания должны быть больше или равны последним!', 'Данные не сохранены');
-        }
+            } else {
+                toastr.error('', 'Произошла ошибка');
+            }
+
+
+        });
+        /*}
+         else {
+         toastr.error('Текущие показания должны быть больше или равны последним!', 'Данные не сохранены');
+         }*/
     };
 
 
