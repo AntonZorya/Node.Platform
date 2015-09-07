@@ -7,15 +7,13 @@ function editTechDataController($scope, dataService, modalSvc, toastr) {
 
     $scope.save = function () {
         dataService.post('/clientJur/update', $scope.modalItem).then(function (response) {
-            toastr.success('', 'Данные успешно сохранены');
 
-            for (var i = 0; i < $scope.modalItem.pipelines.length; i++)
-                for (var j = 0; j < $scope.modalItem.pipelines[i].counters.length; j++) {
-                    if ($scope.modalItem.pipelines[i].counters[j].isCounterNew)
-                        $scope.modalItem.pipelines[i].counters[j].isCounterNew = false;
-                }
+            if (response.operationResult === 0) {
+                toastr.success('', 'Данные успешно сохранены');
 
-            _.extend($scope.$parent.selectedItem, $scope.modalItem);
+                $scope.modalItem = response.result;
+                _.extend($scope.$parent.selectedItem, $scope.modalItem);
+            }
 
         });
 
@@ -40,7 +38,8 @@ function editTechDataController($scope, dataService, modalSvc, toastr) {
                 lastCounts: 0,
                 isActive: true,
                 isCounterNew: true,
-                currentCounts: 0
+                currentCounts: 0,
+                installDate: new Date()
             };
             $scope.modalItem.pipelines[pipelineIndex].counters.push(newCounter);
         }
@@ -49,9 +48,18 @@ function editTechDataController($scope, dataService, modalSvc, toastr) {
     $scope.disableCounter = function (pipelineIndex, counterIndex) {
 
         if (confirm('Вы действительно хотите снять счетчик?')) {
-            $scope.modalItem.pipelines[pipelineIndex].counters[counterIndex].isActive = false;
-            $scope.modalItem.pipelines[pipelineIndex].counters[counterIndex].isCounterNew = false;
-            $scope.modalItem.pipelines[pipelineIndex].counters[counterIndex].removeDate = new Date()
+
+            var day1 = (new Date($scope.modalItem.pipelines[pipelineIndex].counters[counterIndex].dateOfCurrentCounts)).getDate();
+            var day2 = new Date().getDate();
+
+            if (day1 === day2) {
+                $scope.modalItem.pipelines[pipelineIndex].counters[counterIndex].isActive = false;
+                $scope.modalItem.pipelines[pipelineIndex].counters[counterIndex].isCounterNew = false;
+                $scope.modalItem.pipelines[pipelineIndex].counters[counterIndex].removeDate = new Date()
+            } else {
+                toastr.error('Чтобы снять счетчик, необходимо внести показания на сегодшний день!');
+            }
+
         }
 
 

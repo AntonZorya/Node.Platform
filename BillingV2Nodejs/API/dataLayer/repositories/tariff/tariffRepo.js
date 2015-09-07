@@ -7,3 +7,11 @@ exports.getAll = function (done) {
         return done({operationResult: 0, result: res});
     });
 };
+
+
+exports.getById = function (id, done) {
+    Collection.findOne({_id: id}, function (err, res) {
+        if (err) return done(errorBuilder(err));
+        return done({operationResult: 0, result: res});
+    });
+};

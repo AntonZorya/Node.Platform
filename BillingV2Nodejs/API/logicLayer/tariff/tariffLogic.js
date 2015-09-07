@@ -5,3 +5,9 @@ exports.getAll = function (done) {
         done(data);
     });
 };
+
+exports.getById = function (id, done) {
+    repo.getById(id, function (data) {
+        done(data);
+    });
+};
