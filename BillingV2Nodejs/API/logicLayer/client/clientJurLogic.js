@@ -249,14 +249,10 @@ exports.updateClientCounter = function (body, userId, done) {
                     }
 
                 }
-                BalanceLogic.add(balanceAvg, function (balanceAvgResp) {
-                    CalculationLogic.add(calculationAvg, function (calculationAvgResp) {
-                        BalanceLogic.add(balance, function (balanceResp) {
-                            CalculationLogic.add(calculation, function (calcResp) {
-                                ClientJurRepo.update(clientJur, function (counterResp) {
-                                    done(counterResp);
-                                });
-                            });
+                BalanceLogic.addMany([balanceAvg, balance], function (balanceAvgResp) {
+                    CalculationLogic.addMany([calculationAvg, calculation], function (calculationAvgResp) {
+                        ClientJurRepo.update(clientJur, function (counterResp) {
+                            done(counterResp);
                         });
                     });
                 });

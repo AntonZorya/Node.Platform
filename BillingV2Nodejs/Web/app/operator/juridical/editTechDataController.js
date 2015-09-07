@@ -49,16 +49,17 @@ function editTechDataController($scope, dataService, modalSvc, toastr) {
 
         if (confirm('Вы действительно хотите снять счетчик?')) {
 
-            var day1 = (new Date($scope.modalItem.pipelines[pipelineIndex].counters[counterIndex].dateOfCurrentCounts)).getDate();
+            /*var day1 = (new Date($scope.modalItem.pipelines[pipelineIndex].counters[counterIndex].dateOfCurrentCounts)).getDate();
             var day2 = new Date().getDate();
 
-            if (day1 === day2) {
+            if (day1 === day2) {*/
                 $scope.modalItem.pipelines[pipelineIndex].counters[counterIndex].isActive = false;
                 $scope.modalItem.pipelines[pipelineIndex].counters[counterIndex].isCounterNew = false;
                 $scope.modalItem.pipelines[pipelineIndex].counters[counterIndex].removeDate = new Date()
-            } else {
+            /*} */
+            /*else {
                 toastr.error('Чтобы снять счетчик, необходимо внести показания на сегодшний день!');
-            }
+            }*/
 
         }
 
