@@ -73,7 +73,7 @@ exports.delete = function (id, done) {
     }
 };
 
-exports.report = function (period, done) {
+exports.report1 = function (period, done) {
     Collection.aggregate(
         { $unwind: "$pipelines" },
         { $unwind: "$pipelines.counters" },
@@ -113,13 +113,12 @@ exports.report = function (period, done) {
 
         function (err, result) {
             if (err) return done(errorBuilder(err));
-            console.log("result");
             return done({ operationResult: 0, result: result });
         }
         );
 };
 
-exports.reportCounts = function (period, done) {
+exports.report2 = function (period, done) {
     Collection.aggregate(
         { $unwind: "$counters" },
         {

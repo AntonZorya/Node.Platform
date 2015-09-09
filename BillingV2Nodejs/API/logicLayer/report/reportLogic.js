@@ -2,8 +2,8 @@ var ClientJurRepo = require(_repositoriesPath+'client/clientJurRepo');
 var ControllerRepo = require('../../dataLayer/repositories/identity/controllerRepo');
 var async = require('async');
 
-exports.get = function (period, done) {
-    ClientJurRepo.report(period, function (data) {
+exports.report1 = function (period, done) {
+    ClientJurRepo.report1(period, function (data) {
         if (data.operationResult == 0 && data.result != null) {
             var resultList = [];
             ControllerRepo.getAll(function(data2){
@@ -46,8 +46,8 @@ exports.get = function (period, done) {
 
 
 
-exports.getCounts = function (period, done) {
-    ClientJurRepo.reportCounts(period, function (data) {
+exports.report2 = function (period, done) {
+    ClientJurRepo.report2(period, function (data) {
         if (data.operationResult == 0 && data.result != null) {
             var resultList = [];
             ControllerRepo.getAll(function(data2){
