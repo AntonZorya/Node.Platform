@@ -67,6 +67,17 @@
                     <div class="sixteen wide column" style="padding-top: 23px;">
                         <div class="description" ng-show="item.isShowCounters">
 
+                            <button class="ui  button" ng-bind="'#Выписать штраф' | translate"
+                                    ng-click="fined()"></button>
+                            <button class="ui  button" ng-click="showModalPayment(item)"
+                                    ng-bind="'#Принять оплату' | translate"></button>
+                            <button class="ui  button" ng-bind="'#Технические данные' | translate"
+                                    ng-click="editTechData()"></button>
+                            <button class="ui  button" ng-bind="'#Паспортные данные' | translate"
+                                    ng-click="editPassportData()"></button>
+                            <button class="ui  button" ng-bind="'#История' | translate"
+                                    ng-click="getClientBalanceDetails()"></button>
+
                             <table class="ui basic table">
                                 <tbody>
                                 <tr ng-repeat="pipeline in item.pipelines">
@@ -88,7 +99,7 @@
                                                 <th>{{'#lastCounts'|translate}} &nbsp; (м3)</th>
                                                 <th>{{'#dateOfLast'|translate}}</th>
                                                 <th>{{'#currentCounts'|translate}} &nbsp; (м3)</th>
-                                                <th>{{'#dateOfCurrent'|translate}}</th>
+                                                <th>*{{'#dateOfCurrent'|translate}}</th>
                                                 <th>{{'#problemDescription'|translate}}</th>
                                                 <th></th>
                                             </tr>
@@ -177,7 +188,7 @@
                             <div class="ui compact menu">
                                 <div class="ui compact menu">
 
-                                    <div class="ui simple dropdown item">
+                                    <!--<div class="ui simple dropdown item">
                                         <span ng-bind="'#Акт' | translate"></span>
                                         <i class="dropdown icon"></i>
 
@@ -189,7 +200,7 @@
                                             <div class="item"
                                                  ng-bind="'#Установка новой пломбы' | translate"></div>
                                         </div>
-                                    </div>
+                                    </div>-->
 
                                     <!--<div class="ui simple dropdown item">
                                         <span ng-bind="'#Оплата' | translate"></span>
@@ -202,22 +213,6 @@
                                     </div>-->
 
                                 </div>
-                            </div>
-
-                            <div class="ui basic buttons">
-
-                                <!-- <button class="ui basic button">{{'#Просмотр текущего сальдо' | translate}}</button> -->
-                                <!-- <button class="ui basic button" ng-bind="'#Анализ отклонений' | translate"></button> -->
-                                <button class="ui basic button" ng-click="showModalPayment(item)"
-                                        ng-bind="'#Принять оплату' | translate"></button>
-                                <button class="ui basic button" ng-bind="'#Технические данные' | translate"
-                                        ng-click="editTechData()"></button>
-                                <button class="ui basic button" ng-bind="'#Паспортные данные' | translate"
-                                        ng-click="editPassportData()"></button>
-                                <button class="ui basic button" ng-bind="'#История' | translate"
-                                        ng-click="getClientBalanceDetails()"></button>
-
-
                             </div>
 
                         </div>

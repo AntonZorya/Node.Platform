@@ -20,5 +20,6 @@ exports.definition =
         markId: {type: Schema.Types.ObjectId, ref: 'CounterMark'},//марка счетчика
         fileIds: [], //акт снятия, акт установки
         isActive: {type: Boolean},
-        isCounterNew: {type: Boolean}
+        isCounterNew: {type: Boolean},
+        isPrevAvgCalculated: {type: Boolean} // после замены счетчика - был ли расчет по среднему
     }];
