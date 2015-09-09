@@ -85,8 +85,8 @@ exports.delete = function (id, done) {
     });
 };
 
-exports.search = function (searchTerm, done) {
-    ClientJurRepo.search(searchTerm, function (res) {
+exports.search = function (searchTerm, user, done) {
+    ClientJurRepo.search(searchTerm, user, function (res) {
         return done(res);
     });
 };
@@ -133,7 +133,7 @@ exports.updateClientCounter = function (body, userId, done) {
             date: new Date(),
             userId: userId
         };
-        var balanceAvg = {};
+        var balanceAvg = null;
 
         //добор/недобор
         var isShortage = false;
@@ -151,18 +151,17 @@ exports.updateClientCounter = function (body, userId, done) {
             tariff: tariff,
             waterSum: waterSum,
             canalSum: canalSum,
-
             //считаем от минимума
             isShortage: isShortage, //добор/недобор,
             shortageCubicMeters: shortageCubicMeters, //недобор м3,
             shortageSum: shortageSum, //недобор тг
-
             period: period,
             //аудит
             date: new Date(),
-            userId: userId
+            userId: userId,
+            calculationType: 0 //0 - по счетчику, 1 - по среднему,
         };
-        var calculationAvg = {};
+        var calculationAvg = null;
 
         //находим предыдущие показания в этом периоде
         CalculationLogic.getByCounterId(counter._id, period, function (calcByCounterResp) {
@@ -224,12 +223,15 @@ exports.updateClientCounter = function (body, userId, done) {
                         balanceAvg.sum = (avgWaterSum + avgCanalSum) * -1;
 
                         calculationAvg = _.extend(calculationAvg, calculation);
+
                         calculationAvg.counterId = null; //без счетчика
                         calculationAvg.balanceId = balanceIdForAvg;
                         calculationAvg.waterCubicMetersCount = waterCount;
                         calculationAvg.canalCubicMetersCount = canalCount;
                         calculationAvg.waterSum = avgWaterSum;
                         calculationAvg.canalSum = avgCanalSum;
+                        calculationAvg.calculationType = 1; //0 - по счетчику, 1 - по среднему,
+                        calculationAvg.daysCountByAvg = daysDifferenceCount
                     }
                 }
 
@@ -249,12 +251,22 @@ exports.updateClientCounter = function (body, userId, done) {
                     }
 
                 }
+                //console.log('balanceAvg: ' + balanceAvg);
                 BalanceLogic.addMany([balanceAvg, balance], function (balanceAvgResp) {
-                    CalculationLogic.addMany([calculationAvg, calculation], function (calculationAvgResp) {
-                        ClientJurRepo.update(clientJur, function (counterResp) {
-                            done(counterResp);
+                    if (balanceAvgResp.operationResult === 0) {
+                        CalculationLogic.addMany([calculationAvg, calculation], function (calculationAvgResp) {
+                            if (calculationAvgResp.operationResult === 0) {
+                                ClientJurRepo.update(clientJur, function (counterResp) {
+                                    done(counterResp);
+                                });
+                            } else {
+                                console.log('Ошибка вставки в коллекцию calculations');
+                            }
                         });
-                    });
+                    } else {
+                        console.log('Ошибка вставки в коллекцию balances');
+                    }
+
                 });
             }
 

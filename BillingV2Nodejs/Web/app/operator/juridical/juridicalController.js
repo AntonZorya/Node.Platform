@@ -12,7 +12,7 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
     $scope.allBalance = [];
     $scope.balanceDetailsByClient = [];
 
-    $scope.period = 201507;
+    $scope.period = 201508;
     //TODO: дропдаун лист для периода
 
     $scope.dateOptions = {
@@ -55,8 +55,8 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
                     if (response.operationResult === 0) {
                         toastr.success('', 'Данные успешно сохранены');
                         counter.isCounterNew = false;
-                        $scope.getBalanceForClient(client._id);
-                        $scope.getAllBalance();
+                        //$scope.getBalanceForClient(client._id);
+                        //$scope.getAllBalance();
                     } else {
                         toastr.error('', 'Произошла ошибка');
                     }

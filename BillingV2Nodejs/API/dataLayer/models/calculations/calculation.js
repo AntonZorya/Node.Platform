@@ -22,7 +22,10 @@ exports.definition = _.extend({
     period: {type: Number, required: true},
     //аудит
     date: {type: Date, required: '#date required'},
-    userId: {type: schema.Types.ObjectId, required: true}
+    userId: {type: schema.Types.ObjectId, required: true},
+
+    calculationType: {type: Number}, //0 - по счетчику, 1 - по среднему,
+    daysCountByAvg: {type: Number}
 
 }, modelBase);
 

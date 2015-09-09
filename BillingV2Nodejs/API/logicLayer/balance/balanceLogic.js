@@ -25,16 +25,17 @@ exports.addMany = function (balances, done) {
 
     _.each(balances, function (balance, index) {
 
-        validator('balance', balanceDefinition, balance, function (validationRes) {
-            if (validationRes.operationResult == 0) {
-                BalanceRepo.add(balance, function (data) {
-                    if (balances.length - 1 === index)
-                        done(data);
-                });
-            }
-            else
-                done(validationRes);
-        });
+        if (balance != null)
+            validator('balance', balanceDefinition, balance, function (validationRes) {
+                if (validationRes.operationResult == 0) {
+                    BalanceRepo.add(balance, function (data) {
+                        if (balances.length - 1 === index)
+                            return done(data);
+                    });
+                }
+                else
+                    done(validationRes);
+            });
     });
 };
 

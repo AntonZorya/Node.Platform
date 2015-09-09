@@ -52,7 +52,7 @@ exports.get = function (id, done) {
 
 exports.update = function (client, done) {
     if (client._id) {
-        Collection.findOneAndUpdate({_id: client._id}, client, {new: true}, function (err, res) {
+        Collection.findOneAndUpdate({_id: client._id}, client, function (err, res) {
             if (err) return done(errorBuilder(err));
             return done({operationResult: 0, result: res});
         });
@@ -158,23 +158,46 @@ exports.reportCounts = function (period, done) {
     );
 };
 
-exports.search = function (searchTerm, done) {
-    Collection
-        .find(
-        {$text: {$search: searchTerm}},
-        {score: {$meta: "textScore"}},
-        {'$limit': 20}
-    )
-        .sort({score: {$meta: 'textScore'}})
-        .populate('clientType.tariffId')
-        .populate('addressId')
-        .populate('controllerId')
-        //.deepPopulate('tariffId addressId controllerId')
-        .exec(function (err, docs) {
-            if (err) return done(errorBuilder(err));
-            return done({operationResult: 0, result: docs});
+exports.search = function (searchTerm, user, done) {
+    if (user.controllerId) {
+        Collection
+            .find(
+            {
+                $and: [
+                    {controllerId: user.controllerId},
+                    {$text: {$search: searchTerm}}
+                ]
+            },
+            {score: {$meta: "textScore"}},
+            {'$limit': 20}
+        )
+            .sort({score: {$meta: 'textScore'}})
+            .populate('clientType.tariffId')
+            .populate('addressId')
+            .populate('controllerId')
+            .exec(function (err, docs) {
+                if (err) return done(errorBuilder(err));
+                return done({operationResult: 0, result: docs});
 
-        });
+            });
+    } else {
+        Collection
+            .find(
+            {$text: {$search: searchTerm}},
+            {score: {$meta: "textScore"}},
+            {'$limit': 20}
+        )
+            .sort({score: {$meta: 'textScore'}})
+            .populate('clientType.tariffId')
+            .populate('addressId')
+            .populate('controllerId')
+            .exec(function (err, docs) {
+                if (err) return done(errorBuilder(err));
+                return done({operationResult: 0, result: docs});
+
+            });
+    }
+
 };
 
 exports.updateClientCounter = function (body, done) {

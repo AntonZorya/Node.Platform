@@ -4,6 +4,8 @@ var clientTypeRepo = require('../dataLayer/repositories/client/clientTypeRepo');
 var clientJurLogic = require('../logicLayer/client/clientJurLogic');
 var streetsRepo = require('../dataLayer/repositories/location/streetRepo');
 var addressesRepo = require('../dataLayer/repositories/location/addressRepo');
+var addressesTypeRepo = require('../dataLayer/repositories/location/addressTypeRepo');
+var userRepo = require('../dataLayer/repositories/identity/userRepo');
 var async = require("async");
 
 var mongoose = require('mongoose');
@@ -16,7 +18,7 @@ function random(low, high) {
 exports.main = function () {
 
     XLS = require('xlsjs');
-    var workbook = XLS.readFile('workbook_201507.xls');
+    var workbook = XLS.readFile('workbook_201508_2.xls');
     var sheet_name_list = workbook.SheetNames;
     var sheet = workbook.Sheets[sheet_name_list[0]];
     console.log('reading');
@@ -24,9 +26,44 @@ exports.main = function () {
     someData = _.rest(someData, 1);
     console.log('readed');
 
-
     async.series([
 
+            //типы адресов, перед запуском почистить коллекцию addressTypes
+            /*function readyWithAddressTypes() {
+             var addressTypes = [];
+
+             addressTypes.push({
+
+             "_id": "55c1f1d0d39acd07553e4fdd",
+             "name": "Улица"
+             });
+
+             addressTypes.push({
+             "_id": "55c1f5bfd39acd07553e4fdf",
+             "name": "Дом"
+             });
+
+             addressTypes.push({
+             "_id": "55c1f5d7d39acd07553e4fe1",
+             "name": "Квартира"
+             });
+
+             addressTypes.push({
+             "_id": "55c20bb0d39acd07553e4fe3",
+             "name": "Район"
+             });
+
+             _.each(addressTypes, function (addrType, index) {
+             addressesTypeRepo.add(addrType, function (resp) {
+             if (addressTypes.length - 1 === index)
+             readyWithAddressTypes();
+             });
+             });
+             },*/
+            //!типы адресов
+
+
+            //адреса, перед запуском почистить коллекцию addresses
             /*function readyWithAddresses() {
              var addresses = [];
              var districtTypeId = "55c20bb0d39acd07553e4fe3";
@@ -41,6 +78,8 @@ exports.main = function () {
              async.each(uniqData, function (rowArray) {
 
              if (typeof rowArray[5] != 'undefined') {
+
+             var parentAddresses = [];
 
              var streetId = mongoose.Types.ObjectId().toString();
              var streetName = rowArray[5];
@@ -83,13 +122,22 @@ exports.main = function () {
              var foundHouse = _.find(foundHousesForStreet, function (h) {
              return h.value === house;
              });
-             //если такого дома для улицы нет
+             //если такого дома для улицы в базе еще нет
              if (!foundHouse) {
              addresses.push({
              _id: houseId,
              addressTypeId: houseTypeId,
              value: house,
-             parentId: streetId
+             parentId: streetId,
+             parentAddresses: [
+             {
+             typeId: streetTypeId,
+             typeName: 'Улица',
+             shortTypeName: 'ул.',
+             id: streetId,
+             name: streetName
+             }
+             ]
              });
              } else {
              houseId = foundHouse._id;
@@ -100,10 +148,19 @@ exports.main = function () {
              _id: houseId,
              addressTypeId: houseTypeId,
              value: house,
-             parentId: streetId
+             parentId: streetId,
+             parentAddresses: [
+             {
+             typeId: streetTypeId,
+             typeName: 'Улица',
+             shortTypeName: 'ул.',
+             id: streetId,
+             name: streetName
+             }
+             ]
+
              });
              }
-
 
              if (typeof rowArray[7] != 'undefined') {
 
@@ -113,7 +170,23 @@ exports.main = function () {
              addresses.push({
              addressTypeId: flatTypeId,
              value: flat,
-             parentId: houseId
+             parentId: houseId,
+             parentAddresses: [
+             {
+             typeId: houseTypeId,
+             typeName: 'Дом',
+             shortTypeName: 'д.',
+             id: houseId,
+             name: house
+             },
+             {
+             typeId: streetTypeId,
+             typeName: 'Улица',
+             shortTypeName: 'ул.',
+             id: streetId,
+             name: streetName
+             }
+             ]
              });
 
              }
@@ -125,175 +198,162 @@ exports.main = function () {
              addressesRepo.add(addr, function () {
              console.log('added: ' + addr.value);
              });
+             }, function () {
+             readyWithAddresses();
              });
 
              },*/
+            //!адреса
 
-            /*function (readyWithStreets) {
 
-             var streets = [];
+            //типы клиентов, перед запуском почистить clientTypes
+            /*function (readyWithTypes) {
+
+             var clientTypeNames = [];
 
              _.each(someData, function (itemArray) {
              _.each(itemArray, function (row, i) {
-             if (i === 5)
+             if (i === 33)
              if (typeof row != 'undefined') {
              row = row.toString().trim();
-             streets.push(row); //.trim().toLowerCase();
+             clientTypeNames.push(row);
              }
              });
              });
 
-             var uniqStreets = _.uniq(streets);
+             var uniqClientTypeNames = _.uniq(clientTypeNames);
 
-             async.each(uniqStreets, function (row, callback) {
-             streetsRepo.add({
-             name: row
+
+             var newObjectIdForParentMsb = '55db1a16f96bf62c7635ae1b'; //МСБ
+
+             clientTypeRepo.add({
+             _id: newObjectIdForParentMsb,
+             name: "МСБ",
+             tariffId: '55bf41dad39a83c1a4ea83c9',//МСБ
+             parentId: null,
+             isDeleted: false,
+             createDateTime: new Date()
              }, function (result) {
-             console.log(row + '  added');
+             console.log('clientType: ' + "МСБ" + '  added');
+
+             async.each(uniqClientTypeNames, function (clientTypeName, callback) {
+
+             var clientType = {
+             name: clientTypeName
+             };
+
+             switch (clientTypeName) {
+             //TODO областной бюджет ???
+             case 'респ.бюджет':
+             clientType.tariffId = '55bf43bad39a83c1a4ea83cb';
+             break;
+             case 'гор.бюджет':
+             clientType.tariffId = '55bf43bad39a83c1a4ea83cb';
+             break;
+             case 'хоз.субъекты':
+             clientType.tariffId = '55bf441dd39a83c1a4ea83cf';
+             break;
+             case 'район':
+             clientType.tariffId = '55bf43ecd39a83c1a4ea83cd';
+             break;
+             case 'талсуат':
+             clientType.tariffId = '55c9976dd39aa4ea934245a0';
+             break;
+             case 'кафе':
+             clientType.tariffId = '55bf41dad39a83c1a4ea83c9';//МСБ
+             clientType.parentId = newObjectIdForParentMsb;
+             clientType.minConsumption = 25;
+             break;
+             case 'рестораны':
+             clientType.tariffId = '55bf41dad39a83c1a4ea83c9';//МСБ
+             clientType.parentId = newObjectIdForParentMsb;
+             clientType.minConsumption = 110;
+             break;
+             case 'гостиницы':
+             clientType.tariffId = '55bf41dad39a83c1a4ea83c9';//МСБ
+             clientType.parentId = newObjectIdForParentMsb;
+             clientType.minConsumption = 70;
+             break;
+             case 'азс и автомойки':
+             clientType.tariffId = '55bf41dad39a83c1a4ea83c9';//МСБ
+             clientType.parentId = newObjectIdForParentMsb;
+             clientType.minConsumption = 160;
+             break;
+             case 'сауны':
+             clientType.tariffId = '55bf41dad39a83c1a4ea83c9';//МСБ
+             clientType.parentId = newObjectIdForParentMsb;
+             clientType.minConsumption = 80;
+             break;
+             case 'бани':
+             clientType.tariffId = '55bf41dad39a83c1a4ea83c9';//МСБ
+             clientType.parentId = newObjectIdForParentMsb;
+             clientType.minConsumption = 50;
+             break;
+             default:
+             clientType.tariffId = '55bf41dad39a83c1a4ea83c9';//МСБ
+             clientType.parentId = newObjectIdForParentMsb;
+             break;
+             }
+
+             clientTypeRepo.add(clientType, function (result) {
+             console.log('clientType: ' + clientTypeName + '  added');
              callback();
              });
+
+
              }, function () {
-             readyWithStreets();
+             readyWithTypes();
+             });
+
+             });
+
+             },*/
+            //!типы клиентов
+
+
+            //контролеры и пользователи, перед запуском почистить controllers и users (где controllerId не пустой)
+            /*function (readyFunction1) {
+             var controllers = _.uniq(someData, true, function (row) {
+             return row[35];
+             });
+             var userNumber = 0;
+             async.each(controllers, function (row, callback) {
+             var controllerId = mongoose.Types.ObjectId();
+             var fullName = row[35];
+             var password = 123456; //random(1000, 9999);
+             controllerRepo.add({
+             _id: controllerId,
+             fullName: fullName,
+             code: password
+             }, function (result) {
+             console.log(row[35] + ' controller  added');
+
+             userRepo.add({
+             userName: 'user' + (userNumber++),
+             userFullName: fullName,
+             password: password,
+             email: '123@test.kz',
+             roles: ['controller'],
+             controllerId: controllerId
+             }, function (userResp) {
+             callback();
+             });
+             });
+             }, function () {
+             readyFunction1();
              });
 
 
              },*/
-
-            function (readyWithTypes) {
-                /*var clientTypes = _.uniq(someData, true, function (row) {
-                 return row[27];
-                 });*/
-
-                var clientTypeNames = [];
-
-                _.each(someData, function (itemArray) {
-                    _.each(itemArray, function (row, i) {
-                        if (i === 30)
-                            if (typeof row != 'undefined') {
-                                row = row.toString().trim();
-                                clientTypeNames.push(row);
-                            }
-                    });
-                });
-
-                var uniqClientTypeNames = _.uniq(clientTypeNames);
+            //!контролеры и пользователи
 
 
-                //var newObjectIdForParentMsb = mongoose.Types.ObjectId(); //МСБ
-
-                /* clientTypeRepo.add({
-                 _id: newObjectIdForParentMsb,
-                 name: "МСБ",
-                 tariffId: '55bf41dad39a83c1a4ea83c9',//МСБ
-                 parentId: null,
-                 isDeleted: false,
-                 createDateTime: new Date()
-                 }, function (result) {
-                 console.log('clientType: ' + "МСБ" + '  added');
-                 });*/
-
-
-                async.each(uniqClientTypeNames, function (clientTypeName, callback) {
-
-                    var newObjectIdForParentMsb = '55db1a16f96bf62c7635ae1b'; //МСБ
-
-                    var clientType = {
-                        name: clientTypeName
-                        /*tariffId: null,
-                         parentId: null,
-                         minConsumption: null*/
-                    };
-
-                    switch (clientTypeName) {
-                        //TODO обласной бюджет ???
-                        case 'респ.бюджет':
-                            clientType.tariffId = '55bf43bad39a83c1a4ea83cb';
-                            break;
-                        case 'гор.бюджет':
-                            clientType.tariffId = '55bf43bad39a83c1a4ea83cb';
-                            break;
-                        case 'хоз.субъекты':
-                            clientType.tariffId = '55bf441dd39a83c1a4ea83cf';
-                            break;
-                        case 'район':
-                            clientType.tariffId = '55bf43ecd39a83c1a4ea83cd';
-                            break;
-                        case 'талсуат':
-                            clientType.tariffId = '55c9976dd39aa4ea934245a0';
-                            break;
-                        case 'кафе':
-                            clientType.tariffId = '55bf41dad39a83c1a4ea83c9';//МСБ
-                            clientType.parentId = newObjectIdForParentMsb;
-                            clientType.minConsumption = 25;
-                            break;
-                        case 'рестораны':
-                            clientType.tariffId = '55bf41dad39a83c1a4ea83c9';//МСБ
-                            clientType.parentId = newObjectIdForParentMsb;
-                            clientType.minConsumption = 110;
-                            break;
-                        case 'гостиницы':
-                            clientType.tariffId = '55bf41dad39a83c1a4ea83c9';//МСБ
-                            clientType.parentId = newObjectIdForParentMsb;
-                            clientType.minConsumption = 70;
-                            break;
-                        case 'азс и автомойки':
-                            clientType.tariffId = '55bf41dad39a83c1a4ea83c9';//МСБ
-                            clientType.parentId = newObjectIdForParentMsb;
-                            clientType.minConsumption = 160;
-                            break;
-                        case 'сауны':
-                            clientType.tariffId = '55bf41dad39a83c1a4ea83c9';//МСБ
-                            clientType.parentId = newObjectIdForParentMsb;
-                            clientType.minConsumption = 80;
-                            break;
-                        case 'бани':
-                            clientType.tariffId = '55bf41dad39a83c1a4ea83c9';//МСБ
-                            clientType.parentId = newObjectIdForParentMsb;
-                            clientType.minConsumption = 50;
-                            break;
-                        default:
-                            clientType.tariffId = '55bf41dad39a83c1a4ea83c9';//МСБ
-                            clientType.parentId = newObjectIdForParentMsb;
-                            break;
-                    }
-
-
-                    clientTypeRepo.add(clientType, function (result) {
-                        console.log('clientType: ' + clientTypeName + '  added');
-                        callback();
-                    });
-
-
-                }, function () {
-                    readyWithTypes();
-                });
-
-            },
-            function (readyFunction1) {
-                var controllers = _.uniq(someData, true, function (row) {
-                    return row[32];
-                });
-
-
-                async.each(controllers, function (row, callback) {
-                    controllerRepo.add({
-                        fullName: row[32],
-                        code: random(1000, 9999)
-                    }, function (result) {
-                        console.log(row[32] + '  added');
-                        callback();
-                    });
-                }, function () {
-                    readyFunction1();
-                });
-
-
-            },
+            //клиенты, перед запуском почистить clientJur
             function (readyFunction2) {
+
                 var readyJur = _.uniq(someData, true, function (row) {
                     return row[3];
                 });
-
 
                 async.eachSeries(readyJur, function (row, callback) {
 
@@ -307,26 +367,33 @@ exports.main = function () {
                                 counterNumber: cntRow[8],
                                 plumbNumber: cntRow[9],
                                 currentStatus: cntRow[9] ? 'Опломбирован' : 'Не опломбирован',
-                                currentCounts: cntRow[13] ? cntRow[13] : 0,
                                 dateOfCurrentCounts: null,
-                                problem: cntRow[25] ? cntRow[25] : "",
-                                problemDescription: cntRow[26] ? cntRow[26] : "",
-                                lastCounts: cntRow[12] ? cntRow[12] : 0,
+                                problem: cntRow[31] ? cntRow[31] : "",
+                                problemDescription: cntRow[32] ? cntRow[32] : "",
                                 dateOfLastCounts: null,
-                                //isCountsByAvg: false,
-                                isActive: true
+                                isActive: true,
+
+                                lastCounts: cntRow[12] ? cntRow[12] : null,//cntRow[13] ? cntRow[13] : null,
+                                currentCounts: cntRow[13] ? cntRow[13] : null//null,
                             });
                         });
 
                         var pipelines = [];
                         _.each(tmpCntArr, function (counter, index) {
+
+                            var isByCounter = null;
+
+                            if (typeof row[11] !== 'undefined') {
+                                isByCounter = row[11] == 'счетчик';
+                            }
+
                             pipelines.push({
                                 number: index + 1,
                                 description: "Ввод(трубопровод) по адресу: " + row[4],
                                 addressId: null, //TODO addressId
                                 counters: [counter],
 
-                                isByCounter: row[11] == "счетчик",//row[11] == "по норме" ? false : true,
+                                isByCounter: isByCounter,
                                 waterPercent: row[14] ? row[14].replace('%', '') : 0,
                                 canalPercent: row[15] ? row[15].replace('%', '') : 0,
 
@@ -336,8 +403,8 @@ exports.main = function () {
                         });
 
 
-                        controllerRepo.getByName(row[32], function (controller) {
-                            clientTypeRepo.getByName(row[30], function (clientType) {
+                        controllerRepo.getByName(row[35], function (controller) {
+                            clientTypeRepo.getByName(row[33], function (clientType) {
 
                                 //var addressId = '000000000000000000000000';
 
@@ -346,12 +413,11 @@ exports.main = function () {
                                     number: row[0],
                                     name: row[3],
                                     bin: row[2] ? row[2] : 'No bin',
-                                    rnn: row[1],
+                                    rnn: row[1] ? row[1] : 'No rnn',
                                     address: row[4] ? row[4] : 'No address',
-                                    addressId: '000000000000000000000000',
-                                    period: 201507,
+                                    addressId: null,
+                                    period: 201508,
                                     pipelines: pipelines,
-                                    //counters: tmpCntArr,
                                     controllerId: controller.result ? controller.result._id : null,
                                     clientType: clientType.result ? clientType.result._doc : null
                                 };
@@ -436,6 +502,7 @@ exports.main = function () {
                 )
                 ;
             }
+            //!клиенты
         ],
         function () {
             console.log("READY !!!!READY !!!!READY !!!!READY !!!!READY !!!!READY !!!!");
