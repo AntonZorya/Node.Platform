@@ -1,5 +1,5 @@
 var definition = require('../../models/references/ksk');
-var Collection = new require('../../../helpers/mongoose/modelBuilder')('ksks', definition);
+var Collection = new require('../../../helpers/mongoose/modelBuilder')('ksk', definition);
 
 exports.getAll = function (done) {
     Collection.find({isDeleted: false}, null, {sort: {name: 1}}, function (err, res) { //,

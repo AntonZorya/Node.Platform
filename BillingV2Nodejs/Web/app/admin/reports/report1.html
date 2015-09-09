@@ -1,20 +1,36 @@
 <div ng-controller="report1Ctrl" id="container">
 
-<h4>Отчет по контролерам (кол-во пройденых объектов)</h4>
+	<h4>Отчет по контролерам (кол-во пройденных объектов)</h4>
 
-	<div>
-		<highchart config="karimovChartConfig"></highchart>
+	<div class="ui grid">
+		<div class="four wide column">
+			<span>Месяц:</span>
+			<select ng-model="selectedMonth" ng-options="month.name for month in monthList track by month.id" ng-change="getVisitList(selectedYear.id,selectedMonth.id)"></select>
+		</div>
+		<div class="four wide column">
+			<span>Год:</span>
+			<select ng-model="selectedYear" ng-options="year.name for year in yearList track by year.id" ng-change="getVisitList(selectedYear.id,selectedMonth.id)"></select>
+		</div>
+		<div class="four wide column"></div>
+		<div class="four wide column"></div>
 	</div>
 
-	<table class="ui very compact celled  table">
-		
+	<div>
+		<highchart config="highChartConfig"></highchart>
+	</div>
+
+	<table class="ui very compact celled table">
 		<tr>
-			<td >Дата/Контролер</td>
-			<td  ng-repeat="con in controllersList">{{con.fullName}}</td>
+			<td>Дата/Контролер</td>
+			<td ng-repeat="con in controllersList">{{con.fullName}}</td>
 		</tr>
-		<tr ng-repeat="day in days">
+		<tr ng-repeat="day in daysArray">
 			<td style="font-size: 12px;">{{day}}</td>
-			<td  ng-repeat="con in controllersList">{{getCounts(day,con.fullName)}}</td>
+			<td ng-repeat="con in controllersList">{{getCounts(day,con.fullName)}}</td>
+		</tr>
+		<tr>
+			<td>Итого</td>
+			<td ng-repeat="con in controllersList">{{getTotalCounts(con.fullName)}}</td>
 		</tr>
 	</table>
 
