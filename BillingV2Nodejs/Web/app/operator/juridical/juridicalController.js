@@ -1,6 +1,6 @@
-billingApplication.controller('juridicalController', ['$scope', 'dataService', 'toastr', 'printSvc', '$templateCache', 'modalSvc', juridicalController]);
+billingApplication.controller('juridicalController', ['$scope', 'dataService', 'toastr', 'printSvc', '$templateCache', 'modalSvc', '$rootScope', juridicalController]);
 
-function juridicalController($scope, dataService, toastr, printSvc, $templateCache, modalSvc) {
+function juridicalController($scope, dataService, toastr, printSvc, $templateCache, modalSvc, $rootScope) {
 
     $scope.searchTerm = '';
     $scope.data = [];
@@ -55,8 +55,8 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
                     if (response.operationResult === 0) {
                         toastr.success('', 'Данные успешно сохранены');
                         counter.isCounterNew = false;
-                        //$scope.getBalanceForClient(client._id);
-                        //$scope.getAllBalance();
+                        $scope.getBalanceForClient(client._id);
+                        $scope.getAllBalance();
                     } else {
                         toastr.error('', 'Произошла ошибка');
                     }
@@ -89,7 +89,8 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
             personType: 1,
             //sum: $scope.enteredSum,
             date: new Date(),
-            period: $scope.period
+            period: $scope.period,
+            user: $rootScope.user
         };
 
         $scope.isShowModalPayment = true;

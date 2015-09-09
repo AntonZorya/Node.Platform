@@ -162,6 +162,7 @@ exports.updateClientCounter = function (body, userId, done) {
             calculationType: 0 //0 - по счетчику, 1 - по среднему,
         };
         var calculationAvg = null;
+        var minConsumption = clientJur.clientType.minConsumption;
 
         //находим предыдущие показания в этом периоде
         CalculationLogic.getByCounterId(counter._id, period, function (calcByCounterResp) {
@@ -232,10 +233,19 @@ exports.updateClientCounter = function (body, userId, done) {
                         calculationAvg.canalSum = avgCanalSum;
                         calculationAvg.calculationType = 1; //0 - по счетчику, 1 - по среднему,
                         calculationAvg.daysCountByAvg = daysDifferenceCount
+
+                        if (minConsumption) {
+                            isShortageAvg = calculationAvg.waterCubicMetersCount < calculationAvg.minConsumption;
+                            if (isShortageAvg) {
+                                calculationAvg.shortageCubicMeters = minConsumption ? minConsumption - calculationAvg.waterCubicMetersCount : 0;
+                                calculationAvg.shortageSum = calculationAvg.shortageCubicMeters * tariff.water;
+                            }
+                        }
+
                     }
                 }
 
-                var minConsumption = clientJur.clientType.minConsumption;
+
                 if (minConsumption) {
 
                     isShortage = calculation.waterCubicMetersCount < calculation.minConsumption;
@@ -243,13 +253,6 @@ exports.updateClientCounter = function (body, userId, done) {
                         calculation.shortageCubicMeters = minConsumption ? minConsumption - calculation.waterCubicMetersCount : 0;
                         calculation.shortageSum = calculation.shortageCubicMeters * tariff.water;
                     }
-
-                    isShortageAvg = calculationAvg.waterCubicMetersCount < calculationAvg.minConsumption;
-                    if (isShortageAvg) {
-                        calculationAvg.shortageCubicMeters = minConsumption ? minConsumption - calculationAvg.waterCubicMetersCount : 0;
-                        calculationAvg.shortageSum = calculationAvg.shortageCubicMeters * tariff.water;
-                    }
-
                 }
                 //console.log('balanceAvg: ' + balanceAvg);
                 BalanceLogic.addMany([balanceAvg, balance], function (balanceAvgResp) {
