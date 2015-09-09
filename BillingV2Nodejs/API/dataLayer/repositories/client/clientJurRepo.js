@@ -159,7 +159,7 @@ exports.reportCounts = function (period, done) {
 };
 
 exports.search = function (searchTerm, user, done) {
-    if (user.controllerId) {
+    if (user.controllerId) {//test commit
         Collection
             .find(
             {
