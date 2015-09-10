@@ -73,28 +73,29 @@ exports.delete = function (id, done) {
 
 exports.report = function (period, done) {
     Collection.aggregate(
-        {$unwind: "$counters"},
+        {$unwind: "$pipelines"},
+        {$unwind: "$pipelines.counters"},
         {
             $match: {
 
                 $and: [
                     {period: parseInt(period)},
-                    {"counters.currentCounts": {$ne: null}},
-                    {"counters.currentCounts": {$ne: ""}},
-                    {"counters.currentCounts": {$ne: 0}},
-                    {"counters.dateOfCurrentCounts": {$ne: null}}
+                    {"pipelines.counters.currentCounts": {$ne: null}},
+                    {"pipelines.counters.currentCounts": {$ne: ""}},
+                    {"pipelines.counters.currentCounts": {$ne: 0}},
+                    {"pipelines.counters.dateOfCurrentCounts": {$ne: null}}
                 ]
 
             }
         },
         {
             $project: {
-                counterId: "$counters._id",
+                counterId: "$pipelines.counters._id",
                 controllerId: 1,
                 yearMonthDay: {
                     $dateToString: {
                         format: "%Y-%m-%d",
-                        date: {$add: ["$counters.dateOfCurrentCounts", 6 * 60 * 60 * 1000]}
+                        date: { $add: ["$pipelines.counters.dateOfCurrentCounts", 6 * 60 * 60 * 1000] }
                     }
                 },
             }
