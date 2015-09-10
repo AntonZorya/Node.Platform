@@ -68,24 +68,14 @@
                 <div class="two wide field">
                     <label>{{'#КСК' | translate}}</label>
                     <select class="ui search dropdown" ng-model="modalItem.kskId"
-                            ng-options="ksk._id as ksk.name for ksk in $parent.ksks track by ksk._id"></select>
+                            ng-options="ksk.name for ksk in $parent.ksks track by ksk._id"></select>
                 </div>
 
 
                 <div class="two wide field">
                     <label>{{'#Контроллер' | translate}}</label>
-                    <select class="ui search dropdown">
-                        <option>Выберите контроллера</option>
-                        <option>Даяров Алмабек</option>
-                        <option>Баитова Жамал</option>
-                        <option>Жубатырова Роза</option>
-                        <option>Шектибаева Айжамал</option>
-                        <option>Жакып Асылхан</option>
-                        <option>Дуйсенгазиева Замза</option>
-                        <option>Бекбалаев Максат</option>
-                        <option>Убеева Урзия</option>
-                        <option>Оразбеков Ынтымак</option>
-                        <option>Камалова Гульжан</option>
+                    <select class="ui search dropdown" ng-model="modalItem.controllerId"
+                            ng-options="controller.fullName for controller in $parent.controllers track by controller._id">
                     </select>
                 </div>
 

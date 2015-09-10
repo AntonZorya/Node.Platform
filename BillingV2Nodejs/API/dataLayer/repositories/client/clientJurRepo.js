@@ -176,6 +176,7 @@ exports.search = function (searchTerm, user, done) {
             .populate('clientType.tariffId')
             .populate('addressId')
             .populate('controllerId')
+            .populate('kskId')
             .exec(function (err, docs) {
                 if (err) return done(errorBuilder(err));
                 return done({operationResult: 0, result: docs});
@@ -192,6 +193,7 @@ exports.search = function (searchTerm, user, done) {
             .populate('clientType.tariffId')
             .populate('addressId')
             .populate('controllerId')
+            .populate('kskId')
             .exec(function (err, docs) {
                 if (err) return done(errorBuilder(err));
                 return done({operationResult: 0, result: docs});

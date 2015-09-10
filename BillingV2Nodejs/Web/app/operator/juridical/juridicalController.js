@@ -8,6 +8,7 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
     $scope.streets = [];
     $scope.counterMarks = [];
     $scope.ksks = [];
+    $scope.controllers = [];
     $scope.tariffs = [];
     $scope.allBalance = [];
     $scope.balanceDetailsByClient = [];
@@ -163,6 +164,14 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
         });
     };
     $scope.getKsks();
+
+
+    $scope.getControllers = function () {
+        dataService.get('/controllers').then(function (response) {
+            $scope.controllers = response.result;
+        });
+    };
+    $scope.getControllers();
 
     //tariffs
     $scope.getTariffs = function () {
