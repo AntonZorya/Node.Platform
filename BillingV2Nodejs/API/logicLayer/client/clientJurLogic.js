@@ -219,12 +219,13 @@ exports.updateClientCounter = function (body, userId, done) {
 
                         //
                         var balanceIdForAvg = mongoose.Types.ObjectId();
+                        balanceAvg = {};
                         balanceAvg = _.extend(balanceAvg, balance);
                         balanceAvg._id = balanceIdForAvg;
                         balanceAvg.sum = (avgWaterSum + avgCanalSum) * -1;
 
+                        calculationAvg = {};
                         calculationAvg = _.extend(calculationAvg, calculation);
-
                         calculationAvg.counterId = null; //без счетчика
                         calculationAvg.balanceId = balanceIdForAvg;
                         calculationAvg.waterCubicMetersCount = waterCount;
@@ -232,7 +233,7 @@ exports.updateClientCounter = function (body, userId, done) {
                         calculationAvg.waterSum = avgWaterSum;
                         calculationAvg.canalSum = avgCanalSum;
                         calculationAvg.calculationType = 1; //0 - по счетчику, 1 - по среднему,
-                        calculationAvg.daysCountByAvg = daysDifferenceCount
+                        calculationAvg.daysCountByAvg = daysDifferenceCount;
 
                         if (minConsumption) {
                             isShortageAvg = calculationAvg.waterCubicMetersCount < calculationAvg.minConsumption;

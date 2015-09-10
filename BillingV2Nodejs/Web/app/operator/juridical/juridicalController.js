@@ -18,7 +18,7 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
     $scope.dateOptions = {
         changeYear: true,
         changeMonth: true,
-        yearRange: '2015:2020'
+        yearRange: '2010:2020'
     };
 
     $scope.search = function () {

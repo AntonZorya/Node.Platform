@@ -41,8 +41,11 @@
 
                     <table class="ui table" style="margin-bottom: 0 !important;">
                         <tr>
-                            <td>
-                                <b>Ввод № {{pipeline.number}}</b>
+                            <td style="width:120px;">
+                                <div class="ui input">
+                                    <b>Ввод № {{pipeline.number}}</b>
+                                    <input type="text" ng-model="pipeline.description"/>
+                                </div>
                             </td>
                             <td>
                                 <label>{{'% вод.' | translate}}</label>
