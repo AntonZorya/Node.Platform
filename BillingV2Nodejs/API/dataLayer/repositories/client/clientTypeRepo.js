@@ -15,3 +15,10 @@ exports.getByName = function (name, done) {
         return done({operationResult: 0, result: res});
     });
 };
+
+exports.getAll = function (done) {
+    Collection.find(function (err, res) {
+        if (err) return done(errorBuilder(err));
+        return done({operationResult: 0, result: res});
+    });
+};
