@@ -185,7 +185,7 @@ exports.updateClientCounter = function (body, userId, done) {
             } else {//иначе добавляем новые показания
 
                 //расчет по "среднему" - когда старый счетчик снимался и "ввод" был без счетчика определенное кол-во времени
-                var previousCounterIndex = pipeline.counters.length - 1;
+                var previousCounterIndex = pipeline.counters.length - 2;
 
                 if (previousCounterIndex > 0 && !counter.isPrevAvgCalculated) {
 
