@@ -29,8 +29,11 @@ exports.addMany = function (calculations, done) {
                             return done(data);
                     });
                 }
-                else
-                    done(validationRes);
+                else {
+                    if (calculations.length - 1 === index)
+                        done(validationRes);
+                }
+
             });
     });
 };

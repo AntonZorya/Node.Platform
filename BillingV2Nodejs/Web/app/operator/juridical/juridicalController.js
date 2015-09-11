@@ -15,12 +15,12 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
 
     $scope.period = {};
     $scope.period.value = 201508;
-    //TODO: дропдаун лист для периода
-
 
     $scope.periods = [
         {value: 201508, name: 'август 2015'},
-        {value: 201509, name: 'сентябрь 2015'}
+        {value: 201509, name: 'сентябрь 2015'},
+        {value: 201510, name: 'октябрь 2015'},
+        {value: 201511, name: 'ноябрь 2015'}
     ];
 
     $scope.dateOptions = {
@@ -84,7 +84,7 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
     };
 
 
-    //TODO: вынести в отдельный контроллер
+    //TODO: желательно вынести в отдельный контроллер
     //payment
     $scope.isShowModalPayment = false;
     $scope.payment = {};
@@ -185,7 +185,7 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
 
 
     $scope.getClientTypes = function () {
-        dataService.get('/clientTypes').then(function (response){
+        dataService.get('/clientTypes').then(function (response) {
             $scope.clientTypes = response.result;
         });
     };

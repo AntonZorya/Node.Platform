@@ -88,8 +88,8 @@
                                 <tbody>
                                 <tr ng-repeat="pipeline in item.pipelines">
                                     <td style="width: 20px;">
-                                        <b>Ввод №: {{pipeline.number}}</b> <br><br>
-                                        По среднему: <b> (+ {{pipeline.avg}} м3)</b>
+                                        <b>Ввод:</b> {{pipeline.description}} <br><br>
+                                        <b>По ср.:  (+ {{pipeline.avg}} м3)</b>
                                         <input type="checkbox" checked="{{pipeline.isCountsByAvg}}"
                                                ng-model="pipeline.isCountsByAvg"
                                                ng-checked="pipeline.isCountsByAvg"

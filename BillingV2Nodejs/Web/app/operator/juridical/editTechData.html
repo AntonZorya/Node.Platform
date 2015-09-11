@@ -41,9 +41,9 @@
 
                     <table class="ui table" style="margin-bottom: 0 !important;">
                         <tr>
-                            <td style="width:120px;">
+                            <td>
+                                <b>Ввод:</b>
                                 <div class="ui input">
-                                    <b>Ввод № {{pipeline.number}}</b>
                                     <input type="text" ng-model="pipeline.description"/>
                                 </div>
                             </td>
@@ -136,7 +136,7 @@
                             <td>
                                 <div class="ui input">
                                     <select class="ui search dropdown" ng-model="counter.markId"
-                                            ng-options="mark._id as mark.name for mark in $parent.counterMarks track by mark._id"></select>
+                                            ng-options="mark.name for mark in $parent.counterMarks track by mark._id"></select>
                                 </div>
                             </td>
                             <td>

@@ -127,13 +127,14 @@ exports.updateClientCounter = function (body, userId, done) {
             _id: balanceId,
             balanceTypeId: balanceTypeId,
             clientJurId: clientJur._id,
-            sum: (waterSum + canalSum) * -1,
+            sum: waterSum + canalSum,
             period: period,
             //аудит
             date: new Date(),
             userId: userId
         };
-        var balanceAvg = null;
+        //без счетчика по среднему
+        var balanceAvg = null;//в CalculationLogic идет проверка на null
 
         //добор/недобор
         var isShortage = false;
@@ -161,7 +162,7 @@ exports.updateClientCounter = function (body, userId, done) {
             userId: userId,
             calculationType: 0 //0 - по счетчику, 1 - по среднему,
         };
-        var calculationAvg = null;
+        var calculationAvg = null;//без счетчика по среднему, в CalculationLogic идет проверка на null
         var minConsumption = clientJur.clientType.minConsumption;
 
         //находим предыдущие показания в этом периоде
@@ -184,7 +185,7 @@ exports.updateClientCounter = function (body, userId, done) {
             } else {//иначе добавляем новые показания
 
                 //расчет по "среднему" - когда старый счетчик снимался и "ввод" был без счетчика определенное кол-во времени
-                var previousCounterIndex = pipeline.counters.length - 2;
+                var previousCounterIndex = pipeline.counters.length - 1;
 
                 if (previousCounterIndex > 0 && !counter.isPrevAvgCalculated) {
 
@@ -222,7 +223,7 @@ exports.updateClientCounter = function (body, userId, done) {
                         balanceAvg = {};
                         balanceAvg = _.extend(balanceAvg, balance);
                         balanceAvg._id = balanceIdForAvg;
-                        balanceAvg.sum = (avgWaterSum + avgCanalSum) * -1;
+                        balanceAvg.sum = avgWaterSum + avgCanalSum;
 
                         calculationAvg = {};
                         calculationAvg = _.extend(calculationAvg, calculation);
@@ -255,7 +256,7 @@ exports.updateClientCounter = function (body, userId, done) {
                         calculation.shortageSum = calculation.shortageCubicMeters * tariff.water;
                     }
                 }
-                //console.log('balanceAvg: ' + balanceAvg);
+
                 BalanceLogic.addMany([balanceAvg, balance], function (balanceAvgResp) {
                     if (balanceAvgResp.operationResult === 0) {
                         CalculationLogic.addMany([calculationAvg, calculation], function (calculationAvgResp) {

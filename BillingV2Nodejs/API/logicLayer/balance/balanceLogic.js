@@ -33,8 +33,11 @@ exports.addMany = function (balances, done) {
                             return done(data);
                     });
                 }
-                else
-                    done(validationRes);
+                else {
+                    if (balances.length - 1 === index)
+                        done(validationRes);
+                }
+
             });
     });
 };
