@@ -95,7 +95,7 @@ exports.report = function (period, done) {
                 yearMonthDay: {
                     $dateToString: {
                         format: "%Y-%m-%d",
-                        date: { $add: ["$pipelines.counters.dateOfCurrentCounts", 6 * 60 * 60 * 1000] }
+                        date: {$add: ["$pipelines.counters.dateOfCurrentCounts", 6 * 60 * 60 * 1000]}
                     }
                 },
             }
@@ -159,13 +159,14 @@ exports.reportCounts = function (period, done) {
     );
 };
 
-exports.search = function (searchTerm, user, done) {
+exports.search = function (searchTerm, period, user, done) {
     if (user.controllerId) {//test commit
         Collection
             .find(
             {
                 $and: [
                     {controllerId: user.controllerId},
+                    {period: period},
                     {$text: {$search: searchTerm}}
                 ]
             },
@@ -185,7 +186,13 @@ exports.search = function (searchTerm, user, done) {
     } else {
         Collection
             .find(
-            {$text: {$search: searchTerm}},
+            {
+                $and: [
+                    {period: period},
+                    {$text: {$search: searchTerm}}
+                ]
+            },
+
             {score: {$meta: "textScore"}},
             {'$limit': 20}
         )

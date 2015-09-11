@@ -13,8 +13,15 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
     $scope.allBalance = [];
     $scope.balanceDetailsByClient = [];
 
-    $scope.period = 201508;
+    $scope.period = {};
+    $scope.period.value = 201508;
     //TODO: дропдаун лист для периода
+
+
+    $scope.periods = [
+        {value: 201508, name: 'август 2015'},
+        {value: 201509, name: 'сентябрь 2015'}
+    ];
 
     $scope.dateOptions = {
         changeYear: true,
@@ -23,7 +30,10 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
     };
 
     $scope.search = function () {
-        dataService.get('/clientJur/search', {searchTerm: $scope.searchTerm}, null).then(function (response) {
+        dataService.get('/clientJur/search', {
+            searchTerm: $scope.searchTerm,
+            period: $scope.period.value
+        }, null).then(function (response) {
             $scope.data = response.result;
         });
     };
@@ -49,7 +59,7 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
                     client: client,
                     pipeline: pipeline,
                     counter: counter,
-                    period: $scope.period
+                    period: $scope.period.value
                 };
 
                 dataService.post('/clientJur/updateClientCounter', body).then(function (response) {
@@ -79,7 +89,7 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
     $scope.isShowModalPayment = false;
     $scope.payment = {};
     $scope.paymentClientName = '';
-    $scope.enteredSum = 0;
+    $scope.enteredSum = null;
     $scope.enteredReceiptNumber = null;
     $scope.showModalPayment = function (item) {
 
@@ -90,12 +100,12 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
             personType: 1,
             //sum: $scope.enteredSum,
             date: new Date(),
-            period: $scope.period,
+            period: $scope.period.value,
             user: $rootScope.user
         };
 
         $scope.isShowModalPayment = true;
-        $scope.enteredSum = 0;
+        $scope.enteredSum = null;
     };
 
     $scope.closeModalPayment = function () {
@@ -216,7 +226,7 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
 
 
     $scope.getAllBalance = function () {
-        dataService.get('/balance/getAllBalance').then(function (response) {
+        dataService.get('/balance/getAllBalance', {period: $scope.period.value}).then(function (response) {
 
             var groupedBalances = _(response.result).groupBy(function (bal) {
                 return bal.balanceTypeId.name;
@@ -252,7 +262,10 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
 
     $scope.getBalanceForClient = function (id) {
 
-        dataService.get('/balance/getTotalByClientJurId', {clientJurId: id}).then(function (response) {
+        dataService.get('/balance/getTotalByClientJurId', {
+            clientJurId: id,
+            period: $scope.period.value
+        }).then(function (response) {
 
             var foundItem = _.find($scope.data, function (item) {
                 return item._id === id;

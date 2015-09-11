@@ -4,7 +4,7 @@ var clientTypeRepo = require('../dataLayer/repositories/client/clientTypeRepo');
 var clientJurLogic = require('../logicLayer/client/clientJurLogic');
 var streetsRepo = require('../dataLayer/repositories/location/streetRepo');
 var addressesRepo = require('../dataLayer/repositories/location/addressRepo');
-var addressesTypeRepo = require('../dataLayer/repositories/location/addressTypeRepo');
+//var addressesTypeRepo = require('../dataLayer/repositories/location/addressTypeRepo');
 var userRepo = require('../dataLayer/repositories/identity/userRepo');
 var async = require("async");
 
@@ -367,14 +367,22 @@ exports.main = function () {
                                 counterNumber: cntRow[8],
                                 plumbNumber: cntRow[9],
                                 currentStatus: cntRow[9] ? 'Опломбирован' : 'Не опломбирован',
-                                dateOfCurrentCounts: null,
                                 problem: cntRow[31] ? cntRow[31] : "",
                                 problemDescription: cntRow[32] ? cntRow[32] : "",
                                 dateOfLastCounts: null,
                                 isActive: true,
 
-                                lastCounts: cntRow[12] ? cntRow[12] : null,//cntRow[13] ? cntRow[13] : null,
-                                currentCounts: cntRow[13] ? cntRow[13] : null//null,
+                                //текущий  период
+                                dateOfCurrentCounts: null,
+                                lastCounts: cntRow[13] ? cntRow[13] : null,
+                                currentCounts: null
+
+                                //предыдущий период
+                                //dateOfCurrentCounts: Date.parse(cntRow[10]),
+                                //lastCounts: cntRow[12] ? cntRow[12] : null,
+                                //currentCounts: cntRow[13] ? cntRow[13] : null//null,
+
+
                             });
                         });
 
@@ -416,7 +424,7 @@ exports.main = function () {
                                     rnn: row[1] ? row[1] : 'No rnn',
                                     address: row[4] ? row[4] : 'No address',
                                     addressId: null,
-                                    period: 201508,
+                                    period: 201509,
                                     pipelines: pipelines,
                                     controllerId: controller.result ? controller.result._id : null,
                                     clientType: clientType.result ? clientType.result._doc : null

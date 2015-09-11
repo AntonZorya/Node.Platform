@@ -85,8 +85,8 @@ exports.delete = function (id, done) {
     });
 };
 
-exports.search = function (searchTerm, user, done) {
-    ClientJurRepo.search(searchTerm, user, function (res) {
+exports.search = function (searchTerm, period, user, done) {
+    ClientJurRepo.search(searchTerm, period, user, function (res) {
         return done(res);
     });
 };

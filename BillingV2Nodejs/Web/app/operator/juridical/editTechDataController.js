@@ -6,6 +6,7 @@ function editTechDataController($scope, dataService, modalSvc, toastr) {
     $scope.modalItem = _.extend($scope.modalItem, $scope.$parent.selectedItem);
 
     $scope.save = function () {
+        var tariff = $scope.modalItem.clientType.tariffId;
         dataService.post('/clientJur/update', $scope.modalItem).then(function (response) {
 
             if (response.operationResult === 0) {
@@ -13,6 +14,7 @@ function editTechDataController($scope, dataService, modalSvc, toastr) {
 
                 $scope.modalItem = response.result;
                 _.extend($scope.$parent.selectedItem, $scope.modalItem);
+                $scope.$parent.selectedItem.clientType.tariffId = tariff;
             }
 
         });

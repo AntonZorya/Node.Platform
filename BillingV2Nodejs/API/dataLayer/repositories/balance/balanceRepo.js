@@ -34,25 +34,12 @@ exports.getById = function (id, done) {
     });
 };
 
-exports.getByPeriodAndByClientJurId = function (dateFrom, dateTo, clientJurId, done) {
+exports.getByClientJurId = function (clientJurId, period, done) {
     Collection.find(
         {
             $and: [
-                {date: {$gte: dateFrom, $lte: dateTo}},
-                {clientJurId: clientJurId}
-            ]
-        }
-    ).populate('clientJurId').exec(function (err, res) {
-            if (err)return done(errorBuilder(err));
-            done({operationResult: 0, result: res});
-        });
-};
-
-exports.getByClientJurId = function (clientJurId, done) {
-    Collection.find(
-        {
-            $and: [
-                {clientJurId: clientJurId}
+                {clientJurId: clientJurId},
+                {period: period}
             ]
         }
     ).populate('clientJurId').populate('balanceTypeId').exec(function (err, res) {
@@ -74,14 +61,29 @@ exports.getByPeriod = function (dateFrom, dateTo, done) {
         });
 };
 
-exports.getAllBalance = function (done) {
-    Collection.find().deepPopulate('clientJurId balanceTypeId').exec(function (err, res) {
+exports.getAllBalance = function (period, done) {
+    Collection.find({period: period}).deepPopulate('clientJurId balanceTypeId').exec(function (err, res) {
         if (err)return done(errorBuilder(err));
         done({operationResult: 0, result: res});
     });
 };
 
+//не используется
+exports.getByPeriodAndByClientJurId = function (dateFrom, dateTo, clientJurId, done) {
+    Collection.find(
+        {
+            $and: [
+                {date: {$gte: dateFrom, $lte: dateTo}},
+                {clientJurId: clientJurId}
+            ]
+        }
+    ).populate('clientJurId').exec(function (err, res) {
+            if (err)return done(errorBuilder(err));
+            done({operationResult: 0, result: res});
+        });
+};
 
+//не используется
 exports.getByPeriodAndByClientFizId = function (dateFrom, dateTo, clientFizId, done) {
     Collection.find(
         {

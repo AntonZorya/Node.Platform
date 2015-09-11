@@ -14,7 +14,7 @@
 
                     <div class="ui input">
                         <select class="ui search dropdown" ng-model="modalItem.clientType.tariffId"
-                                ng-options="tariff as tariff.name for tariff in $parent.tariffs track by tariff._id"></select>
+                                ng-options="tariff.name for tariff in $parent.tariffs track by tariff._id"></select>
                     </div>
                 </div>
                 <div class=" one wide field">

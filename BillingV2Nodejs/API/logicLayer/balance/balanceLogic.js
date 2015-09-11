@@ -70,14 +70,14 @@ exports.getByPeriod = function (dateFrom, dateTo, done) {
     });
 };
 
-exports.getAllBalance = function (done) {
-    BalanceRepo.getAllBalance(function (data) {
+exports.getAllBalance = function (period, done) {
+    BalanceRepo.getAllBalance(period, function (data) {
         done(data);
     });
 };
 
-exports.getTotalByClientJurId = function (clientJurId, done) {
-    BalanceRepo.getByClientJurId(clientJurId, function (response) {
+exports.getTotalByClientJurId = function (clientJurId, period, done) {
+    BalanceRepo.getByClientJurId(clientJurId, period, function (response) {
 
         var balances = response.result;
 

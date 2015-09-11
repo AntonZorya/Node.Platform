@@ -52,7 +52,7 @@ module.exports = function (router) {
 
     router.route("/clientJur/search")
         .get(function (req, res) {
-            Logic.search(req.query.searchTerm, req.user, function (data) {
+            Logic.search(req.query.searchTerm, req.query.period, req.user, function (data) {
                 operationResultBuilder(data, res);
             });
         });
