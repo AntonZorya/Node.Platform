@@ -79,6 +79,13 @@
                     </select>
                 </div>
 
+                <div class="two wide field">
+                    <label>{{'#Тип' | translate}}</label>
+                    <select class="ui search dropdown" ng-model="modalItem.clientType"
+                            ng-options="clientType.name for clientType in $parent.clientTypes track by clientType._id">
+                    </select>
+                </div>
+
             </div>
         </form>
 

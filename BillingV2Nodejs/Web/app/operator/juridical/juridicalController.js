@@ -173,6 +173,15 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
     };
     $scope.getControllers();
 
+
+    $scope.getClientTypes = function () {
+        dataService.get('/clientTypes').then(function (response){
+            $scope.clientTypes = response.result;
+        });
+    };
+    $scope.getClientTypes();
+
+
     //tariffs
     $scope.getTariffs = function () {
         dataService.get('/tariffs').then(function (response) {
