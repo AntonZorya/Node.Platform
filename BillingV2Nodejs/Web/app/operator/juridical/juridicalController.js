@@ -38,6 +38,11 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
         });
     };
 
+    $scope.refresh = function () {
+        $scope.search();
+        $scope.getAllBalance();
+    };
+
     $scope.showCounters = function (item) {
         item.isShowCounters = !item.isShowCounters;
         $scope.selectedItem = item;
@@ -235,6 +240,7 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
 
 
     $scope.getAllBalance = function () {
+        //TODO: оптимизировать - посчитать на сервере и вернуть на клиента только суммы по всем клиентам
         dataService.get('/balance/getAllBalance', {period: $scope.period.value}).then(function (response) {
 
             var groupedBalances = _(response.result).groupBy(function (bal) {

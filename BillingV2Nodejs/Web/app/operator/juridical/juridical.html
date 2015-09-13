@@ -14,7 +14,7 @@
                 <td>Период: &nbsp;
                     <select class="ui search dropdown" ng-model="period"
                             ng-options="period.name for period in periods track by period.value"
-                            ng-change="search();">
+                            ng-change="refresh();">
                     </select>
 
                 </td>
