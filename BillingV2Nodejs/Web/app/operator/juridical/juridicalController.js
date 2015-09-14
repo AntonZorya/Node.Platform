@@ -57,59 +57,41 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
             if (confirm('#Вы действительно хотите очистить текущие показания?')){
                 counter.currentCounts = null;
                 counter.dateOfCurrentCounts = null;
-                var body = {
-                    client: client,
-                    pipeline: pipeline,
-                    counter: counter,
-                    period: $scope.period.value
-                };
-
-                dataService.post('/clientJur/updateClientCounter', body).then(function (response) {
-                    if (response.operationResult === 0) {
-                        toastr.success('', 'Данные успешно сохранены');
-                        counter.isCounterNew = false;
-                        $scope.getBalanceForClient(client._id);
-                        $scope.getAllBalance();
-                    } else {
-                        toastr.error('', 'Произошла ошибка');
-                    }
-                });
             }else{
                 return;
             }
         }else {
             if (counter.dateOfCurrentCounts == null) { //TODO: переделать на валидацию, если нужно
                 toastr.error('Дата текущих показаний обязательное поле!', 'Данные не сохранены');
+                return;
             } else {
                 if (counter.currentCounts >= counter.lastCounts) {
                     if (!counter.hasProblem)
                         counter.problemDescription = '';
-
-                    var body = {
-                        client: client,
-                        pipeline: pipeline,
-                        counter: counter,
-                        period: $scope.period.value
-                    };
-
-                    dataService.post('/clientJur/updateClientCounter', body).then(function (response) {
-                        if (response.operationResult === 0) {
-                            toastr.success('', 'Данные успешно сохранены');
-                            counter.isCounterNew = false;
-                            $scope.getBalanceForClient(client._id);
-                            $scope.getAllBalance();
-                        } else {
-                            toastr.error('', 'Произошла ошибка');
-                        }
-
-
-                    });
-                }
-                else {
+                } else {
                     toastr.error('Текущие показания должны быть больше или равны последним!', 'Данные не сохранены');
+                    return;
                 }
             }
         }
+
+        var body = {
+            client: client,
+            pipeline: pipeline,
+            counter: counter,
+            period: $scope.period.value
+        };
+
+        dataService.post('/clientJur/updateClientCounter', body).then(function (response) {
+            if (response.operationResult === 0) {
+                toastr.success('', 'Данные успешно сохранены');
+                counter.isCounterNew = false;
+                $scope.getBalanceForClient(client._id);
+                $scope.getAllBalance();
+            } else {
+                toastr.error('', 'Произошла ошибка');
+            }
+        });
 
     };
 
