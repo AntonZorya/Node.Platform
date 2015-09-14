@@ -3,10 +3,12 @@
     var self = this;
 
     $scope.menu = [];
-    
+    $scope.user = {};
 
     dataSvc.get("/identity/menu", {}, $("#main_page")).then(function (res) {
+
         $rootScope.user = res.user;
+        $scope.user = res.user;
           dataSvc.get("/identity/organization", {id: res.user._id}, self.container).then(function(res) {
                 $rootScope.userOrganization = res.result;
             });

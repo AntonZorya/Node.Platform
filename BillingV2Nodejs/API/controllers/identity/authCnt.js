@@ -15,9 +15,6 @@ module.exports = function(router){
 		})
 	});
 
-	router.route('/identity/hui').delete(function(req, res){
-		res.json({result:"1"});
-    })
 
     router.route('/identity/register').post(function (req, res) {
         UserLogic.register(req.body, function (data) {

@@ -27,7 +27,7 @@ function dataService($http, $q, $location, $window, $cookies, API_HOST, $indexed
         this.checkForIndexedDB();
 
 
-        var re = /(\/login)|(\/languages)|(\/register)/;
+        var re = /(\/login)|(\/languages)|(\/register)|(\/loginNormal)/;
         if (url.match(re)) return "";
         var token = $.cookie("ArndBooksAuthToken");
             //$cookies.get('ArndBooksAuthToken');
@@ -39,7 +39,7 @@ function dataService($http, $q, $location, $window, $cookies, API_HOST, $indexed
 
     this.toLogin = function () {
         var currentUrl = encodeURIComponent($location.absUrl());
-        $window.location.href = '#/login?url=' + currentUrl;
+        $window.location.href = '#/loginNormal?url=' + currentUrl;
     };
 
 
