@@ -55,8 +55,8 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
 
         if (withClear){
             if (confirm('#Вы действительно хотите очистить текущие показания?')){
-                counter.currentCounts = '';
-                counter.dateOfCurrentCounts = '';
+                counter.currentCounts = null;
+                counter.dateOfCurrentCounts = null;
                 var body = {
                     client: client,
                     pipeline: pipeline,
