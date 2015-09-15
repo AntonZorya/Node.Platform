@@ -142,10 +142,11 @@ exports.getByPeriodAndClientIdWithDetails = function (clientJurId, period, done)
 
     });
 
-
 };
 
-
+exports.remove = function (balanceId, done) {
+    BalanceRepo.remove(balanceId, done);
+}
 
 
 

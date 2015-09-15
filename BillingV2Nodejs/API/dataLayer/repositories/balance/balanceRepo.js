@@ -27,6 +27,15 @@ exports.update = function (balance, done) {
     }
 };
 
+exports.remove = function(balanceId, done){
+    if (balanceId){
+        Collection.findOneAndRemove({_id: balanceId}, function(err){
+            if (err) return done(errorBuilder(err));
+            return done({operationResult: 0});
+        });
+    }
+}
+
 exports.getById = function (id, done) {
     Collection.find({_id: id}, function (err, res) {
         if (err)return done(errorBuilder(err));

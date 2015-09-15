@@ -21,6 +21,14 @@ exports.update = function (calculation, done) {
     }
 };
 
+exports.remove = function(calculationId, done){
+    if (calculationId){
+        calcCollection.findOneAndRemove({_id: calculationId}, function(err){
+            if (err) return done(errorBuilder(err));
+            return done({operationResult: 0});
+        });
+    }
+}
 
 exports.getByPeriodAndClientId = function (period, clientId, done) {
     calcCollection.find(

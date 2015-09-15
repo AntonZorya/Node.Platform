@@ -373,14 +373,14 @@ exports.main = function () {
                                 isActive: true,
 
                                 //текущий  период
-                                dateOfCurrentCounts: null,
-                                lastCounts: cntRow[13] ? cntRow[13] : null,
-                                currentCounts: null
+                                //dateOfCurrentCounts: null,
+                                //lastCounts: cntRow[13] ? cntRow[13] : null,
+                                //currentCounts: null
 
                                 //предыдущий период
-                                //dateOfCurrentCounts: Date.parse(cntRow[10]),
-                                //lastCounts: cntRow[12] ? cntRow[12] : null,
-                                //currentCounts: cntRow[13] ? cntRow[13] : null//null,
+                                dateOfCurrentCounts: Date.parse(cntRow[10]),
+                                lastCounts: cntRow[12] ? cntRow[12] : null,
+                                currentCounts: cntRow[13] ? cntRow[13] : null//null,
 
 
                             });
@@ -424,7 +424,7 @@ exports.main = function () {
                                     rnn: row[1] ? row[1] : 'No rnn',
                                     address: row[4] ? row[4] : 'No address',
                                     addressId: null,
-                                    period: 201509,
+                                    period: 201508,
                                     pipelines: pipelines,
                                     controllerId: controller.result ? controller.result._id : null,
                                     clientType: clientType.result ? clientType.result._doc : null

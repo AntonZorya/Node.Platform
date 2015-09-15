@@ -93,6 +93,25 @@ exports.search = function (searchTerm, period, user, done) {
 
 exports.updateClientCounter = function (body, userId, done) {
 
+    if (!body.counter.currentCounts){
+        CalculationLogic.getByCounterId(body.counter._id, body.period, function (calcByCounterResp) {
+            if (calcByCounterResp.operationResult === 0 && calcByCounterResp.result) {
+                BalanceLogic.remove(calcByCounterResp.result._doc.balanceId, function(res){
+                    if (res.operationResult === 0){
+                        CalculationLogic.remove(calcByCounterResp.result._doc._id, function(res){
+                            if (res.operationResult === 0){
+                                ClientJurRepo.update(body.client, function(counterResp){
+                                    done(counterResp);
+                                });
+                            }
+                        })
+                    }
+                });
+            }
+        });
+        return;
+    }
+
     var clientJur = body.client;
     var pipeline = body.pipeline;
     var counter = body.counter;

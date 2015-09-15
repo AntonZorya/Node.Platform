@@ -57,3 +57,7 @@ exports.getByCounterId = function (counterId, period, done) {
     });
 };
 
+exports.remove = function(calculationId, done){
+    CalcRepo.remove(calculationId, done);
+};
+
