@@ -81,9 +81,13 @@
     <div class="ui divided items" style="background-color: #fafafa;">
         <div class="item" ng-repeat="item in data" style="background-color: {{item.color}}">
 
+
+
+
+
             <div class="content" ng-class="{'selectedBlock': item.isShowCounters}">
                 <a class="header">{{item.name}}</a>
-
+                <!--<a class="ui red right ribbon label">Долг</a>-->
                 <div>
                     <div class="ui grid">
                         <!--<div class="row">-->
@@ -118,14 +122,14 @@
                         <div class="two wide column">
 
                             <div class="ui mini statistic"
-                                 ng-class="{'green':(item.balances.length>0?item.balances[0].sum + item.balances[1].sum + item.balances[2].sum:0)<0, 'red':(item.balances.length>0?item.balances[0].sum +item.balances[1].sum +item.balances[2].sum:0)>0}">
+                                 ng-class="{'green':(item.balances.length>0?item.balances[0].sum + item.balances[1].sum + item.balances[2].sum:0)>0, 'red':(item.balances.length>0?item.balances[0].sum +item.balances[1].sum +item.balances[2].sum:0)<0}">
                                 <div class="label">
                                     Сальдо:<br>
                                 </div>
                                 <div class="value" style="font-size: small;">
                                     {{(item.balances.length>0?item.balances[0].sum +
                                     item.balances[1].sum +
-                                    item.balances[2].sum:0)*-1 | number: 2}} тг.
+                                    item.balances[2].sum:0) | number: 2}} тг.
                                 </div>
                             </div>
 

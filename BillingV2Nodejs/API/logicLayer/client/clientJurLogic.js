@@ -90,7 +90,7 @@ exports.search = function (searchTerm, period, user, done) {
     ClientJurRepo.search(searchTerm, period, user, function (res) {
 
         if(res.operationResult==0){
-            async.eachSeries(res.result, function(client, callback){
+            async.each(res.result, function(client, callback){
                 BalanceLogic.getTotalByClientJurId(client._doc._id, period, function(balancesRes){
                     client._doc.balances = balancesRes.result;
                     callback();
