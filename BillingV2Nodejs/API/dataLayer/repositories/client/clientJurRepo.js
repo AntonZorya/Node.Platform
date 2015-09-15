@@ -9,9 +9,10 @@ var Address = new require('../../../helpers/mongoose/modelBuilder')('Address', a
 
 var tariffDef = require('../../models/tariff/tariff');
 var Tariff = new require('../../../helpers/mongoose/modelBuilder')('Tariff', tariffDef);
-
 var mongoose = require('mongoose');
 var deepPopulate = require('mongoose-deep-populate')(mongoose);
+var async = require('async');
+
 CollectionSchema.plugin(deepPopulate, {
     whitelist: [
         'tariffId',
@@ -180,6 +181,7 @@ exports.search = function (searchTerm, period, user, done) {
             .populate('kskId')
             .exec(function (err, docs) {
                 if (err) return done(errorBuilder(err));
+
                 return done({operationResult: 0, result: docs});
 
             });

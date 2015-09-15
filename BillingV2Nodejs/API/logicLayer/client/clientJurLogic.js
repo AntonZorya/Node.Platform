@@ -9,6 +9,7 @@ var TariffLogic = require('../../logicLayer/tariff/tariffLogic');
 var mongoose = require('mongoose');
 var _ = require('underscore');
 
+
 exports.add = function (clientJur, orgId, done) {
 
     clientJur.organizationId = orgId;
@@ -87,7 +88,21 @@ exports.delete = function (id, done) {
 
 exports.search = function (searchTerm, period, user, done) {
     ClientJurRepo.search(searchTerm, period, user, function (res) {
-        return done(res);
+
+        if(res.operationResult==0){
+            async.eachSeries(res.result, function(client, callback){
+                BalanceLogic.getTotalByClientJurId(client._doc._id, period, function(balancesRes){
+                    client._doc.balances = balancesRes.result;
+                    callback();
+                });
+            }, function(){
+                return done(res);
+            })
+        } else {
+            return done(res);
+        }
+
+
     });
 };
 
