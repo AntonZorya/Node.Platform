@@ -244,3 +244,10 @@ exports.updateClientCounter = function (body, done) {
     }
 
 };
+
+exports.getPeriods = function(done){
+    Collection.find().distinct('period', function(err, periods){
+        if (err) return done(errorBuilder(err));
+        return done({operationResult: 0, result: periods});
+    });
+};

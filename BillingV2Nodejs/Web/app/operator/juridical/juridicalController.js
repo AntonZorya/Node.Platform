@@ -14,14 +14,20 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
     $scope.balanceDetailsByClient = [];
 
     $scope.period = {};
-    $scope.period.value = 201508;
+    $scope.periods = [];
 
-    $scope.periods = [
-        {value: 201508, name: 'август 2015'},
-        {value: 201509, name: 'сентябрь 2015'},
-        {value: 201510, name: 'октябрь 2015'},
-        {value: 201511, name: 'ноябрь 2015'}
-    ];
+    $scope.getPeriods = function () {
+        dataService.get('/clientJur/getPeriods').then(function (response) {
+            response.result.forEach(function(item){
+                item = item.toString();
+                $scope.periods.unshift({value: item});
+            });
+            var date = new Date();
+            var month = date.getMonth() + 1;
+            $scope.period.value = date.getFullYear().toString() + (month < 10 ? '0' + month.toString(): month.toString());
+        });
+    };
+    $scope.getPeriods();
 
     $scope.dateOptions = {
         changeYear: true,
@@ -53,14 +59,14 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
 
     $scope.updateClient = function (client, counter, pipeline, withClear) {
 
-        if (withClear){
-            if (confirm('#Вы действительно хотите очистить текущие показания?')){
+        if (withClear) {
+            if (confirm('#Вы действительно хотите очистить текущие показания?')) {
                 counter.currentCounts = null;
                 counter.dateOfCurrentCounts = null;
-            }else{
+            } else {
                 return;
             }
-        }else {
+        } else {
             if (counter.dateOfCurrentCounts == null) { //TODO: переделать на валидацию, если нужно
                 toastr.error('Дата текущих показаний обязательное поле!', 'Данные не сохранены');
                 return;

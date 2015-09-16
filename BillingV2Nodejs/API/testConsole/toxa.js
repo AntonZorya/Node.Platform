@@ -349,167 +349,167 @@ exports.main = function () {
 
 
             //клиенты, перед запуском почистить clientJur
-            function (readyFunction2) {
-
-                var readyJur = _.uniq(someData, true, function (row) {
-                    return row[3];
-                });
-
-                async.eachSeries(readyJur, function (row, callback) {
-
-                        var tmpArr = _.filter(someData, function (cntRow) {
-                            return cntRow[3] == row[3];
-                        });
-
-                        var tmpCntArr = [];
-                        _.each(tmpArr, function (cntRow) {
-                            tmpCntArr.push({
-                                counterNumber: cntRow[8],
-                                plumbNumber: cntRow[9],
-                                currentStatus: cntRow[9] ? 'Опломбирован' : 'Не опломбирован',
-                                problem: cntRow[31] ? cntRow[31] : "",
-                                problemDescription: cntRow[32] ? cntRow[32] : "",
-                                dateOfLastCounts: null,
-                                isActive: true,
-
-                                //текущий  период
-                                //dateOfCurrentCounts: null,
-                                //lastCounts: cntRow[13] ? cntRow[13] : null,
-                                //currentCounts: null
-
-                                //предыдущий период
-                                dateOfCurrentCounts: Date.parse(cntRow[10]),
-                                lastCounts: cntRow[12] ? cntRow[12] : null,
-                                currentCounts: cntRow[13] ? cntRow[13] : null//null,
-
-
-                            });
-                        });
-
-                        var pipelines = [];
-                        _.each(tmpCntArr, function (counter, index) {
-
-                            var isByCounter = null;
-
-                            if (typeof row[11] !== 'undefined') {
-                                isByCounter = row[11] == 'счетчик';
-                            }
-
-                            pipelines.push({
-                                number: index + 1,
-                                description: "Ввод(трубопровод) по адресу: " + row[4],
-                                addressId: null, //TODO addressId
-                                counters: [counter],
-
-                                isByCounter: isByCounter,
-                                waterPercent: row[14] ? row[14].replace('%', '') : 0,
-                                canalPercent: row[15] ? row[15].replace('%', '') : 0,
-
-                                isActive: true
-                            });
-
-                        });
-
-
-                        controllerRepo.getByName(row[35], function (controller) {
-                            clientTypeRepo.getByName(row[33], function (clientType) {
-
-                                //var addressId = '000000000000000000000000';
-
-                                var clientJur = {
-                                    accountNumber: 1,
-                                    number: row[0],
-                                    name: row[3],
-                                    bin: row[2] ? row[2] : 'No bin',
-                                    rnn: row[1] ? row[1] : 'No rnn',
-                                    address: row[4] ? row[4] : 'No address',
-                                    addressId: null,
-                                    period: 201508,
-                                    pipelines: pipelines,
-                                    controllerId: controller.result ? controller.result._id : null,
-                                    clientType: clientType.result ? clientType.result._doc : null
-                                };
-
-                                //функция вызывается ниже
-                                function clientJurAdd() {
-                                    clientJurLogic.add(clientJur, 22, function (result) {
-                                        console.log('Added ' + row[3] + ' number ' + row[0]);
-                                        callback();
-                                    });
-                                }
-
-                                if (row[5]) {
-                                    var streetName = row[5];
-                                    streetName = streetName.toString().trim();
-                                    console.log('streetName: ' + streetName);
-                                    addressesRepo.getByValue(streetName, function (street) {
-
-                                        if (street.result) {
-                                            clientJur.addressId = street.result._id;
-                                            console.log('street._id: ' + street.result._id);
-                                            if (row[6]) {
-                                                var houseValue = row[6];
-                                                houseValue = houseValue.toString().trim();
-                                                console.log('houseValue: ' + houseValue);
-
-                                                addressesRepo.getChildrenByParentId(street.result._id, function (houses) {
-
-                                                    var foundHouse = _.find(houses.result, function (house) {
-                                                        return house.value === houseValue;
-                                                    });
-
-                                                    if (foundHouse) {
-                                                        clientJur.addressId = (foundHouse._id).toString();
-
-                                                        if (row[7]) {
-                                                            var flatValue = row[7];
-                                                            flatValue = flatValue.toString().trim();
-                                                            console.log('flatValue: ' + flatValue);
-
-                                                            addressesRepo.getChildrenByParentId(foundHouse._id, function (flats) {
-                                                                var foundFlat = _.find(flats.result, function (flat) {
-                                                                    return flat.value === flatValue;
-                                                                });
-                                                                if (foundFlat) {
-                                                                    clientJur.addressId = (foundFlat._id).toString();
-                                                                    clientJurAdd();
-                                                                } else { //если квартиру в справочнике не нашли
-                                                                    clientJurAdd();
-                                                                }
-                                                            });
-                                                        } else {//если номера квартиры нет
-                                                            clientJurAdd();
-                                                        }
-                                                    } else { //если дом в справочнике не нашли
-                                                        clientJurAdd();
-                                                    }
-                                                });
-                                            } else {//если номера дома нет
-                                                clientJur.addressId = (street.result._id).toString();
-                                                clientJurAdd();
-                                            }
-                                        } else {//нет улицы (addressId == null)
-                                            clientJurAdd();
-                                        }
-                                    });
-                                } else {
-                                    clientJurAdd();
-                                }
-
-
-                            })
-                            ;
-                        })
-                        ;
-
-
-                    },
-                    function () {
-                        readyFunction2();
-                    }
-                )
-                ;
-            }
+            //function (readyFunction2) {
+            //
+            //    var readyJur = _.uniq(someData, true, function (row) {
+            //        return row[3];
+            //    });
+            //
+            //    async.eachSeries(readyJur, function (row, callback) {
+            //
+            //            var tmpArr = _.filter(someData, function (cntRow) {
+            //                return cntRow[3] == row[3];
+            //            });
+            //
+            //            var tmpCntArr = [];
+            //            _.each(tmpArr, function (cntRow) {
+            //                tmpCntArr.push({
+            //                    counterNumber: cntRow[8],
+            //                    plumbNumber: cntRow[9],
+            //                    currentStatus: cntRow[9] ? 'Опломбирован' : 'Не опломбирован',
+            //                    problem: cntRow[31] ? cntRow[31] : "",
+            //                    problemDescription: cntRow[32] ? cntRow[32] : "",
+            //                    dateOfLastCounts: null,
+            //                    isActive: true,
+            //
+            //                    //текущий  период
+            //                    //dateOfCurrentCounts: null,
+            //                    //lastCounts: cntRow[13] ? cntRow[13] : null,
+            //                    //currentCounts: null
+            //
+            //                    //предыдущий период
+            //                    dateOfCurrentCounts: Date.parse(cntRow[10]),
+            //                    lastCounts: cntRow[12] ? cntRow[12] : null,
+            //                    currentCounts: cntRow[13] ? cntRow[13] : null//null,
+            //
+            //
+            //                });
+            //            });
+            //
+            //            var pipelines = [];
+            //            _.each(tmpCntArr, function (counter, index) {
+            //
+            //                var isByCounter = null;
+            //
+            //                if (typeof row[11] !== 'undefined') {
+            //                    isByCounter = row[11] == 'счетчик';
+            //                }
+            //
+            //                pipelines.push({
+            //                    number: index + 1,
+            //                    description: "Ввод(трубопровод) по адресу: " + row[4],
+            //                    addressId: null, //TODO addressId
+            //                    counters: [counter],
+            //
+            //                    isByCounter: isByCounter,
+            //                    waterPercent: row[14] ? row[14].replace('%', '') : 0,
+            //                    canalPercent: row[15] ? row[15].replace('%', '') : 0,
+            //
+            //                    isActive: true
+            //                });
+            //
+            //            });
+            //
+            //
+            //            controllerRepo.getByName(row[35], function (controller) {
+            //                clientTypeRepo.getByName(row[33], function (clientType) {
+            //
+            //                    //var addressId = '000000000000000000000000';
+            //
+            //                    var clientJur = {
+            //                        accountNumber: 1,
+            //                        number: row[0],
+            //                        name: row[3],
+            //                        bin: row[2] ? row[2] : 'No bin',
+            //                        rnn: row[1] ? row[1] : 'No rnn',
+            //                        address: row[4] ? row[4] : 'No address',
+            //                        addressId: null,
+            //                        period: 201508,
+            //                        pipelines: pipelines,
+            //                        controllerId: controller.result ? controller.result._id : null,
+            //                        clientType: clientType.result ? clientType.result._doc : null
+            //                    };
+            //
+            //                    //функция вызывается ниже
+            //                    function clientJurAdd() {
+            //                        clientJurLogic.add(clientJur, 22, function (result) {
+            //                            console.log('Added ' + row[3] + ' number ' + row[0]);
+            //                            callback();
+            //                        });
+            //                    }
+            //
+            //                    if (row[5]) {
+            //                        var streetName = row[5];
+            //                        streetName = streetName.toString().trim();
+            //                        console.log('streetName: ' + streetName);
+            //                        addressesRepo.getByValue(streetName, function (street) {
+            //
+            //                            if (street.result) {
+            //                                clientJur.addressId = street.result._id;
+            //                                console.log('street._id: ' + street.result._id);
+            //                                if (row[6]) {
+            //                                    var houseValue = row[6];
+            //                                    houseValue = houseValue.toString().trim();
+            //                                    console.log('houseValue: ' + houseValue);
+            //
+            //                                    addressesRepo.getChildrenByParentId(street.result._id, function (houses) {
+            //
+            //                                        var foundHouse = _.find(houses.result, function (house) {
+            //                                            return house.value === houseValue;
+            //                                        });
+            //
+            //                                        if (foundHouse) {
+            //                                            clientJur.addressId = (foundHouse._id).toString();
+            //
+            //                                            if (row[7]) {
+            //                                                var flatValue = row[7];
+            //                                                flatValue = flatValue.toString().trim();
+            //                                                console.log('flatValue: ' + flatValue);
+            //
+            //                                                addressesRepo.getChildrenByParentId(foundHouse._id, function (flats) {
+            //                                                    var foundFlat = _.find(flats.result, function (flat) {
+            //                                                        return flat.value === flatValue;
+            //                                                    });
+            //                                                    if (foundFlat) {
+            //                                                        clientJur.addressId = (foundFlat._id).toString();
+            //                                                        clientJurAdd();
+            //                                                    } else { //если квартиру в справочнике не нашли
+            //                                                        clientJurAdd();
+            //                                                    }
+            //                                                });
+            //                                            } else {//если номера квартиры нет
+            //                                                clientJurAdd();
+            //                                            }
+            //                                        } else { //если дом в справочнике не нашли
+            //                                            clientJurAdd();
+            //                                        }
+            //                                    });
+            //                                } else {//если номера дома нет
+            //                                    clientJur.addressId = (street.result._id).toString();
+            //                                    clientJurAdd();
+            //                                }
+            //                            } else {//нет улицы (addressId == null)
+            //                                clientJurAdd();
+            //                            }
+            //                        });
+            //                    } else {
+            //                        clientJurAdd();
+            //                    }
+            //
+            //
+            //                })
+            //                ;
+            //            })
+            //            ;
+            //
+            //
+            //        },
+            //        function () {
+            //            readyFunction2();
+            //        }
+            //    )
+            //    ;
+            //}
             //!клиенты
         ],
         function () {
