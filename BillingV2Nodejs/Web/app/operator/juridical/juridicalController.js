@@ -2,6 +2,33 @@ billingApplication.controller('juridicalController', ['$scope', 'dataService', '
 
 function juridicalController($scope, dataService, toastr, printSvc, $templateCache, modalSvc, $rootScope) {
 
+    $scope.$on('changeTariffId', function(event, args){
+        var client = _.where($scope.data, {_id: args.clientId})[0];
+        if (client){
+            client.pipelines.forEach(function(pipeline){
+                pipeline.counters.forEach(function(counter){
+                    if (counter.isActive && counter.currentCounts && counter.dateOfCurrentCounts){
+                        dataService.post('/clientJur/updateClientCounter', {
+                            client: client,
+                            pipeline: pipeline,
+                            counter: counter,
+                            period: $scope.period.value
+                        }).then(function (response) {
+                            if (response.operationResult === 0) {
+                                //toastr.success('', 'Данные успешно сохранены');
+                                counter.isCounterNew = false;
+                                $scope.getBalanceForClient(client._id);
+                                $scope.getAllBalance();
+                            } else {
+                                toastr.error('', 'Произошла ошибка');
+                            }
+                        });
+                    }
+                });
+            });
+        }
+    });
+
     $scope.searchTerm = '';
     $scope.data = [];
     $scope.selectedItem = {};

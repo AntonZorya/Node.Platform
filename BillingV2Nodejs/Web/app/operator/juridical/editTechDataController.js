@@ -5,6 +5,8 @@ function editTechDataController($scope, dataService, modalSvc, toastr) {
     $scope.modalItem = {};
     $scope.modalItem = _.extend($scope.modalItem, $scope.$parent.selectedItem);
 
+    var prevTarifId = $scope.modalItem.clientType.tariffId._id;
+
     $scope.save = function () {
         var tariff = $scope.modalItem.clientType.tariffId;
         dataService.post('/clientJur/update', $scope.modalItem).then(function (response) {
@@ -15,11 +17,13 @@ function editTechDataController($scope, dataService, modalSvc, toastr) {
                 $scope.modalItem = response.result;
                 _.extend($scope.$parent.selectedItem, $scope.modalItem);
                 $scope.$parent.selectedItem.clientType.tariffId = tariff;
+
+                if (tariff._id !== prevTarifId) {
+                    $scope.$emit('changeTariffId', { clientId: $scope.modalItem._id});
+                }
             }
 
         });
-
-
     };
 
     $scope.cancel = function () {
