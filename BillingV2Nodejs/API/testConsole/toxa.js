@@ -18,7 +18,7 @@ function random(low, high) {
 exports.main = function () {
 
     XLS = require('xlsjs');
-    var workbook = XLS.readFile('workbook_201508_2.xls');
+    var workbook = XLS.readFile('workbook v12.xlsx');
     var sheet_name_list = workbook.SheetNames;
     var sheet = workbook.Sheets[sheet_name_list[0]];
     console.log('reading');
@@ -348,7 +348,7 @@ exports.main = function () {
             //!контролеры и пользователи
 
 
-            //клиенты, перед запуском почистить clientJur
+            //клиенты, перед запуском почистить clientJur, balance, calculation, штрафы и начисления
             //function (readyFunction2) {
             //
             //    var readyJur = _.uniq(someData, true, function (row) {
