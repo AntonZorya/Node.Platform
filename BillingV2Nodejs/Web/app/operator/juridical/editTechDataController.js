@@ -14,7 +14,11 @@ function editTechDataController($scope, dataService, modalSvc, toastr) {
             if (response.operationResult === 0) {
                 toastr.success('', 'Данные успешно сохранены');
 
+                // Костыль
+                var address = $scope.modalItem.addressId;
                 $scope.modalItem = response.result;
+                $scope.modalItem.addressId = address;
+
                 _.extend($scope.$parent.selectedItem, $scope.modalItem);
                 $scope.$parent.selectedItem.clientType.tariffId = tariff;
 
