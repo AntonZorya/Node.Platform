@@ -13,7 +13,7 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
     $scope.allBalance = [];
     $scope.balanceDetailsByClient = [];
 
-    $scope.period = {};
+    $scope.period = { value: '' };
     $scope.periods = [];
 
     $scope.getPeriods = function () {
