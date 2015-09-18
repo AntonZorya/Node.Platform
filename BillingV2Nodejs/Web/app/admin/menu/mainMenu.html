@@ -5,7 +5,7 @@
     <div class="right menu">
 
             <div class="ui item">
-                <a href="/#/loginNormal">{{user.userFullName}} | Выйти</a>
+                <a href="/#/loginNormal">{{user.userFullName}} | {{ '#Exit' | translate}}</a>
             </div>
                 <switch-lng></switch-lng>
 
@@ -14,7 +14,7 @@
 
     <a ng-repeat="menuItem in menu" ng-click="link(menuItem, $event)" ng-class="{ 'active': menuItem.active}" class="item">
         <i ng-if="menuItem.iconClass" class="{{menuItem.iconClass}}"></i>
-        {{ menuItem.name }}
+        {{ menuItem.name | translate }}
     </a>
     
     
