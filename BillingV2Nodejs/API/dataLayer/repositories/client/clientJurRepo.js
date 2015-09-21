@@ -116,6 +116,53 @@ exports.report = function (period, done) {
     );
 };
 
+exports.report5 = function (period, done) {
+    Collection.aggregate(
+        {
+            $match: {
+                
+                $and: [
+                    {period: parseInt(period)},
+                    {"pipelines.counters.currentCounts": {$ne: null}},
+                    {"pipelines.counters.currentCounts": {$ne: ""}},
+                    {"pipelines.counters.currentCounts": {$ne: 0}},
+                    {"pipelines.counters.dateOfCurrentCounts": {$ne: null}}
+                ]
+
+            }
+        },
+
+        {
+            $group: {
+                _id: {controllerId: "$controllerId"},
+                total: {$sum: 1}
+            }
+        },
+
+        function (err, result) {
+            if (err) return done(errorBuilder(err));
+            return done({operationResult: 0, result: result});
+        }
+    );
+};
+
+exports.report6 = function (period, done) {
+    Collection.aggregate(
+
+        {
+            $group: {
+                _id: {controllerId: "$controllerId"},
+                total: {$sum: 1}
+            }
+        },
+
+        function (err, result) {
+            if (err) return done(errorBuilder(err));
+            return done({operationResult: 0, result: result});
+        }
+    );
+};
+
 exports.reportCounts = function (period, done) {
     Collection.aggregate(
         {$unwind: "$counters"},
