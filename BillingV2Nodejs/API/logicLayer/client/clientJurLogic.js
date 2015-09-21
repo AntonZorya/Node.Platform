@@ -114,7 +114,7 @@ exports.search = function (searchTerm, period, user, done) {
 
 exports.updateClientCounter = function (body, userId, done) {
 
-    if (!body.counter.currentCounts) {
+    if (body.withClear) {
         CalculationLogic.getByCounterId(body.counter._id, body.period, function (calcByCounterResp) {
             if (calcByCounterResp.operationResult === 0 && calcByCounterResp.result) {
                 BalanceLogic.remove(calcByCounterResp.result._doc.balanceId, function (res) {
@@ -151,8 +151,13 @@ exports.updateClientCounter = function (body, userId, done) {
         var waterCalcCubicMeters = 0;
         var canalCalcCubicMetersCount = 0;
 
-        waterCalcCubicMeters = (counter.currentCounts - counter.lastCounts) * (pipeline.waterPercent / 100);
-        canalCalcCubicMetersCount = (counter.currentCounts - counter.lastCounts) * (pipeline.canalPercent / 100);
+        if (pipeline.sourceCounts != 2) {
+            waterCalcCubicMeters = (counter.currentCounts - counter.lastCounts) * (pipeline.waterPercent / 100);
+            canalCalcCubicMetersCount = (counter.currentCounts - counter.lastCounts) * (pipeline.canalPercent / 100);
+        } else{
+            waterCalcCubicMeters = pipeline.norm * (pipeline.waterPercent / 100);
+            canalCalcCubicMetersCount = pipeline.norm * (pipeline.canalPercent / 100);
+        }
 
         var waterSum = 0;
         var canalSum = 0;

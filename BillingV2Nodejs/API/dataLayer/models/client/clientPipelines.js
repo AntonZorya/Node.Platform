@@ -16,7 +16,7 @@ exports.definition = [{
 
     fileIds: [],//счет фактуры,
 
-    isByCounter: {type: Boolean},//по норме или по счетчику
+    sourceCounts: {type: Number},// 1 по счетчику, 2 по среднему, 3 по норме
     avg: {type: Number}, //среднее - должно расчитываться на основе предыдущих месяцев или пользователь может вбить сам
     norm: {type: Number} //норма
 

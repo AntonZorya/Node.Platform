@@ -159,12 +159,15 @@
                                 <tr ng-repeat="pipeline in item.pipelines">
                                     <td style="width: 20px;">
                                         <b>Ввод:</b> {{pipeline.description}} <br><br>
-                                        <b>По ср.: (+ {{pipeline.avg}} м3)</b>
                                         <input type="checkbox" checked="{{pipeline.isCountsByAvg}}"
-                                               ng-model="pipeline.isCountsByAvg"
-                                               ng-checked="pipeline.isCountsByAvg"
+                                               ng-model="pipeline.checkAvg"
                                                ng-change="byAverage(pipeline)"/>
-
+                                        <b>По ср.: (+ {{pipeline.avg}} м3)</b>
+                                        <br>
+                                        <input type="checkbox" checked="{{pipeline.isCountsByNorm}}"
+                                               ng-model="pipeline.checkNorm"
+                                               ng-change="byNorm(pipeline)"/>
+                                        <b>По норме: (+ {{pipeline.norm}} м3)</b>
                                     </td>
                                     <td colspan="8">
                                         <table class="ui basic table">
@@ -207,9 +210,9 @@
                                                 <td>
                                                     <div class="ui form">
                                                         <div class="one fields">
-                                                            <div ng-class="{'disabled field': pipeline.isCountsByAvg}">
+                                                            <div ng-class="{'disabled field': pipeline.checkAvg || pipeline.checkNorm}">
                                                                 <input type="text" ng-model="counter.currentCounts"
-                                                                       ng-disabled="counter.isCountsByAvg">
+                                                                       ng-disabled="pipeline.checkAvg || pipeline.checkNorm">
                                                             </div>
                                                         </div>
                                                     </div>

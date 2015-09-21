@@ -13,18 +13,18 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
     $scope.allBalance = [];
     $scope.balanceDetailsByClient = [];
 
-    $scope.period = { value: '' };
+    $scope.period = {value: ''};
     $scope.periods = [];
 
     $scope.getPeriods = function () {
         dataService.get('/clientJur/getPeriods').then(function (response) {
-            response.result.forEach(function(item){
+            response.result.forEach(function (item) {
                 item = item.toString();
                 $scope.periods.unshift({value: item});
             });
             var date = new Date();
             var month = date.getMonth() + 1;
-            $scope.period.value = date.getFullYear().toString() + (month < 10 ? '0' + month.toString(): month.toString());
+            $scope.period.value = date.getFullYear().toString() + (month < 10 ? '0' + month.toString() : month.toString());
             $scope.getAllBalance();
         });
     };
@@ -51,6 +51,10 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
     };
 
     $scope.showCounters = function (item) {
+        item.pipelines.forEach(function (pipeline) {
+            pipeline.checkAvg = pipeline.sourceCounts == 1;
+            pipeline.checkNorm = pipeline.sourceCounts == 2;
+        });
         item.isShowCounters = !item.isShowCounters;
         $scope.selectedItem = item;
 
@@ -64,10 +68,13 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
             if (confirm('#Вы действительно хотите очистить текущие показания?')) {
                 counter.currentCounts = null;
                 counter.dateOfCurrentCounts = null;
+                pipeline.checkAvg = false;
+                pipeline.checkNorm = false;
+                pipeline.sourceCounts = 0;
             } else {
                 return;
             }
-        } else {
+        } else if (pipeline.sourceCounts != 2) {
             if (counter.dateOfCurrentCounts == null) { //TODO: переделать на валидацию, если нужно
                 toastr.error('Дата текущих показаний обязательное поле!', 'Данные не сохранены');
                 return;
@@ -86,7 +93,8 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
             client: client,
             pipeline: pipeline,
             counter: counter,
-            period: $scope.period.value
+            period: $scope.period.value,
+            withClear: withClear
         };
 
         dataService.post('/clientJur/updateClientCounter', body).then(function (response) {
@@ -179,8 +187,8 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
     $scope.getStreets();
 
     //Получение микрорайонов и улиц
-    $scope.getRootAddresses = function (){
-        dataService.get('/location/getByParentId', { parentId: null }).then(function(response){
+    $scope.getRootAddresses = function () {
+        dataService.get('/location/getByParentId', {parentId: null}).then(function (response) {
             $scope.rootAddresses = response.result;
         });
     };
@@ -234,9 +242,10 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
 
     $scope.byAverage = function (pipeline) {
 
-        if (!pipeline.avg && pipeline.isCountsByAvg === true)
+        if (!pipeline.avg) {
             alert('Нет данных "По среднему" ');
-        else {
+            pipeline.checkAvg = false;
+        } else {
             var foundCounter = _.find(pipeline.counters, function (counter) {
                 return counter.isActive === true;
             });
@@ -244,17 +253,31 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
             if (!foundCounter)
                 alert("Нет активного счетчика");
 
-            else if (foundCounter && pipeline.isCountsByAvg === true) {
-                foundCounter.currentCounts = foundCounter.lastCounts * 1 + pipeline.avg * 1;
-                //counter.countsByAvg = avg;
-            }
-            else if (foundCounter && pipeline.isCountsByAvg === false) {
-                foundCounter.currentCounts = 0;
+            else if (foundCounter) {
+                if (pipeline.checkAvg) {
+                    foundCounter.currentCounts = foundCounter.lastCounts * 1 + pipeline.avg * 1;
+                    pipeline.sourceCounts = 1;
+                } else {
+                    foundCounter.currentCounts = 0;
+                    pipeline.sourceCounts = 0;
+                }
             }
         }
 
     };
 
+    $scope.byNorm = function (pipeline) {
+        if (!pipeline.norm) {
+            alert('Нет данных по "По норме"');
+            pipeline.checkNorm = false;
+            return;
+        }
+        if (pipeline.checkNorm) {
+            pipeline.sourceCounts = 2;
+        } else {
+            pipeline.sourceCounts = 0;
+        }
+    }
 
     $scope.fined = function () {
         modalSvc.showModal('/app/operator/juridical/forfeit.html', 'forfeitModal', $scope);
@@ -316,12 +339,12 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
 
     };
 
-    $scope.$on('changeTariffId', function(event, args){
+    $scope.$on('changeTariffId', function (event, args) {
         var client = _.where($scope.data, {_id: args.clientId})[0];
-        if (client){
-            client.pipelines.forEach(function(pipeline){
-                pipeline.counters.forEach(function(counter){
-                    if (counter.isActive && counter.currentCounts && counter.dateOfCurrentCounts){
+        if (client) {
+            client.pipelines.forEach(function (pipeline) {
+                pipeline.counters.forEach(function (counter) {
+                    if (counter.isActive && counter.currentCounts && counter.dateOfCurrentCounts) {
                         dataService.post('/clientJur/updateClientCounter', {
                             client: client,
                             pipeline: pipeline,
