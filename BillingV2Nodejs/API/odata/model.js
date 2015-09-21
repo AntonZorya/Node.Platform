@@ -1,7 +1,7 @@
 require('./institution');
 
 $data.EntityContext.extend("colleges", {
-	"_ClientJoinedAndAggregated": {type: $data.EntitySet, elementType: colleges._ClientJoinedAndAggregated}
+	"_ClientPopulatedAndAggregated": {type: $data.EntitySet, elementType: colleges._ClientPopulatedAndAggregated}
 });
 
 module.exports = exports = colleges;
