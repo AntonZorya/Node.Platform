@@ -35,7 +35,7 @@ exports.unwindData = function (done) {
             ClientCollection
                 .find()
                 .lean()
-                .deepPopulate('kskId addressId.addressTypeId controllerId clientType.tariffId')
+                .deepPopulate('kskId controllerId clientType.tariffId')
                 .exec(function (err, docs) {
                     if (err) {
                         return callback(err, 'ROUND1 ERROR');
@@ -69,7 +69,7 @@ exports.unwindData = function (done) {
                 var model = ClientPopulated(doc);
 
                 model.save(function (err) {
-                    if (err) callback(err);
+                    if (err) return callback(err);
                     callback();
                 });
             }, function (err) {
@@ -93,54 +93,54 @@ exports.unwindData = function (done) {
                     $project: {
                         _id: 0,
                         clientJurId: "$_id",
+                        phone: "$phone",
+                        email: "$email",
+                        abonentEntryDate: "$abonentEntryDate",
                         "Лицевой_счет": "$accountNumber",
                         "Номер": "$number",
                         "Наименование": "$name",
                         "БИН": "$bin",
                         "РНН": "$rnn",
                         "Адрес": "$address",
-                        "Телефон": "$phone",
-                        "email": "$email",
                         "Период": "$period",
-                        abonentEntryDate: "$abonentEntryDate",
                         pipelines_id: "$pipelines._id",
-                        pipelines_number: "$pipelines.number",
-                        pipelines_description: "$pipelines.description",
+                        "Номер_ввода": "$pipelines.number",
+                        "Описание_ввода": "$pipelines.description",
                         pipelines_addressId: "$pipelines.addressId",
                         pipelines_isByCounter: "$pipelines.isByCounter",
-                        pipelines_waterPercent: "$pipelines.waterPercent",
-                        pipelines_canalPercent: "$pipelines.canalPercent",
-                        pipelines_isActive: "$pipelines.isActive",
+                        "Процент_воды_ввода": "$pipelines.waterPercent",
+                        "Процент_канализации_ввода": "$pipelines.canalPercent",
+                        "Ввод_в_действии": "$pipelines.isActive",
                         pipelines_fileIds: "$pipelines.fileIds",
                         pipelines_avg: "$pipelines.avg",
                         pipelines_norm: "$pipelines.norm",
-                        pipelines_counters_counterNumber: "$pipelines.counters.counterNumber",
-                        pipelines_counters_currentStatus: "$pipelines.counters.currentStatus",
-                        pipelines_counters_currentCounts: "$pipelines.counters.currentCounts",
-                        pipelines_counters_dateOfCurrentCounts: "$pipelines.counters.dateOfCurrentCounts",
-                        pipelines_counters_problem: "$pipelines.counters.problem",
-                        pipelines_counters_problemDescription: "$pipelines.counters.problemDescription",
-                        pipelines_counters_lastCounts: "$pipelines.counters.lastCounts",
-                        pipelines_counters_dateOfLastCounts: "$pipelines.counters.dateOfLastCounts",
+                        "Номер_счетчика": "$pipelines.counters.counterNumber",
+                        "Текущий_статус_счетчика": "$pipelines.counters.currentStatus",
+                        "Текущие_показания_счетчика": "$pipelines.counters.currentCounts",
+                        "Дата_текущих_показаний_счетчика": "$pipelines.counters.dateOfCurrentCounts",
+                        "Проблемы_счетчика": "$pipelines.counters.problem",
+                        "Описание_проблемы_счетчика": "$pipelines.counters.problemDescription",
+                        "Предыдущие_показания_счетчика": "$pipelines.counters.lastCounts",
+                        "Дата_предыдущих_показаний_счетчика": "$pipelines.counters.dateOfLastCounts",
                         pipelines_counters_hasProblem: "$pipelines.counters.hasProblem",
                         pipelines_counters_installDate: "$pipelines.counters.installDate",
                         pipelines_counters_checkDate: "$pipelines.counters.checkDate",
-                        pipelines_counters_plumbNumber: "$pipelines.counters.plumbNumber",
+                        "Номер_пломбы_счетчика": "$pipelines.counters.plumbNumber",
                         pipelines_counters_plumbInstallDate: "$pipelines.counters.plumbInstallDate",
                         pipelines_counters_markId: "$pipelines.counters.markId",
                         pipelines_counters_fileIds: "$pipelines.counters.fileIds",
-                        pipelines_counters_isActive: "$pipelines.counters.isActive",
+                        "Счетчик_в_действии": "$pipelines.counters.isActive",
                         pipelines_counters_removeDate: "$pipelines.counters.removeDate",
-                        controllerId_fullName: "$controllerId.fullName",
-                        controllerId_code: "$controllerId.code",
-                        clientType_name: "$clientType.name",
+                        "Имя_контролера": "$controllerId.fullName",
+                        "Код_контролера": "$controllerId.code",
+                        "Тип_потребителя": "$clientType.name",
                         clientType_minConsumption: "$clientType.minConsumption",
                         clientType_avgConsumption: "$clientType.avgConsumption",
                         clientType_maxConsumption: "$clientType.maxConsumption",
                         clientType_parentId: "$clientType.parentId",
-                        clientType_tariffId_name: "$clientType.tariffId.name",
-                        clientType_tariffId_water: "$clientType.tariffId.water",
-                        clientType_tariffId_canal: "$clientType.tariffId.canal",
+                        "Наименование_тарифа": "$clientType.tariffId.name",
+                        "Тариф_за_воду": "$clientType.tariffId.water",
+                        "Тариф_за_канализацию": "$clientType.tariffId.canal",
                         clientType_tariffId_date: "$clientType.tariffId.date",
                         kskId_name: "$kskId.name",
                     }
@@ -201,12 +201,14 @@ exports.unwindData = function (done) {
                 if(doc.pipelineId) props.pipelines_id = doc.pipelineId;
                 
                 ClientPopulatedAndAggregated.findOne({ clientJurId: doc.clientJurId, pipelines_id: doc.pipelineId  }, function (err, client) {
+                    if(err) return callback();
+                    if(client==null) return callback();
                     doc.newClient = client._doc;
                     
                     var model = CalculationPopulated(doc);
     
                     model.save(function (err) {
-                        if (err) callback(err);
+                        if (err) return callback(err);
                         callback();
                     });
                 });
