@@ -18,7 +18,7 @@ function random(low, high) {
 exports.main = function () {
 
     XLS = require('xlsjs');
-    var workbook = XLS.readFile('workbook v12.xls');
+    var workbook = XLS.readFile('workbook v13.xls');
     var sheet_name_list = workbook.SheetNames;
     var sheet = workbook.Sheets[sheet_name_list[0]];
     console.log('reading');
@@ -206,147 +206,115 @@ exports.main = function () {
 
 
             //типы клиентов, перед запуском почистить clientTypes
-            /*function (readyWithTypes) {
 
-             var clientTypeNames = [];
+            //function (readyWithTypes) {
+            //
+            //    var clientTypeNames = [];
+            //
+            //    _.each(someData, function (itemArray) {
+            //        _.each(itemArray, function (row, i) {
+            //            if (i === 33)
+            //                if (typeof row != 'undefined') {
+            //                    row = row.toString().trim();
+            //                    clientTypeNames.push(row);
+            //                }
+            //        });
+            //    });
+            //
+            //    //55c9976dd39aa4ea934245a0 талсуат
+            //    //55bf441dd39a83c1a4ea83cf коммунальное хозяйство
+            //    //55bf43ecd39a83c1a4ea83cd район
+            //    //55bf43bad39a83c1a4ea83cb бюджет
+            //    //55bf41dad39a83c1a4ea83c9 мсб
+            //    var newObjectIdForParentMsb = '55bf41dad39a83c1a4ea83c9';
+            //
+            //    var uniqClientTypeNames = _.uniq(clientTypeNames);
+            //
+            //    async.each(uniqClientTypeNames, function (clientTypeName, callback) {
+            //
+            //        var clientType = {
+            //            name: clientTypeName
+            //        };
+            //
+            //        switch (clientTypeName) {
+            //            case 'респ.бюджет':
+            //                clientType.tariffId = '55bf43bad39a83c1a4ea83cb'; // бюджет
+            //                break;
+            //            case 'обл.бюджет':
+            //                clientType.tariffId = '55bf43bad39a83c1a4ea83cb'; // бюджет
+            //                break;
+            //            case 'гор.бюджет':
+            //                clientType.tariffId = '55bf43bad39a83c1a4ea83cb'; // бюджет
+            //                break;
+            //            case 'талсуат':
+            //                clientType.tariffId = '55c9976dd39aa4ea934245a0'; // талсуат
+            //                clientType.parentId = newObjectIdForParentMsb;
+            //                clientType.minConsumption = 50;
+            //                break;
+            //            case 'коммунал.хоз-во':
+            //                clientType.tariffId = '55bf441dd39a83c1a4ea83cf'; // коммунальное хозяйство
+            //                break;
+            //            case 'район':
+            //                clientType.tariffId = '55bf43ecd39a83c1a4ea83cd'; // район
+            //                break;
+            //            default:
+            //                clientType.tariffId = '55bf41dad39a83c1a4ea83c9'; // мсб
+            //                clientType.parentId = newObjectIdForParentMsb;
+            //                break;
+            //        }
+            //
+            //        clientTypeRepo.add(clientType, function (result) {
+            //            console.log('clientType: ' + clientTypeName + '  added');
+            //            callback();
+            //        });
+            //
+            //
+            //    }, function () {
+            //        readyWithTypes();
+            //    });
+            //
+            //},
 
-             _.each(someData, function (itemArray) {
-             _.each(itemArray, function (row, i) {
-             if (i === 33)
-             if (typeof row != 'undefined') {
-             row = row.toString().trim();
-             clientTypeNames.push(row);
-             }
-             });
-             });
-
-             var uniqClientTypeNames = _.uniq(clientTypeNames);
-
-
-             var newObjectIdForParentMsb = '55db1a16f96bf62c7635ae1b'; //МСБ
-
-             clientTypeRepo.add({
-             _id: newObjectIdForParentMsb,
-             name: "МСБ",
-             tariffId: '55bf41dad39a83c1a4ea83c9',//МСБ
-             parentId: null,
-             isDeleted: false,
-             createDateTime: new Date()
-             }, function (result) {
-             console.log('clientType: ' + "МСБ" + '  added');
-
-             async.each(uniqClientTypeNames, function (clientTypeName, callback) {
-
-             var clientType = {
-             name: clientTypeName
-             };
-
-             switch (clientTypeName) {
-             //TODO областной бюджет ???
-             case 'респ.бюджет':
-             clientType.tariffId = '55bf43bad39a83c1a4ea83cb';
-             break;
-             case 'гор.бюджет':
-             clientType.tariffId = '55bf43bad39a83c1a4ea83cb';
-             break;
-             case 'хоз.субъекты':
-             clientType.tariffId = '55bf441dd39a83c1a4ea83cf';
-             break;
-             case 'район':
-             clientType.tariffId = '55bf43ecd39a83c1a4ea83cd';
-             break;
-             case 'талсуат':
-             clientType.tariffId = '55c9976dd39aa4ea934245a0';
-             break;
-             case 'кафе':
-             clientType.tariffId = '55bf41dad39a83c1a4ea83c9';//МСБ
-             clientType.parentId = newObjectIdForParentMsb;
-             clientType.minConsumption = 25;
-             break;
-             case 'рестораны':
-             clientType.tariffId = '55bf41dad39a83c1a4ea83c9';//МСБ
-             clientType.parentId = newObjectIdForParentMsb;
-             clientType.minConsumption = 110;
-             break;
-             case 'гостиницы':
-             clientType.tariffId = '55bf41dad39a83c1a4ea83c9';//МСБ
-             clientType.parentId = newObjectIdForParentMsb;
-             clientType.minConsumption = 70;
-             break;
-             case 'азс и автомойки':
-             clientType.tariffId = '55bf41dad39a83c1a4ea83c9';//МСБ
-             clientType.parentId = newObjectIdForParentMsb;
-             clientType.minConsumption = 160;
-             break;
-             case 'сауны':
-             clientType.tariffId = '55bf41dad39a83c1a4ea83c9';//МСБ
-             clientType.parentId = newObjectIdForParentMsb;
-             clientType.minConsumption = 80;
-             break;
-             case 'бани':
-             clientType.tariffId = '55bf41dad39a83c1a4ea83c9';//МСБ
-             clientType.parentId = newObjectIdForParentMsb;
-             clientType.minConsumption = 50;
-             break;
-             default:
-             clientType.tariffId = '55bf41dad39a83c1a4ea83c9';//МСБ
-             clientType.parentId = newObjectIdForParentMsb;
-             break;
-             }
-
-             clientTypeRepo.add(clientType, function (result) {
-             console.log('clientType: ' + clientTypeName + '  added');
-             callback();
-             });
-
-
-             }, function () {
-             readyWithTypes();
-             });
-
-             });
-
-             },*/
             //!типы клиентов
 
 
-            //контролеры и пользователи, перед запуском почистить controllers и users (где controllerId не пустой)
+//контролеры и пользователи, перед запуском почистить controllers и users (где controllerId не пустой)
 
-            //function (readyFunction1) {
-            //    var controllers = _.uniq(someData, true, function (row) {
-            //        return row[35];
-            //    });
-            //    controllers = _.countBy(someData, '35');
-            //    var userNumber = 0;
-            //    async.each(Object.keys(controllers), function (row, callback) {
-            //        var controllerId = mongoose.Types.ObjectId();
-            //        var fullName = row;
-            //        var password = 123456; //random(1000, 9999);
-            //        controllerRepo.add({
-            //            _id: controllerId,
-            //            fullName: fullName,
-            //            code: password
-            //        }, function (result) {
-            //            console.log(row + ' controller  added');
-            //
-            //            userRepo.add({
-            //                userName: 'user' + (userNumber++),
-            //                userFullName: fullName,
-            //                password: password,
-            //                email: '123@test.kz',
-            //                roles: ['controller'],
-            //                controllerId: controllerId
-            //            }, function (userResp) {
-            //                callback();
-            //            });
-            //        });
-            //    }, function () {
-            //        readyFunction1();
-            //    });
-            //
-            //
-            //},
-            //!контролеры и пользователи
+//function (readyFunction1) {
+//    var controllers = _.uniq(someData, true, function (row) {
+//        return row[35];
+//    });
+//    controllers = _.countBy(someData, '35');
+//    var userNumber = 0;
+//    async.each(Object.keys(controllers), function (row, callback) {
+//        var controllerId = mongoose.Types.ObjectId();
+//        var fullName = row;
+//        var password = 123456; //random(1000, 9999);
+//        controllerRepo.add({
+//            _id: controllerId,
+//            fullName: fullName,
+//            code: password
+//        }, function (result) {
+//            console.log(row + ' controller  added');
+//
+//            userRepo.add({
+//                userName: 'user' + (userNumber++),
+//                userFullName: fullName,
+//                password: password,
+//                email: '123@test.kz',
+//                roles: ['controller'],
+//                controllerId: controllerId
+//            }, function (userResp) {
+//                callback();
+//            });
+//        });
+//    }, function () {
+//        readyFunction1();
+//    });
+//
+//
+//},
+//!контролеры и пользователи
 
 
             //клиенты, перед запуском почистить clientJur, balance, calculation, штрафы и начисления
@@ -517,5 +485,7 @@ exports.main = function () {
         function () {
             console.log("READY !!!!READY !!!!READY !!!!READY !!!!READY !!!!READY !!!!");
         }
-    );
-};
+    )
+    ;
+}
+;
