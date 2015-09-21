@@ -25,6 +25,7 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
             var date = new Date();
             var month = date.getMonth() + 1;
             $scope.period.value = date.getFullYear().toString() + (month < 10 ? '0' + month.toString(): month.toString());
+            $scope.getAllBalance();
         });
     };
     $scope.getPeriods();
@@ -294,7 +295,6 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
 
         });
     };
-    $scope.getAllBalance();
 
     $scope.getBalanceForClient = function (id) {
 

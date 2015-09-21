@@ -20,24 +20,24 @@
 
                 </td>
                 <td>
-                <div class="ui green mini statistic">
-                    <div class="label">
-                        {{nachisl.name}}
+                    <div class="ui green mini statistic">
+                        <div class="label">
+                            {{nachisl.name}}
+                        </div>
+                        <div class="value">
+                            {{nachisl.sum*-1 | number:2 }} тг.
+                        </div>
                     </div>
-                    <div class="value">
-                        {{nachisl.sum*-1 | number:2 }} тг.
-                    </div>
-                </div>
                 </td>
                 <td>
-                <div class="ui pink mini statistic">
-                    <div class="label">
-                        {{forfeit.name}}
+                    <div class="ui pink mini statistic">
+                        <div class="label">
+                            {{forfeit.name}}
+                        </div>
+                        <div class="value">
+                            {{forfeit.sum*-1 | number:2 }} тг.
+                        </div>
                     </div>
-                    <div class="value">
-                        {{forfeit.sum*-1 | number:2 }} тг.
-                    </div>
-                </div>
                 </td>
                 <td>
                     <div class="ui orange mini statistic">
@@ -50,7 +50,8 @@
                     </div>
                 </td>
                 <td>
-                    <div class="ui mini statistic" ng-class="{'green':(payment.sum + nachisl.sum + forfeit.sum)<0, 'red':(payment.sum + nachisl.sum + forfeit.sum)>0}">
+                    <div class="ui mini statistic"
+                         ng-class="{'green':(payment.sum + nachisl.sum + forfeit.sum)<0, 'red':(payment.sum + nachisl.sum + forfeit.sum)>0}">
                         <div class="label">
                             Всего должны
                         </div>
@@ -83,9 +84,6 @@
         <div class="item" ng-repeat="item in data" style="background-color: {{item.color}}">
 
 
-
-
-
             <div class="content" ng-class="{'selectedBlock': item.isShowCounters}">
                 <a class="header">{{item.name}}</a>
                 <!--<a class="ui red right ribbon label">Долг</a>-->
@@ -107,19 +105,20 @@
                             <span ng-bind="item.controllerId.fullName"></span>
                         </div>
 
-                            <div ng-repeat="bal in item.balances" class="two wide column">
+                        <div ng-repeat="bal in item.balances" class="two wide column">
 
-                                <div class="ui green mini statistic" ng-class="{green:(bal.name=='Начисление'), pink:(bal.name=='Штраф'), orange: (bal.name=='Оплата')}">
-                                    <div class="label">
-                                        {{bal.name}}
-                                    </div>
-                                    <div class="value" style="font-size: small;">
-                                        {{bal.sum<0?bal.sum*-1:bal.sum | number:2}} тг.
-                                    </div>
+                            <div class="ui green mini statistic"
+                                 ng-class="{green:(bal.name=='Начисление'), pink:(bal.name=='Штраф'), orange: (bal.name=='Оплата')}">
+                                <div class="label">
+                                    {{bal.name}}
                                 </div>
-
+                                <div class="value" style="font-size: small;">
+                                    {{bal.sum<0?bal.sum*-1:bal.sum | number:2}} тг.
+                                </div>
+                            </div>
 
                         </div>
+
                         <div class="two wide column">
 
                             <div class="ui mini statistic"
@@ -160,7 +159,7 @@
                                 <tr ng-repeat="pipeline in item.pipelines">
                                     <td style="width: 20px;">
                                         <b>Ввод:</b> {{pipeline.description}} <br><br>
-                                        <b>По ср.:  (+ {{pipeline.avg}} м3)</b>
+                                        <b>По ср.: (+ {{pipeline.avg}} м3)</b>
                                         <input type="checkbox" checked="{{pipeline.isCountsByAvg}}"
                                                ng-model="pipeline.isCountsByAvg"
                                                ng-checked="pipeline.isCountsByAvg"
@@ -235,8 +234,9 @@
                                                 <td>
                                                     <div class="ui small basic icon buttons right floated">
                                                         <button class="ui button"
-                                                                ng-click="updateClient(item, counter, pipeline, true)"><i
-                                                                class="large delete icon"></i></button>
+                                                                ng-click="updateClient(item, counter, pipeline, true)">
+                                                            <i
+                                                                    class="large delete icon"></i></button>
                                                     </div>
                                                 </td>
                                                 <td>
