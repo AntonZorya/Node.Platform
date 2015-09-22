@@ -105,6 +105,37 @@ exports.getTotalByClientJurId = function (clientJurId, done) {
     });
 };
 
+exports.getTotalByClientFizId = function (clientFizId, done) {
+    BalanceRepo.getByClientFizId(clientFizId, function (response) {
+
+        var balances = response.result;
+
+        var groupedBalances = _(balances).groupBy(function (bal) {
+            return bal.balanceTypeId.name;
+        });
+
+        var balancesRes = [];
+
+        for (var key in groupedBalances) {
+
+            var clientName = key;
+            var balanceByClient = {
+                name: clientName,
+                sum: 0
+            };
+
+            _.each(groupedBalances[key], function (bal) {
+                balanceByClient.sum = balanceByClient.sum + bal.sum;
+            });
+
+            balancesRes.push(balanceByClient);
+        }
+
+        done({operationResult: 0, result: balancesRes});
+    });
+};
+
+
 
 exports.getByPeriodAndClientIdWithDetails = function (clientJurId, period, done) {
 

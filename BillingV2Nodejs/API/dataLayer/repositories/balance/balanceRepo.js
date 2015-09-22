@@ -61,6 +61,19 @@ exports.getByClientJurId = function (clientJurId, done) {
         });
 };
 
+exports.getByClientFizId = function (clientFizId, done) {
+    Collection.find(
+        {
+            $and: [
+                {clientFizId: clientFizId}
+            ]
+        }
+    ).populate('clientFizId').populate('balanceTypeId').exec(function (err, res) {
+            if (err)return done(errorBuilder(err));
+            done({operationResult: 0, result: res});
+        });
+};
+
 exports.getByPeriod = function (dateFrom, dateTo, done) {
     Collection.find(
         {

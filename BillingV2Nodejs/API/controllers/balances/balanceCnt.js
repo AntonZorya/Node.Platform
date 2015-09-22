@@ -24,6 +24,13 @@ module.exports = function (router) {
             });
         });
 
+    router.route('/balance/getTotalByClientFizId').
+        get(function (req, res) {
+            Logic.getTotalByClientFizId(req.query.clientFizId, function (data) {
+                operationResultBuilder(data, res);
+            });
+        });
+
     router.route('/balance/getByClientJurId').
         get(function (req, res) {
             Logic.getByClientJurId(req.query.clientJurId, function (data) {

@@ -1,0 +1,288 @@
+<style>
+    .selectedBlock {
+        background-color: white !important;
+        border: 1px solid rgba(39, 41, 43, .15) !important;
+        padding: 5px !important;
+    }
+</style>
+
+<div ng-controller="fisicalController" class="ui padded segment">
+
+    <div>
+        <table class="ui basic table">
+            <tr>
+                <td>Период: июль 2015</td>
+                <td>{{nachisl.name}} : {{nachisl.sum | number:2 }} тг.</td>
+                <td>{{forfeit.name}} : {{forfeit.sum | number:2 }} тг.</td>
+                <td>{{payment.name}} : {{payment.sum | number:2 }} тг.</td>
+                <td>Всего должны : {{payment.sum + nachisl.sum + forfeit.sum | number:2}} тг.</td>
+            </tr>
+        </table>
+
+
+        <div class="ui form">
+
+            <div class="field">
+                <form ng-submit="search()">
+                    <label>{{ '#Поиск' | translate }}</label>
+
+                    <div class="ui action input">
+                        <input type="text" ng-model="searchTerm" placeholder="{{ '#Поиск кнопка'  | translate }}"/>
+                        <input type="submit" id="submit" class="ui button" value="{{ '#Поиск кнопка' | translate }}"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="ui divided items" style="background-color: #fafafa;">
+        <div class="item" ng-repeat="item in data" style="background-color: {{item.color}}">
+
+            <div class="content" ng-class="{'selectedBlock': item.isShowCounters}">
+                <a class="header">{{item.name}}</a>
+
+                <div>
+                    <div class="ui grid">
+                        <!--<div class="row">-->
+                        <div class="four wide column">
+                            {{item.address}}
+                        </div>
+                        <div class="four wide column">
+                            {{item.iin}}
+                        </div>
+                        <div class="tree wide column">
+                            <div class="ui black basic button" ng-click="showCounters(item)" style="cursor:pointer;">
+                                <i class="dashboard icon"></i> {{item.pipelines.length}}
+                            </div>
+                        </div>
+                        <div class="two wide column">
+                            <span ng-bind="item.controllerId.fullName"></span>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="sixteen wide column" style="padding-top: 23px;">
+                        <div class="description" ng-show="item.isShowCounters">
+
+                            <button class="ui  button" ng-bind="'#Выписать штраф' | translate"
+                                    ng-click="fined()"></button>
+                            <button class="ui  button" ng-click="showModalPayment(item)"
+                                    ng-bind="'#Принять оплату' | translate"></button>
+                            <button class="ui  button" ng-bind="'#Технические данные' | translate"
+                                    ng-click="editTechData()"></button>
+                            <button class="ui  button" ng-bind="'#Паспортные данные' | translate"
+                                    ng-click="editPassportData()"></button>
+                            <button class="ui  button" ng-bind="'#История' | translate"
+                                    ng-click="getClientBalanceDetails()"></button>
+
+                            <table class="ui basic table">
+                                <tbody>
+                                <tr ng-repeat="pipeline in item.pipelines">
+                                    <td style="width: 20px;">
+                                        <b>Ввод №: {{pipeline.number}}</b> <br><br>
+                                        По среднему: <b> (+ {{pipeline.avg}} м3)</b>
+                                        <input type="checkbox" checked="{{pipeline.isCountsByAvg}}"
+                                               ng-model="pipeline.isCountsByAvg"
+                                               ng-checked="pipeline.isCountsByAvg"
+                                               ng-change="byAverage(pipeline)"/>
+
+                                    </td>
+                                    <td colspan="8">
+                                        <table class="ui basic table">
+                                            <thead>
+                                            <tr>
+                                                <th>{{'#counterNumber'|translate}}</th>
+                                                <th>{{'#counterPlumb'|translate}}</th>
+                                                <th>{{'#lastCounts'|translate}} &nbsp; (м3)</th>
+                                                <th>{{'#dateOfLast'|translate}}</th>
+                                                <th>{{'#currentCounts'|translate}} &nbsp; (м3)</th>
+                                                <th>*{{'#dateOfCurrent'|translate}}</th>
+                                                <th>{{'#problemDescription'|translate}}</th>
+                                                <th></th>
+                                            </tr>
+
+                                            </thead>
+                                            <tbody>
+                                            <tr ng-repeat="counter in pipeline.counters"
+                                                style="background-color: {{counter.color}}"
+                                                ng-class="{
+                                                'error disabled': !counter.isActive,
+                                                'positive': counter.isActive
+                                                }">
+                                                <td>
+                                                    <span ng-bind="counter.counterNumber"></span>
+                                                </td>
+                                                <td>
+                                                    <span ng-bind="counter.plumbNumber"></span>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <span ng-bind="counter.lastCounts"></span>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <span ng-bind="counter.dateOfLastCounts"></span>
+                                                </td>
+
+                                                <td>
+                                                    <div class="ui form">
+                                                        <div class="one fields">
+                                                            <div ng-class="{'disabled field': pipeline.isCountsByAvg}">
+                                                                <input type="text" ng-model="counter.currentCounts"
+                                                                       ng-disabled="counter.isCountsByAvg">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+                                                </td>
+
+                                                <td>
+                                                    <div class="ui icon small input">
+                                                        <i class="calendar icon"></i>
+                                                        <input ui-date="dateOptions"
+                                                               ng-model='counter.dateOfCurrentCounts'>
+                                                    </div>
+                                                    <!--<span ng-bind='counter.dateOfCurrentCounts | date:"dd.MM.yyyy HH:mm:ss":"+0600"'></span>-->
+                                                </td>
+
+                                                <td>
+                                                    <checkbox ng-model="counter.hasProblem"></checkbox>
+                                         <textarea ng-model="counter.problemDescription"
+                                                   ng-disabled="!counter.hasProblem"></textarea>
+                                                </td>
+                                                <td>
+                                                    <div class="ui small basic icon buttons right floated">
+                                                        <button class="ui button"
+                                                                ng-click="updateClient(item, counter, pipeline)"><i
+                                                                class="large save icon"></i></button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Всего:</td>
+                                    <td ng-repeat="bal in item.balances">
+                                        {{bal.name}} :
+                                        {{bal.sum | number:2}}
+                                    </td>
+                                    <td>Сальдо:
+                                        {{item.balances[0].sum +
+                                        item.balances[1].sum +
+                                        item.balances[2].sum | number: 2}}
+                                    </td>
+                                    <td>Минимум: {{item.clientType.minConsumption}} (м3)</td>
+                                    <td></td>
+
+                                </tr>
+                                </tbody>
+                            </table>
+
+                            <div class="ui compact menu">
+                                <div class="ui compact menu">
+
+                                    <!--<div class="ui simple dropdown item">
+                                        <span ng-bind="'#Акт' | translate"></span>
+                                        <i class="dropdown icon"></i>
+
+                                        <div class="menu">
+                                            <div class="item" ng-bind="'#Штрафы' | translate" ng-click="fined()"></div>
+                                            <div class="item" ng-bind="'#Списание долга' | translate"></div>
+                                            <div class="item"
+                                                 ng-bind="'#Установка нового счетчика' | translate"></div>
+                                            <div class="item"
+                                                 ng-bind="'#Установка новой пломбы' | translate"></div>
+                                        </div>
+                                    </div>-->
+
+                                    <!--<div class="ui simple dropdown item">
+                                        <span ng-bind="'#Оплата' | translate"></span>
+                                        <i class="dropdown icon"></i>
+
+                                        <div class="menu">
+                                            <div class="item" ng-bind="'#Принять' | translate"
+                                                 ng-click="showModalPayment(item)"></div>
+                                        </div>
+                                    </div>-->
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <modal ng-model="isShowModalPayment">
+        <i class="close icon" ng-click="closeModalPayment()"></i>
+
+        <div class="header">
+            {{'#Оплата' | translate }}. {{paymentClientName}}
+        </div>
+        <div class="content">
+
+            <form name="paymentForm" novalidate class="ui form">
+                <div class="field">
+                    <label>{{'#Сумма' | translate}}</label>
+                    <input type="text" name="sum" placeholder="{{'#Сумма' | translate}}" ng-model="$parent.enteredSum"
+                           required>
+                </div>
+                <div class="field">
+                    <label>{{'#Номер квитанции' | translate}} </label>
+                    <input type="text" name="receiptNumber" placeholder="{{'#Номер квитанции' | translate}}"
+                           ng-model="$parent.enteredReceiptNumber" required>
+                </div>
+            </form>
+
+
+        </div>
+        <div class="actions">
+            <div class="two fluid ui buttons">
+                <div class="ui negative labeled icon button">
+                    <i class="remove icon"></i>
+                    Закрыть
+                </div>
+                <div class="ui positive right labeled icon button"
+                     ng-click="sendPayment()">
+                    <span ng-bind="'#Оплатил' | translate"></span>
+                    <i class="checkmark icon"></i>
+                </div>
+            </div>
+        </div>
+    </modal>
+
+
+    <script type="text/ng-template" id="paymentInvoice.html">
+        <table>
+            <thead>
+            <tr>
+                <td>Клиент: {{paymentClientName}}</td>
+            </tr>
+            <tr>
+                <td>Сумма: {{payment.sum}}</td>
+            </tr>
+            <tr>
+                <td>Дата: {{payment.date | date: 'dd.MM.yyyy hh:mm:ss'}}</td>
+            </tr>
+            <tr>
+                <td>Номер квитанции: {{payment.receiptNumber}}</td>
+            </tr>
+            </thead>
+        </table>
+    </script>
+
+    <div id="paymentInvoice" style="display: none" ng-include="'paymentInvoice.html'"></div>
+
+</div>
+
+

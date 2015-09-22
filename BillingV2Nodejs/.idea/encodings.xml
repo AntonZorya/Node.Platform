@@ -12,6 +12,8 @@
     <file url="file://$PROJECT_DIR$/API/logicLayer/payment/paymentLogic.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/API/testConsole/toxa.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/Web/app/controller/subController.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Web/app/operator/fizical/editTechDataController.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Web/app/operator/fizical/fisicalController.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/Web/app/operator/juridical/editTechDataController.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/Web/app/operator/juridical/juridicalController.js" charset="UTF-8" />
   </component>

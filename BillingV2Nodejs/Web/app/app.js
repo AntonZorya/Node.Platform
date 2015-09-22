@@ -38,6 +38,12 @@ var billingApplication = angular.module('billingApplication', ['indexedDB', "hig
             .when('/operator/juridical/paymentsByPeriod', {
                 templateUrl: './app/operator/juridical/paymentsByPeriodView.html'
             })
+            .when('/operator/fizical', {
+                templateUrl: './app/operator/fiziacal/fizicalView.html'
+            })
+            .when('/operator/fizical/paymentsByPeriod', {
+                templateUrl: './app/operator/fiziacal/paymentsByPeriodView.html'
+            })
         ;
     }]).config(['$translatePartialLoaderProvider', function (translatePartialLoader) {
         translatePartialLoader.addPart('identity');
