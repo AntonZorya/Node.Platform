@@ -111,9 +111,6 @@ exports.report1 = function (period, done) {
 
         function (err, result) {
             if (err) return done(errorBuilder(err));
-<<<<<<< HEAD
-            return done({ operationResult: 0, result: result });
-=======
             return done({operationResult: 0, result: result});
         }
     );
@@ -145,7 +142,6 @@ exports.report5 = function (period, done) {
         function (err, result) {
             if (err) return done(errorBuilder(err));
             return done({operationResult: 0, result: result});
->>>>>>> dev
         }
     );
 };

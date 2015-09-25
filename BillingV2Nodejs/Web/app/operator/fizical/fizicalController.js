@@ -1,6 +1,6 @@
-billingApplication.controller('fisicalController', ['$scope', 'dataService', 'toastr', 'printSvc', '$templateCache', 'modalSvc', fisicalController]);
+billingApplication.controller('fizicalController', ['$scope', 'dataService', 'toastr', 'printSvc', '$templateCache', 'modalSvc', fizicalController]);
 
-function fisicalController($scope, dataService, toastr, printSvc, $templateCache, modalSvc) {
+function fizicalController($scope, dataService, toastr, printSvc, $templateCache, modalSvc) {
 
     $scope.searchTerm = '';
     $scope.data = [];

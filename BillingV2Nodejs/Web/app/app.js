@@ -39,10 +39,10 @@ var billingApplication = angular.module('billingApplication', ['indexedDB', "hig
                 templateUrl: './app/operator/juridical/paymentsByPeriodView.html'
             })
             .when('/operator/fizical', {
-                templateUrl: './app/operator/fiziacal/fizicalView.html'
+                templateUrl: './app/operator/fizical/fizicalView.html'
             })
             .when('/operator/fizical/paymentsByPeriod', {
-                templateUrl: './app/operator/fiziacal/paymentsByPeriodView.html'
+                templateUrl: './app/operator/fizical/paymentsByPeriodView.html'
             })
         ;
     }]).config(['$translatePartialLoaderProvider', function (translatePartialLoader) {

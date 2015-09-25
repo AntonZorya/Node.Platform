@@ -72,6 +72,12 @@ module.exports = [
         childs: []
     },
     {
+        url: "/operator/fizical",
+        name: "Физ. оператор",
+        roles: null,
+        childs: []
+    },
+    {
         url: "/operator/juridical/paymentsByPeriod",
         name: "Баланс",
         roles: null,
