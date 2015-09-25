@@ -1,1 +1,141 @@
-<div id="main_page" ng-controller="mainCtrl"></div>
+<div id="main_page" ng-controller="mainCtrl">
+
+
+    <table class="ui basic table">
+        <tr>
+            <td>
+                <!--Период: &nbsp;-->
+                <!--<select class="ui search dropdown" ng-model="period.value" ng-change="refresh();">-->
+                    <!--<option ng-repeat="per in periods" value="{{per.value}}" ng-selected="period">-->
+                        <!--{{per.value.substring(0, 4) + ' '}}{{'#month' + per.value.substring(4) | translate}}-->
+                    <!--</option>-->
+                <!--</select>-->
+
+            </td>
+            <td>
+                <div class="ui green mini statistic">
+                    <div class="label">
+                        {{nachisl.name}}
+                    </div>
+                    <div class="value">
+                        {{nachisl.sum*-1 | number:2 }} тг.
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="ui pink mini statistic">
+                    <div class="label">
+                        {{forfeit.name}}
+                    </div>
+                    <div class="value">
+                        {{forfeit.sum*-1 | number:2 }} тг.
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="ui orange mini statistic">
+                    <div class="label">
+                        {{payment.name}}
+                    </div>
+                    <div class="value">
+                        {{payment.sum | number:2 }} тг.
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="ui mini statistic" ng-class="{'green':(payment.sum + nachisl.sum + forfeit.sum)<0, 'red':(payment.sum + nachisl.sum + forfeit.sum)>0}">
+                    <div class="label">
+                        Всего должны
+                    </div>
+                    <div class="value">
+                        {{(payment.sum + nachisl.sum + forfeit.sum)*-1 | number:2}} тг.
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <table class="ui basic table">
+        <tr>
+
+            <td style="vertical-align: top; height: 20%;">
+                <div class="ui green mini statistic">
+                    <div class="label">
+                        {{"Пройдено клиентов"}}
+                    </div>
+                    <div class="value">
+                        {{totalClientsPassed}}
+                    </div>
+                </div>
+            </td>
+            <td style="vertical-align: top">
+                <div class="ui pink mini statistic">
+                    <div class="label">
+                        {{"Всего клиентов"}}
+                    </div>
+                    <div class="value">
+                        {{totalClients}}
+                    </div>
+                </div>
+            </td>
+            <td width="500" rowspan="2">
+                <div id="container">
+                    <!--<highchart config="highChartConfig"></highchart>-->
+                </div>
+            </td>
+            <!--<td>-->
+                <!--<div class="ui orange mini statistic">-->
+                    <!--<div class="label">-->
+                        <!--{{payment.name}}-->
+                    <!--</div>-->
+                    <!--<div class="value">-->
+                        <!--{{payment.sum | number:2 }} тг.-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</td>-->
+            <!--<td>-->
+                <!--<div class="ui mini statistic" ng-class="{'green':(payment.sum + nachisl.sum + forfeit.sum)<0, 'red':(payment.sum + nachisl.sum + forfeit.sum)>0}">-->
+                    <!--<div class="label">-->
+                        <!--Всего должны-->
+                    <!--</div>-->
+                    <!--<div class="value">-->
+                        <!--{{(payment.sum + nachisl.sum + forfeit.sum)*-1 | number:2}} тг.-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</td>-->
+        </tr>
+        <tr>
+            <td colspan="2" style="vertical-align: top">
+                <table class="ui basic table">
+                    <tr>
+                        <th>
+                            Контроллер
+                        </th>
+                        <th>
+                            Пройдено
+                        </th>
+                        <th>
+                            Осталось
+                        </th>
+                    </tr>
+                    <tr ng-repeat="item in controllers">
+                        <td>
+                            {{item.fullName}}
+                        </td>
+                        <td>
+                            {{getContollersPassed(item._id)}}
+                        </td>
+                        <td>
+                            {{getContollersRest(item._id)}}
+                        </td>
+                    </tr>
+                </table>
+            </td>
+
+        </tr>
+    </table>
+
+
+
+
+</div>

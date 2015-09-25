@@ -11,11 +11,55 @@
     <div>
         <table class="ui basic table">
             <tr>
-                <td>Период: июль 2015</td>
-                <td>{{nachisl.name}} : {{nachisl.sum | number:2 }} тг.</td>
-                <td>{{forfeit.name}} : {{forfeit.sum | number:2 }} тг.</td>
-                <td>{{payment.name}} : {{payment.sum | number:2 }} тг.</td>
-                <td>Всего должны : {{payment.sum + nachisl.sum + forfeit.sum | number:2}} тг.</td>
+                <td>Период: &nbsp;
+                    <select class="ui search dropdown" ng-model="period.value" ng-change="refresh();">
+                        <option ng-repeat="per in periods" value="{{per.value}}" ng-selected="period">
+                            {{per.value.substring(0, 4) + ' '}}{{'#month' + per.value.substring(4) | translate}}
+                        </option>
+                    </select>
+
+                </td>
+                <td>
+                    <div class="ui green mini statistic">
+                        <div class="label">
+                            {{nachisl.name}}
+                        </div>
+                        <div class="value">
+                            {{nachisl.sum*-1 | number:2 }} тг.
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="ui pink mini statistic">
+                        <div class="label">
+                            {{forfeit.name}}
+                        </div>
+                        <div class="value">
+                            {{forfeit.sum*-1 | number:2 }} тг.
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="ui orange mini statistic">
+                        <div class="label">
+                            {{payment.name}}
+                        </div>
+                        <div class="value">
+                            {{payment.sum | number:2 }} тг.
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="ui mini statistic"
+                         ng-class="{'green':(payment.sum + nachisl.sum + forfeit.sum)<0, 'red':(payment.sum + nachisl.sum + forfeit.sum)>0}">
+                        <div class="label">
+                            Всего должны
+                        </div>
+                        <div class="value">
+                            {{(payment.sum + nachisl.sum + forfeit.sum)*-1 | number:2}} тг.
+                        </div>
+                    </div>
+                </td>
             </tr>
         </table>
 
@@ -39,16 +83,17 @@
     <div class="ui divided items" style="background-color: #fafafa;">
         <div class="item" ng-repeat="item in data" style="background-color: {{item.color}}">
 
+
             <div class="content" ng-class="{'selectedBlock': item.isShowCounters}">
                 <a class="header">{{item.name}}</a>
-
+                <!--<a class="ui red right ribbon label">Долг</a>-->
                 <div>
                     <div class="ui grid">
                         <!--<div class="row">-->
                         <div class="four wide column">
                             {{item.address}}
                         </div>
-                        <div class="four wide column">
+                        <div class="two wide column">
                             {{item.bin}}
                         </div>
                         <div class="tree wide column">
@@ -56,8 +101,39 @@
                                 <i class="dashboard icon"></i> {{item.pipelines.length}}
                             </div>
                         </div>
-                        <div class="two wide column">
+                        <div class="one wide column">
                             <span ng-bind="item.controllerId.fullName"></span>
+                        </div>
+
+                        <div ng-repeat="bal in item.balances" class="two wide column">
+
+                            <div class="ui green mini statistic"
+                                 ng-class="{green:(bal.name=='Начисление'), pink:(bal.name=='Штраф'), orange: (bal.name=='Оплата')}">
+                                <div class="label">
+                                    {{bal.name}}
+                                </div>
+                                <div class="value" style="font-size: small;">
+                                    {{bal.sum<0?bal.sum*-1:bal.sum | number:2}} тг.
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="two wide column">
+
+                            <div class="ui mini statistic"
+                                 ng-class="{'green':(item.balances.length>0?item.balances[0].sum + item.balances[1].sum + item.balances[2].sum:0)>0, 'red':(item.balances.length>0?item.balances[0].sum +item.balances[1].sum +item.balances[2].sum:0)<0}">
+                                <div class="label">
+                                    Сальдо:<br>
+                                </div>
+                                <div class="value" style="font-size: small;">
+                                    {{(item.balances.length>0?item.balances[0].sum +
+                                    item.balances[1].sum +
+                                    item.balances[2].sum:0) | number: 2}} тг.
+                                </div>
+                            </div>
+
+
                         </div>
 
                     </div>
@@ -82,13 +158,16 @@
                                 <tbody>
                                 <tr ng-repeat="pipeline in item.pipelines">
                                     <td style="width: 20px;">
-                                        <b>Ввод №: {{pipeline.number}}</b> <br><br>
-                                        По среднему: <b> (+ {{pipeline.avg}} м3)</b>
+                                        <b>Ввод:</b> {{pipeline.description}} <br><br>
                                         <input type="checkbox" checked="{{pipeline.isCountsByAvg}}"
-                                               ng-model="pipeline.isCountsByAvg"
-                                               ng-checked="pipeline.isCountsByAvg"
+                                               ng-model="pipeline.checkAvg"
                                                ng-change="byAverage(pipeline)"/>
-
+                                        <b>По ср.: (+ {{pipeline.avg}} м3)</b>
+                                        <br>
+                                        <input type="checkbox" checked="{{pipeline.isCountsByNorm}}"
+                                               ng-model="pipeline.checkNorm"
+                                               ng-change="byNorm(pipeline)"/>
+                                        <b>По норме: (+ {{pipeline.norm}} м3)</b>
                                     </td>
                                     <td colspan="8">
                                         <table class="ui basic table">
@@ -101,6 +180,7 @@
                                                 <th>{{'#currentCounts'|translate}} &nbsp; (м3)</th>
                                                 <th>*{{'#dateOfCurrent'|translate}}</th>
                                                 <th>{{'#problemDescription'|translate}}</th>
+                                                <th></th>
                                                 <th></th>
                                             </tr>
 
@@ -130,9 +210,9 @@
                                                 <td>
                                                     <div class="ui form">
                                                         <div class="one fields">
-                                                            <div ng-class="{'disabled field': pipeline.isCountsByAvg}">
+                                                            <div ng-class="{'disabled field': pipeline.checkAvg || pipeline.checkNorm}">
                                                                 <input type="text" ng-model="counter.currentCounts"
-                                                                       ng-disabled="counter.isCountsByAvg">
+                                                                       ng-disabled="pipeline.checkAvg || pipeline.checkNorm">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -157,6 +237,14 @@
                                                 <td>
                                                     <div class="ui small basic icon buttons right floated">
                                                         <button class="ui button"
+                                                                ng-click="updateClient(item, counter, pipeline, true)">
+                                                            <i
+                                                                    class="large delete icon"></i></button>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="ui small basic icon buttons right floated">
+                                                        <button class="ui button"
                                                                 ng-click="updateClient(item, counter, pipeline)"><i
                                                                 class="large save icon"></i></button>
                                                     </div>
@@ -171,12 +259,12 @@
                                     <td>Всего:</td>
                                     <td ng-repeat="bal in item.balances">
                                         {{bal.name}} :
-                                        {{bal.sum | number:2}}
+                                        {{(bal.sum<0?bal.sum*-1:bal.sum) | number:2}}
                                     </td>
                                     <td>Сальдо:
-                                        {{item.balances[0].sum +
+                                        {{(item.balances[0].sum +
                                         item.balances[1].sum +
-                                        item.balances[2].sum | number: 2}}
+                                        item.balances[2].sum)*-1 | number: 2}}
                                     </td>
                                     <td>Минимум: {{item.clientType.minConsumption}} (м3)</td>
                                     <td></td>
@@ -231,16 +319,16 @@
         </div>
         <div class="content">
 
-            <form name="paymentForm" novalidate class="ui form">
+            <form name="paymentForm" class="ui form">
                 <div class="field">
-                    <label>{{'#Сумма' | translate}}</label>
+                    <label>*{{'#Сумма' | translate}}</label>
                     <input type="text" name="sum" placeholder="{{'#Сумма' | translate}}" ng-model="$parent.enteredSum"
-                           required>
+                            >
                 </div>
                 <div class="field">
-                    <label>{{'#Номер квитанции' | translate}} </label>
+                    <label>*{{'#Номер квитанции' | translate}} </label>
                     <input type="text" name="receiptNumber" placeholder="{{'#Номер квитанции' | translate}}"
-                           ng-model="$parent.enteredReceiptNumber" required>
+                           ng-model="$parent.enteredReceiptNumber">
                 </div>
             </form>
 
@@ -253,7 +341,11 @@
                     Закрыть
                 </div>
                 <div class="ui positive right labeled icon button"
-                     ng-click="sendPayment()">
+                     ng-click="sendPayment()"
+                     ng-class="{'disabled':
+                     $parent.enteredReceiptNumber == '' || $parent.enteredReceiptNumber == null ||
+                     $parent.enteredSum == '' || $parent.enteredSum == null
+                     }">
                     <span ng-bind="'#Оплатил' | translate"></span>
                     <i class="checkmark icon"></i>
                 </div>

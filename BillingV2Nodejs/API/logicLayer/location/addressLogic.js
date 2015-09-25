@@ -11,3 +11,11 @@ exports.getAll = function (done) {
         done(data);
     });
 };
+
+exports.getChildrenByParentId = function (parentId, done){
+    repo.getChildrenByParentId(parentId, done);
+};
+
+exports.getByAddressTypeId = function (typeId, done){
+    repo.getChildrenByParentId(typeId, done);
+};

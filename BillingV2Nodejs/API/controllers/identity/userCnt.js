@@ -42,4 +42,9 @@ module.exports = function (router) {
             operationResultBuilder(data, res);
         });
     });
+
+    router.route("/identity/getUserByToken")
+        .get(function (req, res){
+        res.json(req.user);
+    });
 }

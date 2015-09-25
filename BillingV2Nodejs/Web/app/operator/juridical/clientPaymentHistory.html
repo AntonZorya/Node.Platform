@@ -63,6 +63,7 @@
                 <table class="ui table">
                     <thead>
                     <tr>
+                        <th>Тип</th>
                         <th>Дата</th>
                         <th>Вода (тг.)</th>
                         <th>Канализация (тг.)</th>
@@ -75,11 +76,15 @@
                     </thead>
                     <tbody>
                     <tr ng-repeat="data in item.data">
+                        <td>
+                            <div ng-if="data.calculationType === 1">По среднему ( {{data.daysCountByAvg}} дн.)</div>
+                            <div ng-if="data.calculationType === 0">По счетчику</div>
+                        </td>
                         <td>{{data.date | date:'dd.MM.yyyy hh:mm:ss'}}</td>
                         <td>{{data.waterSum | number:2}}</td>
                         <td>{{data.canalSum | number:2}}</td>
-                        <td>{{data.waterCubicMetersCount}}</td>
-                        <td>{{data.canalCubicMetersCount}}</td>
+                        <td>{{data.waterCubicMetersCount | number:2}}</td>
+                        <td>{{data.canalCubicMetersCount | number:2}}</td>
                         <td>{{data.shortageSum}}</td>
                         <td>{{data.shortageCubicMeters}}</td>
                         <td>{{data.balanceId.sum | number:2}}</td>

@@ -32,12 +32,11 @@ exports.getByValue = function (value, done) {
 };
 
 exports.getChildrenByParentId = function (parentId, done) {
-    Collection.find({parentId: parentId, isDeleted: false}, function (err, res) {
+    Collection.find({parentId: parentId, isDeleted: false}, null, {sort: {value: 1}}, function (err, res) {
         if (err) done(errorBuilder(err));
         done({operationResult: 0, result: res});
     });
 };
-
 
 exports.getAll = function (done) {
     Collection.find({isDeleted: false}, null, {sort: {name: 1}}, function (err, res) { //,
@@ -45,7 +44,3 @@ exports.getAll = function (done) {
         return done({operationResult: 0, result: res});
     });
 };
-
-
-
-

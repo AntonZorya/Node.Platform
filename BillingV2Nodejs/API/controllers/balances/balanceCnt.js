@@ -11,7 +11,7 @@ module.exports = function (router) {
 
     router.route('/balance/getAllBalance').
         get(function (req, res) {
-            Logic.getAllBalance(function (data) {
+            Logic.getAllBalance(req.query.period, function (data) {
                 operationResultBuilder(data, res);
             });
         });
@@ -19,7 +19,7 @@ module.exports = function (router) {
 
     router.route('/balance/getTotalByClientJurId').
         get(function (req, res) {
-            Logic.getTotalByClientJurId(req.query.clientJurId, function (data) {
+            Logic.getTotalByClientJurId(req.query.clientJurId, req.query.period, function (data) {
                 operationResultBuilder(data, res);
             });
         });

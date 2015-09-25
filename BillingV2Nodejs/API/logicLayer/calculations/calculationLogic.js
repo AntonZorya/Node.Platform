@@ -21,16 +21,20 @@ exports.addMany = function (calculations, done) {
 
     _.each(calculations, function (calculation, index) {
 
-        validator('calculation', calcDefinition, calculation, function (validationRes) {
-            if (validationRes.operationResult == 0) {
-                CalcRepo.add(calculation, function (data) {
+        if (calculation != null)
+            validator('calculation', calcDefinition, calculation, function (validationRes) {
+                if (validationRes.operationResult == 0) {
+                    CalcRepo.add(calculation, function (data) {
+                        if (calculations.length - 1 === index)
+                            return done(data);
+                    });
+                }
+                else {
                     if (calculations.length - 1 === index)
-                        done(data);
-                });
-            }
-            else
-                done(validationRes);
-        });
+                        done(validationRes);
+                }
+
+            });
     });
 };
 
@@ -51,5 +55,9 @@ exports.getByCounterId = function (counterId, period, done) {
     CalcRepo.getByCounterId(counterId, period, function (data) {
         return done(data);
     });
+};
+
+exports.remove = function(calculationId, done){
+    CalcRepo.remove(calculationId, done);
 };
 

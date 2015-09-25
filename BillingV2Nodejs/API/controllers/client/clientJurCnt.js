@@ -52,7 +52,7 @@ module.exports = function (router) {
 
     router.route("/clientJur/search")
         .get(function (req, res) {
-            Logic.search(req.query.searchTerm, function (data) {
+            Logic.search(req.query.searchTerm, req.query.period, req.user, function (data) {
                 operationResultBuilder(data, res);
             });
         });
@@ -64,5 +64,10 @@ module.exports = function (router) {
             });
         });
 
-
+    router.route('/clientJur/getPeriods')
+        .get(function (req, res){
+            Logic.getPeriods(function(data){
+                operationResultBuilder(data, res);
+            });
+        });
 };

@@ -26,6 +26,5 @@ build/Release
 # https://www.npmjs.org/doc/misc/npm-faq.html#should-i-check-my-node_modules-folder-into-git
 node_modules
 !BillingV2Nodejs/API/odata/**/node_modules
-BillingV2Nodejs/.idea/dictionaries/Dmitriy.xml
-BillingV2Nodejs/.idea/encodings.xml
-BillingV2Nodejs/.idea/encodings.xml
+.idea/*
+BillingV2Nodejs/.idea/*

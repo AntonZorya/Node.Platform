@@ -25,16 +25,20 @@ exports.addMany = function (balances, done) {
 
     _.each(balances, function (balance, index) {
 
-        validator('balance', balanceDefinition, balance, function (validationRes) {
-            if (validationRes.operationResult == 0) {
-                BalanceRepo.add(balance, function (data) {
+        if (balance != null)
+            validator('balance', balanceDefinition, balance, function (validationRes) {
+                if (validationRes.operationResult == 0) {
+                    BalanceRepo.add(balance, function (data) {
+                        if (balances.length - 1 === index)
+                            return done(data);
+                    });
+                }
+                else {
                     if (balances.length - 1 === index)
-                        done(data);
-                });
-            }
-            else
-                done(validationRes);
-        });
+                        done(validationRes);
+                }
+
+            });
     });
 };
 
@@ -69,14 +73,14 @@ exports.getByPeriod = function (dateFrom, dateTo, done) {
     });
 };
 
-exports.getAllBalance = function (done) {
-    BalanceRepo.getAllBalance(function (data) {
+exports.getAllBalance = function (period, done) {
+    BalanceRepo.getAllBalance(period, function (data) {
         done(data);
     });
 };
 
-exports.getTotalByClientJurId = function (clientJurId, done) {
-    BalanceRepo.getByClientJurId(clientJurId, function (response) {
+exports.getTotalByClientJurId = function (clientJurId, period, done) {
+    BalanceRepo.getByClientJurId(clientJurId, period, function (response) {
 
         var balances = response.result;
 
@@ -169,10 +173,11 @@ exports.getByPeriodAndClientIdWithDetails = function (clientJurId, period, done)
 
     });
 
-
 };
 
-
+exports.remove = function (balanceId, done) {
+    BalanceRepo.remove(balanceId, done);
+}
 
 
 
