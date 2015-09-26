@@ -1,6 +1,6 @@
 var ClientFizRepo = require('../../dataLayer/repositories/client/clientFizRepo');
 var clientFizValidator = require(_helpersMongoosePath + 'validator');
-var clientFizDefinition = require(_modelsPath + 'client/clientFiz');
+var clientFizDefinition = require(_modelsPath + 'client/fizical/clientFiz');
 var async = require('async');
 
 var BalanceLogic = require('../../logicLayer/balance/balanceLogic');

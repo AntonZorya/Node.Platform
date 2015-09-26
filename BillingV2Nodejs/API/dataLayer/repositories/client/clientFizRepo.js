@@ -1,4 +1,4 @@
-var ClientFizDef = require('../../models/client/clientFiz');
+var ClientFizDef = require('../../models/client/fizical/clientFiz');
 var clientTypeDef = require('../../models/client/clientType');
 var CollectionSchema = new require('../../../helpers/mongoose/modelBuilder')('ClientFiz', ClientFizDef, true);
 var Collection = new require('../../../helpers/mongoose/modelBuilder')('ClientFiz', ClientFizDef);
