@@ -1,4 +1,4 @@
-var ModelBase = require('../../base/modelBase');
+var ModelBase = require('../base/modelBase');
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var _ = require('underscore');
