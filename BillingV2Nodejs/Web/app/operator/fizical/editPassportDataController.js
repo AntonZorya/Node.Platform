@@ -1,4 +1,4 @@
-billingApplication.controller('editPassportDataController', ['$scope', 'dataService', 'modalSvc', 'toastr', editPassportDataController]);
+billingApplication.controller('editPassportDataFizController', ['$scope', 'dataService', 'modalSvc', 'toastr', editPassportDataController]);
 
 function editPassportDataController($scope, dataService, modalSvc, toastr) {
     $scope.modalItem = {};

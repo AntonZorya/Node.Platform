@@ -3,7 +3,7 @@ var clientFizValidator = require(_helpersMongoosePath + 'validator');
 var clientFizDefinition = require(_modelsPath + 'client/clientFiz');
 var async = require('async');
 
-var BalanceLogic = require('../../logicLayer/balance/balanceLogic');
+var BalanceLogic = require('../../logicLayer/balance/balanceFizLogic');
 var CalculationLogic = require('../../logicLayer/calculations/calculationLogic');
 var TariffLogic = require('../../logicLayer/tariff/tariffLogic');
 var mongoose = require('mongoose');
@@ -97,7 +97,7 @@ exports.search = function (searchTerm, period, user, done) {
 
 		if(res.operationResult==0){
 			async.each(res.result, function(client, callback){
-				BalanceLogic.getTotalByClientFizId(client._doc._id, period, function(balancesRes){
+				BalanceLogic.getTotalByClientId(client._doc._id, period, function(balancesRes){
 					client._doc.balances = balancesRes.result;
 					callback();
 				});

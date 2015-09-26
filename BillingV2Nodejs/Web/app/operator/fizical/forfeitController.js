@@ -1,4 +1,4 @@
-billingApplication.controller('forfeitController', ['$scope', 'dataService', 'modalSvc', 'toastr', forfeitController]);
+billingApplication.controller('forfeitFizController', ['$scope', 'dataService', 'modalSvc', 'toastr', forfeitController]);
 
 function forfeitController($scope, dataService, modalSvc, toastr) {
 

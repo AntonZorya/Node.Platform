@@ -1,4 +1,4 @@
-billingApplication.controller('clientPaymentHistoryController', ['$scope', 'dataService', 'modalSvc', 'toastr', clientPaymentHistoryController]);
+billingApplication.controller('clientPaymentHistoryFizController', ['$scope', 'dataService', 'modalSvc', 'toastr', clientPaymentHistoryController]);
 
 function clientPaymentHistoryController($scope, dataService, modalSvc, toastr) {
 
@@ -11,7 +11,7 @@ function clientPaymentHistoryController($scope, dataService, modalSvc, toastr) {
     $scope.modalItem.clientBalanceDetails = [];
     $scope.getByPeriodAndClientIdWithDetails = function () {
 
-        dataService.get('/balance/getByPeriodAndClientIdWithDetails', {
+        dataService.get('/balanceFiz/getByPeriodAndClientIdWithDetails', {
             clientId: id,
             period: period
         }).then(function (response) {

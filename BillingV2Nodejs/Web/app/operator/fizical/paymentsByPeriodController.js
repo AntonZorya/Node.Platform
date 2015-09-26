@@ -1,4 +1,4 @@
-billingApplication.controller('paymentsByPeriodController', ['$scope', 'dataService', 'modalSvc', 'toastr', paymentsByPeriodController]);
+billingApplication.controller('paymentsByPeriodFizController', ['$scope', 'dataService', 'modalSvc', 'toastr', paymentsByPeriodController]);
 
 function paymentsByPeriodController($scope, dataService, modalSvc, toastr) {
 
@@ -13,14 +13,14 @@ function paymentsByPeriodController($scope, dataService, modalSvc, toastr) {
 
     $scope.balances = [];
     $scope.balancesByPeriod = function () {
-        dataService.get('/balance/getByPeriod', {
+        dataService.get('/balanceFiz/getByPeriod', {
             dateFrom: $scope.dateFrom,
             dateTo: $scope.dateTo
         }).then(function (response) {
             var balances = response.result;
 
             $scope.groupedBalances = _(balances).groupBy(function (bal) {
-                return bal.clientFizId.name;
+                return bal.clientId.name;
             });
 
             $scope.balancesRes = [];

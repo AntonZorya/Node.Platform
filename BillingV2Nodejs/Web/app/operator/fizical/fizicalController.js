@@ -286,7 +286,7 @@ function fizicalController($scope, dataService, toastr, printSvc, $templateCache
 
     $scope.getAllBalance = function () {
         //TODO: оптимизировать - посчитать на сервере и вернуть на клиента только суммы по всем клиентам
-        dataService.get('/balance/getAllBalance', {period: $scope.period.value}).then(function (response) {
+        dataService.get('/balanceFiz/getAllBalance', {period: $scope.period.value}).then(function (response) {
 
             var groupedBalances = _(response.result).groupBy(function (bal) {
                 return bal.balanceTypeId.name;
@@ -321,7 +321,7 @@ function fizicalController($scope, dataService, toastr, printSvc, $templateCache
 
     $scope.getBalanceForClient = function (id) {
 
-        dataService.get('/balance/getTotalByClientFizId', {
+        dataService.get('/balanceFiz/getTotalByClientId', {
             clientFizId: id,
             period: $scope.period.value
         }).then(function (response) {
