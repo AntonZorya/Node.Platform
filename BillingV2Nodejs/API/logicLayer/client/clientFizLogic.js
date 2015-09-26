@@ -9,6 +9,7 @@ var TariffLogic = require('../../logicLayer/tariff/tariffLogic');
 var mongoose = require('mongoose');
 var _ = require('underscore');
 
+
 exports.add = function (clientFiz, orgId, done) {
 
 	clientFiz.organizationId = orgId;
@@ -85,13 +86,52 @@ exports.delete = function (id, done) {
 	});
 };
 
-exports.search = function (searchTerm, done) {
-	ClientFizRepo.search(searchTerm, function (res) {
-		return done(res);
+exports.getPeriods = function (done) {
+	ClientFizRepo.getPeriods(function (res) {
+		done({operationResult: 0, result: res.result});
+	});
+}
+
+exports.search = function (searchTerm, period, user, done) {
+	ClientFizRepo.search(searchTerm, period, user, function (res) {
+
+		if(res.operationResult==0){
+			async.each(res.result, function(client, callback){
+				BalanceLogic.getTotalByClientFizId(client._doc._id, period, function(balancesRes){
+					client._doc.balances = balancesRes.result;
+					callback();
+				});
+			}, function(){
+				return done(res);
+			})
+		} else {
+			return done(res);
+		}
+
+
 	});
 };
 
 exports.updateClientCounter = function (body, userId, done) {
+
+	if (body.withClear) {
+		CalculationLogic.getByCounterId(body.counter._id, body.period, function (calcByCounterResp) {
+			if (calcByCounterResp.operationResult === 0 && calcByCounterResp.result) {
+				BalanceLogic.remove(calcByCounterResp.result._doc.balanceId, function (res) {
+					if (res.operationResult === 0) {
+						CalculationLogic.remove(calcByCounterResp.result._doc._id, function (res) {
+							if (res.operationResult === 0) {
+								ClientFizRepo.update(body.client, function (counterResp) {
+									done(counterResp);
+								});
+							}
+						})
+					}
+				});
+			}
+		});
+		return;
+	}
 
 	var clientFiz = body.client;
 	var pipeline = body.pipeline;
@@ -111,8 +151,13 @@ exports.updateClientCounter = function (body, userId, done) {
 		var waterCalcCubicMeters = 0;
 		var canalCalcCubicMetersCount = 0;
 
-		waterCalcCubicMeters = (counter.currentCounts - counter.lastCounts) * (pipeline.waterPercent / 100);
-		canalCalcCubicMetersCount = (counter.currentCounts - counter.lastCounts) * (pipeline.canalPercent / 100);
+		if (pipeline.sourceCounts != 2) {
+			waterCalcCubicMeters = (counter.currentCounts - counter.lastCounts) * (pipeline.waterPercent / 100);
+			canalCalcCubicMetersCount = (counter.currentCounts - counter.lastCounts) * (pipeline.canalPercent / 100);
+		} else{
+			waterCalcCubicMeters = pipeline.norm * (pipeline.waterPercent / 100);
+			canalCalcCubicMetersCount = pipeline.norm * (pipeline.canalPercent / 100);
+		}
 
 		var waterSum = 0;
 		var canalSum = 0;
@@ -127,13 +172,14 @@ exports.updateClientCounter = function (body, userId, done) {
 			_id: balanceId,
 			balanceTypeId: balanceTypeId,
 			clientFizId: clientFiz._id,
-			sum: (waterSum + canalSum) * -1,
+			sum: waterSum + canalSum,
 			period: period,
 			//аудит
 			date: new Date(),
 			userId: userId
 		};
-		var balanceAvg = {};
+		//без счетчика по среднему
+		var balanceAvg = null;//в CalculationLogic идет проверка на null
 
 		//добор/недобор
 		var isShortage = false;
@@ -151,18 +197,18 @@ exports.updateClientCounter = function (body, userId, done) {
 			tariff: tariff,
 			waterSum: waterSum,
 			canalSum: canalSum,
-
 			//считаем от минимума
 			isShortage: isShortage, //добор/недобор,
 			shortageCubicMeters: shortageCubicMeters, //недобор м3,
 			shortageSum: shortageSum, //недобор тг
-
 			period: period,
 			//аудит
 			date: new Date(),
-			userId: userId
+			userId: userId,
+			calculationType: 0 //0 - по счетчику, 1 - по среднему,
 		};
-		var calculationAvg = {};
+		var calculationAvg = null;//без счетчика по среднему, в CalculationLogic идет проверка на null
+		var minConsumption = clientFiz.clientType.minConsumption;
 
 		//находим предыдущие показания в этом периоде
 		CalculationLogic.getByCounterId(counter._id, period, function (calcByCounterResp) {
@@ -175,7 +221,7 @@ exports.updateClientCounter = function (body, userId, done) {
 
 				BalanceLogic.update(balance, function (balanceResp) {
 					CalculationLogic.update(calculation, function (calcResp) {
-						clientFizRepo.update(clientFiz, function (counterResp) {
+						ClientFizRepo.update(clientFiz, function (counterResp) {
 							done(counterResp);
 						});
 					});
@@ -219,10 +265,12 @@ exports.updateClientCounter = function (body, userId, done) {
 
 						//
 						var balanceIdForAvg = mongoose.Types.ObjectId();
+						balanceAvg = {};
 						balanceAvg = _.extend(balanceAvg, balance);
 						balanceAvg._id = balanceIdForAvg;
-						balanceAvg.sum = (avgWaterSum + avgCanalSum) * -1;
+						balanceAvg.sum = avgWaterSum + avgCanalSum;
 
+						calculationAvg = {};
 						calculationAvg = _.extend(calculationAvg, calculation);
 						calculationAvg.counterId = null; //без счетчика
 						calculationAvg.balanceId = balanceIdForAvg;
@@ -230,10 +278,21 @@ exports.updateClientCounter = function (body, userId, done) {
 						calculationAvg.canalCubicMetersCount = canalCount;
 						calculationAvg.waterSum = avgWaterSum;
 						calculationAvg.canalSum = avgCanalSum;
+						calculationAvg.calculationType = 1; //0 - по счетчику, 1 - по среднему,
+						calculationAvg.daysCountByAvg = daysDifferenceCount;
+
+						if (minConsumption) {
+							isShortageAvg = calculationAvg.waterCubicMetersCount < calculationAvg.minConsumption;
+							if (isShortageAvg) {
+								calculationAvg.shortageCubicMeters = minConsumption ? minConsumption - calculationAvg.waterCubicMetersCount : 0;
+								calculationAvg.shortageSum = calculationAvg.shortageCubicMeters * tariff.water;
+							}
+						}
+
 					}
 				}
 
-				var minConsumption = clientFiz.clientType.minConsumption;
+
 				if (minConsumption) {
 
 					isShortage = calculation.waterCubicMetersCount < calculation.minConsumption;
@@ -241,20 +300,23 @@ exports.updateClientCounter = function (body, userId, done) {
 						calculation.shortageCubicMeters = minConsumption ? minConsumption - calculation.waterCubicMetersCount : 0;
 						calculation.shortageSum = calculation.shortageCubicMeters * tariff.water;
 					}
+				}
 
-					isShortageAvg = calculationAvg.waterCubicMetersCount < calculationAvg.minConsumption;
-					if (isShortageAvg) {
-						calculationAvg.shortageCubicMeters = minConsumption ? minConsumption - calculationAvg.waterCubicMetersCount : 0;
-						calculationAvg.shortageSum = calculationAvg.shortageCubicMeters * tariff.water;
+				BalanceLogic.addMany([balanceAvg, balance], function (balanceAvgResp) {
+					if (balanceAvgResp.operationResult === 0) {
+						CalculationLogic.addMany([calculationAvg, calculation], function (calculationAvgResp) {
+							if (calculationAvgResp.operationResult === 0) {
+								ClientFizRepo.update(clientFiz, function (counterResp) {
+									done(counterResp);
+								});
+							} else {
+								console.log('Ошибка вставки в коллекцию calculations');
+							}
+						});
+					} else {
+						console.log('Ошибка вставки в коллекцию balances');
 					}
 
-				}
-				BalanceLogic.addMany([balanceAvg, balance], function (balanceAvgResp) {
-					CalculationLogic.addMany([calculationAvg, calculation], function (calculationAvgResp) {
-						clientFizRepo.update(clientFiz, function (counterResp) {
-							done(counterResp);
-						});
-					});
 				});
 			}
 

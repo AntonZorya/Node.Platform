@@ -1,6 +1,5 @@
 var Logic = require('../../logicLayer/client/clientFizLogic');
 
-
 module.exports = function (router) {
 	router.route('/clientFiz/add').
 		post(function (req, res) {
@@ -16,14 +15,14 @@ module.exports = function (router) {
 			});
 		});
 
-	router.route('/clientsFizByCtrl').
+	router.route('/clientsByCtrl').
 		get(function (req, res) {
 			Logic.getAllByControllerId(req.query.controllerId, function (data) {
 				operationResultBuilder(data, res);
 			});
 		});
 
-	router.route('/syncClientsFiz').
+	router.route('/syncClients').
 		post(function (req, res) {
 			Logic.sync(req.body.clients, function (data) {
 				operationResultBuilder(data, res);
@@ -53,7 +52,7 @@ module.exports = function (router) {
 
 	router.route("/clientFiz/search")
 		.get(function (req, res) {
-			Logic.search(req.query.searchTerm, function (data) {
+			Logic.search(req.query.searchTerm, req.query.period, req.user, function (data) {
 				operationResultBuilder(data, res);
 			});
 		});
@@ -65,5 +64,10 @@ module.exports = function (router) {
 			});
 		});
 
-
+	router.route('/clientFiz/getPeriods')
+		.get(function (req, res){
+			Logic.getPeriods(function(data){
+				operationResultBuilder(data, res);
+			});
+		});
 };
