@@ -20,6 +20,7 @@ var async = require('async');
 
 var clientFizRepo = rootRequire('dataLayer/repositories/client/clientFizRepo');
 var addressRepo = rootRequire('dataLayer/repositories/location/addressFizRepo');
+var addressTypeRepo = rootRequire('dataLayer/repositories/location/addressTypeRepo');
 
 var workbook = XLS.readFile('API/inputData/clientFiz.xls');
 var sheet_name_list = workbook.SheetNames;
@@ -51,7 +52,9 @@ async.series([
         var houseTypeId = mongoose.Types.ObjectId('55c1f5bfd39acd07553e4fdf');
         var flatTypeId = mongoose.Types.ObjectId('55c1f5d7d39acd07553e4fe1');
 
-        async.each(clientFizExcel, function (rowArray) {
+        var i = 0;
+
+        async.each(clientFizExcel, function (rowArray, eachDone) {
 
             if (typeof rowArray[5] != 'undefined') {
 
@@ -168,23 +171,24 @@ async.series([
                     }
                 }
             }
+            console.log(i++);
+            eachDone();
         }, function(error){
             if (error){
                 callback(error);
             } else{
-                _.each(addresses, function(addr){
+                async.each(addresses, function(addr, done){
                     addressRepo.add(addr, function(){
-                        console.log('Added address:', addr);
+                        console.log('Added address:', addr.value);
+                        done();
                     });
+                }, function(){
+                    callback();
                 });
             }
         });
     }
 
 ], function (error, results) {
-    if (error) {
-        console.log(error);
-    } else {
-        console.log(results);
-    }
-})
+    console.log('DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE');
+});
