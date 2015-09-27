@@ -1,4 +1,4 @@
-var ClientFizDef = require('../../models/client/fizical/clientFiz');
+var ClientFizDef = require('../../models/client/clientFiz');
 var clientTypeDef = require('../../models/client/clientType');
 var CollectionSchema = new require('../../../helpers/mongoose/modelBuilder')('ClientFiz', ClientFizDef, true);
 var Collection = new require('../../../helpers/mongoose/modelBuilder')('ClientFiz', ClientFizDef);
@@ -9,9 +9,10 @@ var Address = new require('../../../helpers/mongoose/modelBuilder')('Address', a
 
 var tariffDef = require('../../models/tariff/tariff');
 var Tariff = new require('../../../helpers/mongoose/modelBuilder')('Tariff', tariffDef);
-
 var mongoose = require('mongoose');
 var deepPopulate = require('mongoose-deep-populate')(mongoose);
+var async = require('async');
+
 CollectionSchema.plugin(deepPopulate, {
     whitelist: [
         'tariffId',
@@ -24,60 +25,57 @@ CollectionSchema.plugin(deepPopulate, {
 exports.add = function (client, done) {
     var model = Collection(client);
     model.save(function (err) {
-        if (err) return done(errorBuilder(err));
-        done({ operationResult: 0 });
+        if (err)return done(errorBuilder(err));
+        done({operationResult: 0});
     });
 };
 
 exports.getAll = function (orgId, done) {
-    Collection.find({ isDeleted: false }).populate("controllerId").populate('addressId').exec(function (err, clients) {
+    Collection.find({isDeleted: false}).populate("controllerId").populate('addressId').exec(function (err, clients) {
         if (err) return done(errorBuilder(err));
-        return done({ operationResult: 0, result: clients });
+        return done({operationResult: 0, result: clients});
     });
 };
 
 exports.getAllByCtrlId = function (ctrlId, done) {
-    Collection.find({ isDeleted: false, controllerId: ctrlId }, function (err, clients) {
+    Collection.find({isDeleted: false, controllerId: ctrlId}, function (err, clients) {
         if (err) return done(errorBuilder(err));
-        return done({ operationResult: 0, result: clients });
+        return done({operationResult: 0, result: clients});
     });
 };
 
 exports.get = function (id, done) {
-    Collection.findById(id, { isDeleted: false }).deepPopulate('tariffId addressId').exec(function (err, client) {
+    Collection.findById(id, {isDeleted: false}).deepPopulate('tariffId addressId').exec(function (err, client) {
         if (err) return done(errorBuilder(err));
-        return done({ operationResult: 0, result: client });
+        return done({operationResult: 0, result: client});
     });
 };
 
 exports.update = function (client, done) {
     if (client._id) {
-
         Collection.findOneAndUpdate({_id: client._id}, client, {new: true}, function (err, res) {
             if (err) return done(errorBuilder(err));
             return done({operationResult: 0, result: res});
-
         });
     }
     else {
-        return done({ operationResult: 1, result: "#clientNotFound" });
+        return done({operationResult: 1, result: "#clientNotFound"});
     }
 };
 
 exports.delete = function (id, done) {
     if (id) {
-        Collection.findOneAndUpdate({ _id: id }, { isDeleted: true }, function (err) {
+        Collection.findOneAndUpdate({_id: id}, {isDeleted: true}, function (err) {
             if (err) return done(errorBuilder(err));
-            return done({ operationResult: 0 });
+            return done({operationResult: 0});
         });
     }
 };
 
 exports.report1 = function (period, done) {
     Collection.aggregate(
-        { $unwind: "$pipelines" },
-        { $unwind: "$pipelines.counters" },
-        // { $limit: 2 },
+        {$unwind: "$pipelines"},
+        {$unwind: "$pipelines.counters"},
         {
             $match: {
 
@@ -98,7 +96,7 @@ exports.report1 = function (period, done) {
                 yearMonthDay: {
                     $dateToString: {
                         format: "%Y-%m-%d",
-                        date: { $add: ["$pipelines.counters.dateOfCurrentCounts", 6 * 60 * 60 * 1000] }
+                        date: {$add: ["$pipelines.counters.dateOfCurrentCounts", 6 * 60 * 60 * 1000]}
                     }
                 },
             }
@@ -113,23 +111,70 @@ exports.report1 = function (period, done) {
 
         function (err, result) {
             if (err) return done(errorBuilder(err));
-            return done({ operationResult: 0, result: result });
+            return done({operationResult: 0, result: result});
+        }
+    );
+};
+
+exports.report5 = function (period, done) {
+    Collection.aggregate(
+        {
+            $match: {
+
+                $and: [
+                    {period: parseInt(period)},
+                    {"pipelines.counters.currentCounts": {$ne: null}},
+                    {"pipelines.counters.currentCounts": {$ne: ""}},
+                    {"pipelines.counters.currentCounts": {$ne: 0}},
+                    {"pipelines.counters.dateOfCurrentCounts": {$ne: null}}
+                ]
+
+            }
+        },
+
+        {
+            $group: {
+                _id: {controllerId: "$controllerId"},
+                total: {$sum: 1}
+            }
+        },
+
+        function (err, result) {
+            if (err) return done(errorBuilder(err));
+            return done({operationResult: 0, result: result});
+        }
+    );
+};
+
+exports.report6 = function (period, done) {
+    Collection.aggregate(
+
+        {
+            $group: {
+                _id: {controllerId: "$controllerId"},
+                total: {$sum: 1}
+            }
+        },
+
+        function (err, result) {
+            if (err) return done(errorBuilder(err));
+            return done({operationResult: 0, result: result});
         }
     );
 };
 
 exports.report2 = function (period, done) {
     Collection.aggregate(
-        { $unwind: "$counters" },
+        {$unwind: "$counters"},
         {
             $match: {
 
                 $and: [
-                    { period: parseInt(period) },
-                    { "counters.currentCounts": { $ne: null } },
-                    { "counters.currentCounts": { $ne: "" } },
-                    { "counters.currentCounts": { $ne: 0 } },
-                    { "counters.dateOfCurrentCounts": { $ne: null } }
+                    {period: parseInt(period)},
+                    {"counters.currentCounts": {$ne: null}},
+                    {"counters.currentCounts": {$ne: ""}},
+                    {"counters.currentCounts": {$ne: 0}},
+                    {"counters.dateOfCurrentCounts": {$ne: null}}
                 ]
 
             }
@@ -142,7 +187,7 @@ exports.report2 = function (period, done) {
                 yearMonthDay: {
                     $dateToString: {
                         format: "%Y-%m-%d",
-                        date: { $add: ["$counters.dateOfCurrentCounts", 6 * 60 * 60 * 1000] }
+                        date: {$add: ["$counters.dateOfCurrentCounts", 6 * 60 * 60 * 1000]}
                     }
                 },
             }
@@ -150,40 +195,73 @@ exports.report2 = function (period, done) {
 
         {
             $group: {
-                _id: { controllerId: "$controllerId", yearMonthDay: "$yearMonthDay" },
-                total: { $sum: "$currentCounts" }
+                _id: {controllerId: "$controllerId", yearMonthDay: "$yearMonthDay"},
+                total: {$sum: "$currentCounts"}
             }
         },
 
         function (err, result) {
             if (err) return done(errorBuilder(err));
-            return done({ operationResult: 0, result: result });
+            return done({operationResult: 0, result: result});
         }
     );
 };
 
-exports.search = function (searchTerm, done) {
-    Collection
-        .find(
-        { $text: { $search: searchTerm } },
-        { score: { $meta: "textScore" } },
-        { '$limit': 20 }
-    )
-        .sort({ score: { $meta: 'textScore' } })
-        .populate('clientType.tariffId')
-        .populate('addressId')
-        .populate('controllerId')
-        //.deepPopulate('tariffId addressId controllerId')
-        .exec(function (err, docs) {
-            if (err) return done(errorBuilder(err));
-            return done({ operationResult: 0, result: docs });
+exports.search = function (searchTerm, period, user, done) {
+    if (user.controllerId) {//test commit
+        Collection
+            .find(
+            {
+                $and: [
+                    {controllerId: user.controllerId},
+                    {period: period},
+                    {$text: {$search: searchTerm}}
+                ]
+            },
+            {score: {$meta: "textScore"}},
+            {'$limit': 20}
+        )
+            .sort({score: {$meta: 'textScore'}})
+            .populate('clientType.tariffId')
+            .populate('addressId')
+            .populate('controllerId')
+            .populate('kskId')
+            .exec(function (err, docs) {
+                if (err) return done(errorBuilder(err));
 
-        });
+                return done({operationResult: 0, result: docs});
+
+            });
+    } else {
+        Collection
+            .find(
+            {
+                $and: [
+                    {period: period},
+                    {$text: {$search: searchTerm}}
+                ]
+            },
+
+            {score: {$meta: "textScore"}},
+            {'$limit': 20}
+        )
+            .sort({score: {$meta: 'textScore'}})
+            .populate('clientType.tariffId')
+            .populate('addressId')
+            .populate('controllerId')
+            .populate('kskId')
+            .exec(function (err, docs) {
+                if (err) return done(errorBuilder(err));
+                return done({operationResult: 0, result: docs});
+
+            });
+    }
+
 };
 
 exports.updateClientCounter = function (body, done) {
     var pipelineIndex = body.pipelineIndex;
-    var conditions = { '_id': body.clientId, 'pipelines.counters._id': body.counter._id },
+    var conditions = {'_id': body.clientId, 'pipelines.counters._id': body.counter._id},
         update = {
             $set: {
                 //'pipelines.$.counters.$': body.counter
@@ -209,7 +287,14 @@ exports.updateClientCounter = function (body, done) {
     function callback(err, counter) {
         if (err)
             return done(errorBuilder(err));
-        return done({ operationResult: 0, result: counter });
+        return done({operationResult: 0, result: counter});
     }
 
+};
+
+exports.getPeriods = function(done){
+    Collection.find().distinct('period', function(err, periods){
+        if (err) return done(errorBuilder(err));
+        return done({operationResult: 0, result: periods});
+    });
 };

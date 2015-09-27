@@ -1,6 +1,6 @@
-billingApplication.controller('fizicalController', ['$scope', 'dataService', 'toastr', 'printSvc', '$templateCache', 'modalSvc', fizicalController]);
+billingApplication.controller('fizicalController', ['$scope', 'dataService', 'toastr', 'printSvc', '$templateCache', 'modalSvc', '$rootScope', fizicalController]);
 
-function fizicalController($scope, dataService, toastr, printSvc, $templateCache, modalSvc) {
+function fizicalController($scope, dataService, toastr, printSvc, $templateCache, modalSvc, $rootScope) {
 
     $scope.searchTerm = '';
     $scope.data = [];
@@ -8,26 +8,53 @@ function fizicalController($scope, dataService, toastr, printSvc, $templateCache
     $scope.streets = [];
     $scope.counterMarks = [];
     $scope.ksks = [];
+    $scope.controllers = [];
     $scope.tariffs = [];
     $scope.allBalance = [];
     $scope.balanceDetailsByClient = [];
 
-    $scope.period = 201507;
-    //TODO: дропдаун лист для периода
+    $scope.period = {value: ''};
+    $scope.periods = [];
+
+    $scope.getPeriods = function () {
+        dataService.get('/clientFiz/getPeriods').then(function (response) {
+            response.result.forEach(function (item) {
+                item = item.toString();
+                $scope.periods.unshift({value: item});
+            });
+            var date = new Date();
+            var month = date.getMonth() + 1;
+            $scope.period.value = date.getFullYear().toString() + (month < 10 ? '0' + month.toString() : month.toString());
+            $scope.getAllBalance();
+        });
+    };
+    $scope.getPeriods();
 
     $scope.dateOptions = {
         changeYear: true,
         changeMonth: true,
-        yearRange: '2015:2020'
+        yearRange: '2010:2020'
     };
 
     $scope.search = function () {
-        dataService.get('/clientFiz/search', {searchTerm: $scope.searchTerm}, null).then(function (response) {
+        dataService.get('/clientFiz/search', {
+            searchTerm: $scope.searchTerm,
+            period: $scope.period.value
+        }, null).then(function (response) {
             $scope.data = response.result;
         });
     };
 
+    $scope.refresh = function () {
+        $scope.search();
+        $scope.getAllBalance();
+    };
+
     $scope.showCounters = function (item) {
+        item.pipelines.forEach(function (pipeline) {
+            pipeline.checkAvg = pipeline.sourceCounts == 1;
+            pipeline.checkNorm = pipeline.sourceCounts == 2;
+        });
         item.isShowCounters = !item.isShowCounters;
         $scope.selectedItem = item;
 
@@ -35,50 +62,61 @@ function fizicalController($scope, dataService, toastr, printSvc, $templateCache
             $scope.getBalanceForClient(item._id);
     };
 
-    $scope.updateClient = function (client, counter, pipeline) {
+    $scope.updateClient = function (client, counter, pipeline, withClear) {
 
-        if (counter.dateOfCurrentCounts == null) { //TODO: переделать на валидацию, если нужно
-            toastr.error('Дата текущих показаний обязательное поле!', 'Данные не сохранены');
-        } else {
-            if (counter.currentCounts >= counter.lastCounts) {
-                if (!counter.hasProblem)
-                    counter.problemDescription = '';
-
-                var body = {
-                    client: client,
-                    pipeline: pipeline,
-                    counter: counter,
-                    period: $scope.period
-                };
-
-                dataService.post('/clientFiz/updateClientCounter', body).then(function (response) {
-                    if (response.operationResult === 0) {
-                        toastr.success('', 'Данные успешно сохранены');
-                        counter.isCounterNew = false;
-                        $scope.getBalanceForClient(client._id);
-                        $scope.getAllBalance();
-                    } else {
-                        toastr.error('', 'Произошла ошибка');
-                    }
-
-
-                });
+        if (withClear) {
+            if (confirm('#Вы действительно хотите очистить текущие показания?')) {
+                counter.currentCounts = null;
+                counter.dateOfCurrentCounts = null;
+                pipeline.checkAvg = false;
+                pipeline.checkNorm = false;
+                pipeline.sourceCounts = 0;
+            } else {
+                return;
             }
-            else {
-                toastr.error('Текущие показания должны быть больше или равны последним!', 'Данные не сохранены');
+        } else if (pipeline.sourceCounts != 2) {
+            if (counter.dateOfCurrentCounts == null) { //TODO: переделать на валидацию, если нужно
+                toastr.error('Дата текущих показаний обязательное поле!', 'Данные не сохранены');
+                return;
+            } else {
+                if (counter.currentCounts >= counter.lastCounts) {
+                    if (!counter.hasProblem)
+                        counter.problemDescription = '';
+                } else {
+                    toastr.error('Текущие показания должны быть больше или равны последним!', 'Данные не сохранены');
+                    return;
+                }
             }
         }
 
+        var body = {
+            client: client,
+            pipeline: pipeline,
+            counter: counter,
+            period: $scope.period.value,
+            withClear: withClear
+        };
+
+        dataService.post('/clientFiz/updateClientCounter', body).then(function (response) {
+            if (response.operationResult === 0) {
+                toastr.success('', 'Данные успешно сохранены');
+                counter.isCounterNew = false;
+                $scope.getBalanceForClient(client._id);
+                $scope.getAllBalance();
+            } else {
+                toastr.error('', 'Произошла ошибка');
+            }
+        });
 
     };
 
 
-    //TODO: вынести в отдельный контроллер
+    //TODO: желательно вынести в отдельный контроллер
     //payment
     $scope.isShowModalPayment = false;
     $scope.payment = {};
     $scope.paymentClientName = '';
-    $scope.enteredSum = 0;
+    $scope.enteredSum = null;
     $scope.enteredReceiptNumber = null;
     $scope.showModalPayment = function (item) {
 
@@ -89,11 +127,12 @@ function fizicalController($scope, dataService, toastr, printSvc, $templateCache
             personType: 1,
             //sum: $scope.enteredSum,
             date: new Date(),
-            period: $scope.period
+            period: $scope.period.value,
+            user: $rootScope.user
         };
 
         $scope.isShowModalPayment = true;
-        $scope.enteredSum = 0;
+        $scope.enteredSum = null;
     };
 
     $scope.closeModalPayment = function () {
@@ -132,11 +171,11 @@ function fizicalController($scope, dataService, toastr, printSvc, $templateCache
     };
 
     $scope.editTechData = function () {
-        modalSvc.showModal('/app/operator/fisical/editTechData.html', 'editTechDataModal', $scope);
+        modalSvc.showModal('/app/operator/fizical/editTechData.html', 'editTechDataModal', $scope);
     };
 
     $scope.editPassportData = function () {
-        modalSvc.showModal('/app/operator/fisical/editPassportData.html', 'editPassportDataModal', $scope);
+        modalSvc.showModal('/app/operator/fizical/editPassportData.html', 'editPassportDataModal', $scope);
     };
 
     //streets
@@ -146,6 +185,14 @@ function fizicalController($scope, dataService, toastr, printSvc, $templateCache
         });
     };
     $scope.getStreets();
+
+    //Получение микрорайонов и улиц
+    $scope.getRootAddresses = function () {
+        dataService.get('/location/getByParentId', {parentId: null}).then(function (response) {
+            $scope.rootAddresses = response.result;
+        });
+    };
+    $scope.getRootAddresses();
 
     //counterMarks
     $scope.getCounterMarks = function () {
@@ -163,6 +210,23 @@ function fizicalController($scope, dataService, toastr, printSvc, $templateCache
     };
     $scope.getKsks();
 
+
+    $scope.getControllers = function () {
+        dataService.get('/controllers').then(function (response) {
+            $scope.controllers = response.result;
+        });
+    };
+    $scope.getControllers();
+
+
+    $scope.getClientTypes = function () {
+        dataService.get('/clientTypes').then(function (response) {
+            $scope.clientTypes = response.result;
+        });
+    };
+    $scope.getClientTypes();
+
+
     //tariffs
     $scope.getTariffs = function () {
         dataService.get('/tariffs').then(function (response) {
@@ -173,14 +237,15 @@ function fizicalController($scope, dataService, toastr, printSvc, $templateCache
 
 
     $scope.getClientBalanceDetails = function () {
-        modalSvc.showModal('/app/operator/fisical/clientPaymentHistory.html', 'clientPaymentHistoryModal', $scope);
+        modalSvc.showModal('/app/operator/fizical/clientPaymentHistory.html', 'clientPaymentHistoryModal', $scope);
     };
 
     $scope.byAverage = function (pipeline) {
 
-        if (!pipeline.avg && pipeline.isCountsByAvg === true)
+        if (!pipeline.avg) {
             alert('Нет данных "По среднему" ');
-        else {
+            pipeline.checkAvg = false;
+        } else {
             var foundCounter = _.find(pipeline.counters, function (counter) {
                 return counter.isActive === true;
             });
@@ -188,25 +253,40 @@ function fizicalController($scope, dataService, toastr, printSvc, $templateCache
             if (!foundCounter)
                 alert("Нет активного счетчика");
 
-            else if (foundCounter && pipeline.isCountsByAvg === true) {
-                foundCounter.currentCounts = foundCounter.lastCounts * 1 + pipeline.avg * 1;
-                //counter.countsByAvg = avg;
-            }
-            else if (foundCounter && pipeline.isCountsByAvg === false) {
-                foundCounter.currentCounts = 0;
+            else if (foundCounter) {
+                if (pipeline.checkAvg) {
+                    foundCounter.currentCounts = foundCounter.lastCounts * 1 + pipeline.avg * 1;
+                    pipeline.sourceCounts = 1;
+                } else {
+                    foundCounter.currentCounts = 0;
+                    pipeline.sourceCounts = 0;
+                }
             }
         }
 
     };
 
+    $scope.byNorm = function (pipeline) {
+        if (!pipeline.norm) {
+            alert('Нет данных по "По норме"');
+            pipeline.checkNorm = false;
+            return;
+        }
+        if (pipeline.checkNorm) {
+            pipeline.sourceCounts = 2;
+        } else {
+            pipeline.sourceCounts = 0;
+        }
+    }
 
     $scope.fined = function () {
-        modalSvc.showModal('/app/operator/fisical/forfeit.html', 'forfeitModal', $scope);
+        modalSvc.showModal('/app/operator/fizical/forfeit.html', 'forfeitModal', $scope);
     };
 
 
     $scope.getAllBalance = function () {
-        dataService.get('/balance/getAllBalance').then(function (response) {
+        //TODO: оптимизировать - посчитать на сервере и вернуть на клиента только суммы по всем клиентам
+        dataService.get('/balanceFiz/getAllBalance', {period: $scope.period.value}).then(function (response) {
 
             var groupedBalances = _(response.result).groupBy(function (bal) {
                 return bal.balanceTypeId.name;
@@ -238,11 +318,13 @@ function fizicalController($scope, dataService, toastr, printSvc, $templateCache
 
         });
     };
-    $scope.getAllBalance();
 
     $scope.getBalanceForClient = function (id) {
 
-        dataService.get('/balance/getTotalByClientFizId', {clientFizId: id}).then(function (response) {
+        dataService.get('/balanceFiz/getTotalByClientId', {
+            clientFizId: id,
+            period: $scope.period.value
+        }).then(function (response) {
 
             var foundItem = _.find($scope.data, function (item) {
                 return item._id === id;
@@ -257,6 +339,32 @@ function fizicalController($scope, dataService, toastr, printSvc, $templateCache
 
     };
 
+    $scope.$on('changeTariffId', function (event, args) {
+        var client = _.where($scope.data, {_id: args.clientId})[0];
+        if (client) {
+            client.pipelines.forEach(function (pipeline) {
+                pipeline.counters.forEach(function (counter) {
+                    if (counter.isActive && counter.currentCounts && counter.dateOfCurrentCounts) {
+                        dataService.post('/clientFiz/updateClientCounter', {
+                            client: client,
+                            pipeline: pipeline,
+                            counter: counter,
+                            period: $scope.period.value
+                        }).then(function (response) {
+                            if (response.operationResult === 0) {
+                                //toastr.success('', 'Данные успешно сохранены');
+                                counter.isCounterNew = false;
+                                $scope.getBalanceForClient(client._id);
+                                $scope.getAllBalance();
+                            } else {
+                                toastr.error('', 'Произошла ошибка');
+                            }
+                        });
+                    }
+                });
+            });
+        }
+    });
 
 }
 
