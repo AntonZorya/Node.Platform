@@ -4,8 +4,8 @@ var clientFizDefinition = require(_modelsPath + 'client/clientFiz');
 var async = require('async');
 
 var BalanceLogic = require('../../logicLayer/balance/balanceFizLogic');
-var CalculationLogic = require('../../logicLayer/calculations/calculationLogic');
-var TariffLogic = require('../../logicLayer/tariff/tariffLogic');
+var CalculationLogic = require('../../logicLayer/calculations/calculationFizLogic');
+var TariffLogic = require('../../logicLayer/tariff/tariffFizLogic');
 var mongoose = require('mongoose');
 var _ = require('underscore');
 
@@ -167,28 +167,28 @@ exports.updateClientCounter = function (body, userId, done) {
 		//}
 
 		var balanceId = mongoose.Types.ObjectId();
-		var balanceTypeId = '55cdf641fb777624231ab6d9'; // начисление
+		var balanceTypeId = '55cdf641fb777624231ab6d9'; // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 		var balance = {
 			_id: balanceId,
 			balanceTypeId: balanceTypeId,
 			clientFizId: clientFiz._id,
 			sum: waterSum + canalSum,
 			period: period,
-			//аудит
+			//пїЅпїЅпїЅпїЅпїЅ
 			date: new Date(),
 			userId: userId
 		};
-		//без счетчика по среднему
-		var balanceAvg = null;//в CalculationLogic идет проверка на null
+		//пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+		var balanceAvg = null;//пїЅ CalculationLogic пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ null
 
-		//добор/недобор
+		//пїЅпїЅпїЅпїЅпїЅ/пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 		var isShortage = false;
 		var isShortageAvg = false;
 		var shortageCubicMeters = 0;
 		var shortageSum = 0;
 
 		var calculation = {
-			clientFizId: clientFiz._id,
+			clientId: clientFiz._id,
 			pipelineId: pipeline._id,
 			counterId: counter._id,
 			balanceId: balanceId,
@@ -197,22 +197,22 @@ exports.updateClientCounter = function (body, userId, done) {
 			tariff: tariff,
 			waterSum: waterSum,
 			canalSum: canalSum,
-			//считаем от минимума
-			isShortage: isShortage, //добор/недобор,
-			shortageCubicMeters: shortageCubicMeters, //недобор м3,
-			shortageSum: shortageSum, //недобор тг
+			//пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+			isShortage: isShortage, //пїЅпїЅпїЅпїЅпїЅ/пїЅпїЅпїЅпїЅпїЅпїЅпїЅ,
+			shortageCubicMeters: shortageCubicMeters, //пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ3,
+			shortageSum: shortageSum, //пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ
 			period: period,
-			//аудит
+			//пїЅпїЅпїЅпїЅпїЅ
 			date: new Date(),
 			userId: userId,
-			calculationType: 0 //0 - по счетчику, 1 - по среднему,
+			calculationType: 0 //0 - пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, 1 - пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ,
 		};
-		var calculationAvg = null;//без счетчика по среднему, в CalculationLogic идет проверка на null
+		var calculationAvg = null;//пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅ CalculationLogic пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ null
 		var minConsumption = clientFiz.clientType.minConsumption;
 
-		//находим предыдущие показания в этом периоде
+		//пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 		CalculationLogic.getByCounterId(counter._id, period, function (calcByCounterResp) {
-			//если показания есть, то обновляем
+			//пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 			if (calcByCounterResp.operationResult === 0 && calcByCounterResp.result) {
 				var calcRes = calcByCounterResp.result._doc;
 				balance._id = calcRes.balanceId;
@@ -227,9 +227,9 @@ exports.updateClientCounter = function (body, userId, done) {
 					});
 				});
 
-			} else {//иначе добавляем новые показания
+			} else {//пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 
-				//расчет по "среднему" - когда старый счетчик снимался и "ввод" был без счетчика определенное кол-во времени
+				//пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ" - пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ "пїЅпїЅпїЅпїЅ" пїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ-пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 				var previousCounterIndex = pipeline.counters.length - 2;
 
 				if (previousCounterIndex > 0 && !counter.isPrevAvgCalculated) {
@@ -243,7 +243,7 @@ exports.updateClientCounter = function (body, userId, done) {
 
 					var prevDate = pipeline.counters[previousCounterIndex].dateOfCurrentCounts;
 					var currentDate = counter.dateOfCurrentCounts;
-					//кол-во дней без счетчика
+					//пїЅпїЅпїЅ-пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 					var daysDifferenceCount = 0;
 					if (currentDate && prevDate) {
 						currentDate = new Date(currentDate);
@@ -253,13 +253,13 @@ exports.updateClientCounter = function (body, userId, done) {
 
 						var year = prevDate.getFullYear();
 						var month = prevDate.getMonth() + 1;
-						//узнаем кол-во дней в месяце, найдя последний день месяца
+						//пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ-пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 						var lastDayOfMonth = new Date(year, month, 0).getDate();
-						//среднее за день (м3)
+						//пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ (пїЅ3)
 						var avgCountsPerDay = avgCountsPerMonth / lastDayOfMonth;
 						var avgCountsByPeriod = avgCountsPerDay * daysDifferenceCount;
-						var waterCount = avgCountsByPeriod * (pipeline.waterPercent / 100); //м3
-						var canalCount = avgCountsByPeriod * (pipeline.canalPercent / 100); //м3
+						var waterCount = avgCountsByPeriod * (pipeline.waterPercent / 100); //пїЅ3
+						var canalCount = avgCountsByPeriod * (pipeline.canalPercent / 100); //пїЅ3
 						var avgWaterSum = avgCountsByPeriod * waterCount * tariff.water * -1;
 						var avgCanalSum = avgCountsByPeriod * canalCount * tariff.canal * -1;
 
@@ -272,13 +272,13 @@ exports.updateClientCounter = function (body, userId, done) {
 
 						calculationAvg = {};
 						calculationAvg = _.extend(calculationAvg, calculation);
-						calculationAvg.counterId = null; //без счетчика
+						calculationAvg.counterId = null; //пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 						calculationAvg.balanceId = balanceIdForAvg;
 						calculationAvg.waterCubicMetersCount = waterCount;
 						calculationAvg.canalCubicMetersCount = canalCount;
 						calculationAvg.waterSum = avgWaterSum;
 						calculationAvg.canalSum = avgCanalSum;
-						calculationAvg.calculationType = 1; //0 - по счетчику, 1 - по среднему,
+						calculationAvg.calculationType = 1; //0 - пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, 1 - пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ,
 						calculationAvg.daysCountByAvg = daysDifferenceCount;
 
 						if (minConsumption) {
@@ -310,11 +310,11 @@ exports.updateClientCounter = function (body, userId, done) {
 									done(counterResp);
 								});
 							} else {
-								console.log('Ошибка вставки в коллекцию calculations');
+								console.log('пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ calculations');
 							}
 						});
 					} else {
-						console.log('Ошибка вставки в коллекцию balances');
+						console.log('пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ balances');
 					}
 
 				});

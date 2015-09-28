@@ -7,8 +7,8 @@ var ClientType = new require('../../../helpers/mongoose/modelBuilder')('ClientTy
 var addressDef = require('../../models/location/address');
 var Address = new require('../../../helpers/mongoose/modelBuilder')('Address', addressDef);
 
-var tariffDef = require('../../models/tariff/tariff');
-var Tariff = new require('../../../helpers/mongoose/modelBuilder')('Tariff', tariffDef);
+var tariffDef = require('../../models/tariff/tariffFiz');
+var Tariff = new require('../../../helpers/mongoose/modelBuilder')('TariffFiz', tariffDef);
 var mongoose = require('mongoose');
 var deepPopulate = require('mongoose-deep-populate')(mongoose);
 var async = require('async');
