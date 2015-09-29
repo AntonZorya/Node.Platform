@@ -47,7 +47,7 @@ exports.getByClientId = function (clientId, period, done) {
     Collection.find(
         {
             $and: [
-                {clientId: clientJurId},
+                {clientId: clientId},
                 {period: period}
             ]
         }

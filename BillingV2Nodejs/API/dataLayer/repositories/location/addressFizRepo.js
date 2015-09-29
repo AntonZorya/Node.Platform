@@ -1,5 +1,5 @@
 var definition = new require('../../models/location/addressFiz');
-var Collection = new require('../../../helpers/mongoose/modelBuilder')('Address', definition);
+var Collection = new require('../../../helpers/mongoose/modelBuilder')('AddressFiz', definition);
 
 exports.add = function (address, done) {
     var model = new Collection(address);

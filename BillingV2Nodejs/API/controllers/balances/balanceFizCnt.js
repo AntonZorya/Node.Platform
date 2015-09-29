@@ -19,7 +19,7 @@ module.exports = function (router) {
 
     router.route('/balanceFiz/getTotalByClientId').
         get(function (req, res) {
-            Logic.getTotalByClientJurId(req.query.clientId, req.query.period, function (data) {
+            Logic.getTotalByClientId(req.query.clientId, req.query.period, function (data) {
                 operationResultBuilder(data, res);
             });
         });
