@@ -25,7 +25,8 @@ CollectionSchema.plugin(deepPopulate, {
 exports.add = function (client, done) {
     var model = Collection(client);
     model.save(function (err) {
-        if (err)return done(errorBuilder(err));
+        if (err)
+            return done(errorBuilder(err));
         done({operationResult: 0});
     });
 };
