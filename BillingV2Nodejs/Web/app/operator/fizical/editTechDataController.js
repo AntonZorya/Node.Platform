@@ -5,26 +5,35 @@ function editTechDataFizController($scope, dataService, modalSvc, toastr) {
     $scope.modalItem = {};
     $scope.modalItem = _.extend($scope.modalItem, $scope.$parent.selectedItem);
 
+    var prevTarifId = $scope.modalItem.clientType.tariffId._id;
+
     $scope.save = function () {
+        var tariff = $scope.modalItem.clientType.tariffId;
         dataService.post('/clientFiz/update', $scope.modalItem).then(function (response) {
 
             if (response.operationResult === 0) {
                 toastr.success('', 'Данные успешно сохранены');
 
+                // Костыль
+                var address = $scope.modalItem.addressId;
                 $scope.modalItem = response.result;
+                $scope.modalItem.addressId = address;
+
                 _.extend($scope.$parent.selectedItem, $scope.modalItem);
+                $scope.$parent.selectedItem.clientType.tariffId = tariff;
+
+                if (tariff._id !== prevTarifId) {
+                    $scope.$emit('changeTariffId', { clientId: $scope.modalItem._id});
+                }
             }
 
         });
-
-
     };
 
     $scope.cancel = function () {
         modalSvc.resolveModal('editTechDataModal');
     };
 
-    //TODO: Тех. данные - add newCounter
     $scope.addNewCounter = function (pipelineIndex) {
 
         var foundActiveCounter = _($scope.modalItem.pipelines[pipelineIndex].counters).find(function (counter) {
@@ -47,24 +56,31 @@ function editTechDataFizController($scope, dataService, modalSvc, toastr) {
 
     $scope.disableCounter = function (pipelineIndex, counterIndex) {
 
-        if (confirm('Вы действительно хотите снять счетчик?')) {
+        if ($scope.modalItem.pipelines[pipelineIndex].avg == null ||
+            $scope.modalItem.pipelines[pipelineIndex].avg == "") {
 
-            /*var day1 = (new Date($scope.modalItem.pipelines[pipelineIndex].counters[counterIndex].dateOfCurrentCounts)).getDate();
-            var day2 = new Date().getDate();
+            toastr.warning('"Среднее" должно быть заполнено');
 
-            if (day1 === day2) {*/
+        } else {
+            if (confirm('Вы действительно хотите снять счетчик?')) {
+
+                //TODO: после тестирования раскометировать проверку дат
+                /*var day1 = (new Date($scope.modalItem.pipelines[pipelineIndex].counters[counterIndex].dateOfCurrentCounts)).getDate();
+                 var day2 = new Date().getDate();
+
+                 if (day1 === day2) {*/
                 $scope.modalItem.pipelines[pipelineIndex].counters[counterIndex].isActive = false;
                 $scope.modalItem.pipelines[pipelineIndex].counters[counterIndex].isCounterNew = false;
-                $scope.modalItem.pipelines[pipelineIndex].counters[counterIndex].removeDate = new Date()
-            /*} */
-            /*else {
-                toastr.error('Чтобы снять счетчик, необходимо внести показания на сегодшний день!');
-            }*/
+                $scope.modalItem.pipelines[pipelineIndex].counters[counterIndex].removeDate = new Date();
+                /*} */
+                /*else {
+                 toastr.error('Чтобы снять счетчик, необходимо внести показания на сегодшний день!');
+                 }*/
 
+            }
         }
 
 
     };
-
 
 }
