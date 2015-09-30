@@ -4,7 +4,7 @@ var Schema = mongoose.Schema;
 
 exports.definition = _.extend({
     name: {type: String, required: "#name required"},
-    tariffId: {type: Schema.Types.ObjectId}, //, ref: 'Tariff'},
+    tariffId: {type: Schema.Types.ObjectId, ref: 'Tariff'},
     minConsumption: {type: Number},
     avgConsumption: {type: Number},
     maxConsumption: {type: Number},
