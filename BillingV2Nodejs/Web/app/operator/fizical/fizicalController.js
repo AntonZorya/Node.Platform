@@ -143,7 +143,7 @@ function fizicalController($scope, dataService, toastr, printSvc, $templateCache
     $scope.sendPayment = function () {
         $scope.payment.sum = $scope.enteredSum;
         $scope.payment.receiptNumber = $scope.enteredReceiptNumber;
-        dataService.post('/payment/paymentAdd', $scope.payment).then(function (response) {
+        dataService.post('/paymentfiz/paymentAdd', $scope.payment).then(function (response) {
             if (response.operationResult === 0) {
                 $scope.paymentResult = response.result;
                 $scope.print();
@@ -220,7 +220,7 @@ function fizicalController($scope, dataService, toastr, printSvc, $templateCache
 
 
     $scope.getClientTypes = function () {
-        dataService.get('/clientTypes').then(function (response) {
+        dataService.get('/clientTypesFiz').then(function (response) {
             $scope.clientTypes = response.result;
         });
     };
@@ -229,7 +229,7 @@ function fizicalController($scope, dataService, toastr, printSvc, $templateCache
 
     //tariffs
     $scope.getTariffs = function () {
-        dataService.get('/tariffs').then(function (response) {
+        dataService.get('/tariffsFiz').then(function (response) {
             $scope.tariffs = response.result;
         });
     };
@@ -322,7 +322,7 @@ function fizicalController($scope, dataService, toastr, printSvc, $templateCache
     $scope.getBalanceForClient = function (id) {
 
         dataService.get('/balanceFiz/getTotalByClientId', {
-            clientFizId: id,
+            clientId: id,
             period: $scope.period.value
         }).then(function (response) {
 

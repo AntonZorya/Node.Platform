@@ -1,6 +1,6 @@
-billingApplication.controller('paymentsByPeriodFizController', ['$scope', 'dataService', 'modalSvc', 'toastr', paymentsByPeriodController]);
+billingApplication.controller('paymentsByPeriodFizController', ['$scope', 'dataService', 'modalSvc', 'toastr', paymentsByPeriodFizController]);
 
-function paymentsByPeriodController($scope, dataService, modalSvc, toastr) {
+function paymentsByPeriodFizController($scope, dataService, modalSvc, toastr) {
 
     $scope.dateFrom = new Date(moment().add(-1, 'days'));
     $scope.dateTo = new Date(moment().add(1, 'days'));
