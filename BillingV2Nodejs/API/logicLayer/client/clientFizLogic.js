@@ -171,7 +171,7 @@ exports.updateClientCounter = function (body, userId, done) {
 		var balance = {
 			_id: balanceId,
 			balanceTypeId: balanceTypeId,
-			clientFizId: clientFiz._id,
+			clientId: clientFiz._id,
 			sum: waterSum + canalSum,
 			period: period,
 			//�����

@@ -1,18 +1,21 @@
-billingApplication.controller('forfeitFizController', ['$scope', 'dataService', 'modalSvc', 'toastr', forfeitController]);
+billingApplication.controller('forfeitFizController', ['$scope', '$rootScope', 'dataService', 'modalSvc', 'toastr', forfeitController]);
 
-function forfeitController($scope, dataService, modalSvc, toastr) {
+function forfeitController($scope, $rootScope, dataService, modalSvc, toastr) {
 
     var selectedItem = $scope.$parent.selectedItem;
     var id = selectedItem._id;
-    var period = $scope.$parent.period;
+    var period = $scope.$parent.period.value;
 
-    $scope.forfeitDetails = {
-        clientId: id,
-        period: period
+    $scope.body = {
+        forfeitDetails: {
+            clientId: id,
+            period: period
+        },
+        user: $rootScope.user
     };
 
     $scope.forfeitDetailsAdd = function () {
-        dataService.post('/forfeitDetails/add', $scope.forfeitDetails).then(function (response) {
+        dataService.post('/forfeitDetailsFiz/add', $scope.body).then(function (response) {
 
             $scope.$parent.getBalanceForClient(id);
             $scope.$parent.getAllBalance();

@@ -51,7 +51,7 @@ exports.getByClientId = function (clientId, period, done) {
                 {period: period}
             ]
         }
-    ).populate('clientJurId').populate('balanceTypeId').exec(function (err, res) {
+    ).populate('clientId').populate('balanceTypeId').exec(function (err, res) {
             if (err)return done(errorBuilder(err));
             done({operationResult: 0, result: res});
         });
