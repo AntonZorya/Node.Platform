@@ -1,10 +1,10 @@
-billingApplication.controller('clientPaymentHistoryFizController', ['$scope', 'dataService', 'modalSvc', 'toastr', clientPaymentHistoryController]);
+billingApplication.controller('clientPaymentHistoryFizController', ['$scope', 'dataService', 'modalSvc', 'toastr', clientPaymentHistoryFizController]);
 
-function clientPaymentHistoryController($scope, dataService, modalSvc, toastr) {
+function clientPaymentHistoryFizController($scope, dataService, modalSvc, toastr) {
 
     var selectedItem = $scope.$parent.selectedItem;
     var id = selectedItem._id;
-    var period = $scope.$parent.period;
+    var period = $scope.$parent.period.value;
 
 
     $scope.modalItem = {};

@@ -14,10 +14,10 @@
 
                     <div class="ui input">
                         <select class="ui search dropdown" ng-model="modalItem.clientType.tariffId"
-                                ng-options="tariff as tariff.name for tariff in $parent.tariffs track by tariff._id"></select>
+                                ng-options="tariff.name for tariff in $parent.tariffs track by tariff._id"></select>
                     </div>
                 </div>
-                <div class=" two wide field">
+                <div class=" one wide field">
                     <label>{{'#Тариф на воду' | translate}}</label>
 
                     <div class="ui large label">{{modalItem.clientType.tariffId.water}}</div>
@@ -42,7 +42,10 @@
                     <table class="ui table" style="margin-bottom: 0 !important;">
                         <tr>
                             <td>
-                                <b>Ввод № {{pipeline.number}}</b>
+                                <b>Ввод:</b>
+                                <div class="ui input">
+                                    <input type="text" ng-model="pipeline.description"/>
+                                </div>
                             </td>
                             <td>
                                 <label>{{'% вод.' | translate}}</label>
@@ -133,7 +136,7 @@
                             <td>
                                 <div class="ui input">
                                     <select class="ui search dropdown" ng-model="counter.markId"
-                                            ng-options="mark._id as mark.name for mark in $parent.counterMarks track by mark._id"></select>
+                                            ng-options="mark.name for mark in $parent.counterMarks track by mark._id"></select>
                                 </div>
                             </td>
                             <td>
@@ -161,6 +164,7 @@
         <div class="ui button red" ng-click="cancel()">{{'#cancel' | translate}}</div>
         <div class="ui green button" ng-click="save()">{{'#save' | translate}}</div>
     </div>
+
 
     <!--<div class="actions">
         <div class="two fluid ui buttons">

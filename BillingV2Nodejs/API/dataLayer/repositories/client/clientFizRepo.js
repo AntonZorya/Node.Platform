@@ -1,11 +1,11 @@
 var ClientFizDef = require('../../models/client/clientFiz');
-var clientTypeDef = require('../../models/client/clientType');
+var clientTypeDef = require('../../models/client/clientTypeFiz');
 var CollectionSchema = new require('../../../helpers/mongoose/modelBuilder')('ClientFiz', ClientFizDef, true);
 var Collection = new require('../../../helpers/mongoose/modelBuilder')('ClientFiz', ClientFizDef);
-var ClientType = new require('../../../helpers/mongoose/modelBuilder')('ClientType', clientTypeDef);
+var ClientType = new require('../../../helpers/mongoose/modelBuilder')('ClientTypeFiz', clientTypeDef);
 
-var addressDef = require('../../models/location/address');
-var Address = new require('../../../helpers/mongoose/modelBuilder')('Address', addressDef);
+var addressDef = require('../../models/location/addressFiz');
+var Address = new require('../../../helpers/mongoose/modelBuilder')('AddressFiz', addressDef);
 
 var tariffDef = require('../../models/tariff/tariffFiz');
 var Tariff = new require('../../../helpers/mongoose/modelBuilder')('TariffFiz', tariffDef);
@@ -242,10 +242,10 @@ exports.search = function (searchTerm, period, user, done) {
                 ]
             },
 
-            {score: {$meta: "textScore"}},
-            {'$limit': 20}
+            {score: {$meta: "textScore"}}
         )
             .sort({score: {$meta: 'textScore'}})
+            .limit(20)
             .populate('clientType.tariffId')
             .populate('addressId')
             .populate('controllerId')

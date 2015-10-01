@@ -14,36 +14,43 @@
                            ng-model="modalItem.accountNumber">
                 </div>
                 <div class="two wide field">
-                    <label>{{'#Наименование абонента' | translate}}</label>
-                    <input type="text" name="name" placeholder="{{'#Наименование абонента' | translate}}"
+                    <label>{{'#Наименование компании' | translate}}</label>
+                    <input type="text" name="name" placeholder="{{'#Наименование компании' | translate}}"
                            ng-model="modalItem.name">
                 </div>
                 <div class=" two wide field">
-                    <label>{{'#ИИН' | translate}}</label>
-                    <input type="text" name="bin" placeholder="{{'#ИИН' | translate}}"
-                           ng-model="modalItem.iin">
+                    <label>{{'#БИН' | translate}}</label>
+                    <input type="text" name="bin" placeholder="{{'#БИН' | translate}}"
+                           ng-model="modalItem.bin">
                 </div>
                 <div class="two wide field">
                     <label>{{'#Адрес' | translate}}</label>
                     <span ng-bind="modalItem.address"></span>
 
                 </div>
-                <div class="two wide field">
-                    <label>{{'#Улица' | translate}}</label>
-                    <select class="ui search dropdown" ng-model="modalItem.streetId"
-                            ng-options="street._id as street.name for street in $parent.streets track by street._id"></select>
 
+
+                <div class="two wide field">
+                    <label>{{'#Мкр/Улица' | translate}}</label>
+                    <select class="ui search dropdown" ng-model="address.street"
+                            ng-options="street.value for street in $parent.rootAddresses track by street._id"
+                            ng-change="StreetChange()"></select>
                 </div>
+
                 <div class="two wide field">
                     <label>{{'#Дом' | translate}}</label>
-                    <input type="text" name="streetId" placeholder="{{'#Дом' | translate}}"
-                           ng-model="modalItem.house">
+                    <select class="ui search dropdown" ng-model="address.house"
+                            ng-options="house.value for house in houseList track by house._id"
+                            ng-change="HouseChange()"></select>
                 </div>
+
                 <div class="two wide field">
                     <label>{{'#Квартира' | translate}}</label>
-                    <input type="text" name="ap" placeholder="{{'#Квартира' | translate}}"
-                           ng-model="modalItem.ap">
+                    <select class="ui search dropdown" ng-model="address.flat"
+                            ng-options="flat.value for flat in flatList track by flat._id"></select>
                 </div>
+
+
                 <div class="two wide field">
                     <label>{{'#Кол-во проживающих' | translate}}</label>
                     <input type="text" name="residentsCount" placeholder="{{'#Кол-во проживающих' | translate}}"
@@ -68,24 +75,21 @@
                 <div class="two wide field">
                     <label>{{'#КСК' | translate}}</label>
                     <select class="ui search dropdown" ng-model="modalItem.kskId"
-                            ng-options="ksk._id as ksk.name for ksk in $parent.ksks track by ksk._id"></select>
+                            ng-options="ksk.name for ksk in $parent.ksks track by ksk._id"></select>
                 </div>
 
 
                 <div class="two wide field">
                     <label>{{'#Контроллер' | translate}}</label>
-                    <select class="ui search dropdown">
-                        <option>Выберите контроллера</option>
-                        <option>Даяров Алмабек</option>
-                        <option>Баитова Жамал</option>
-                        <option>Жубатырова Роза</option>
-                        <option>Шектибаева Айжамал</option>
-                        <option>Жакып Асылхан</option>
-                        <option>Дуйсенгазиева Замза</option>
-                        <option>Бекбалаев Максат</option>
-                        <option>Убеева Урзия</option>
-                        <option>Оразбеков Ынтымак</option>
-                        <option>Камалова Гульжан</option>
+                    <select class="ui search dropdown" ng-model="modalItem.controllerId"
+                            ng-options="controller.fullName for controller in $parent.controllers track by controller._id">
+                    </select>
+                </div>
+
+                <div class="two wide field">
+                    <label>{{'#Тип' | translate}}</label>
+                    <select class="ui search dropdown" ng-model="modalItem.clientType"
+                            ng-options="clientType.name for clientType in $parent.clientTypes track by clientType._id">
                     </select>
                 </div>
 
@@ -96,6 +100,6 @@
 
     <div class="actions">
         <div class="ui button red" ng-click="cancel()">{{'#cancel' | translate}}</div>
-        <div class="ui green button" ng-click="save()">{{'#save' | translate}}</div>
+        <div class="ui button green" ng-click="save()">{{'#save' | translate}}</div>
     </div>
 </div>

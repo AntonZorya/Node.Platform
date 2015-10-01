@@ -3,9 +3,9 @@ var BalanceRepo = require('../../dataLayer/repositories/balance/balanceFizRepo')
     balanceDefinition = require(_modelsPath + 'balances/balanceFiz'),
     mongoose = require('mongoose'),
     _ = require('underscore'),
-    PaymentDetailsRepo = require('../../dataLayer/repositories/payment/paymentRepo'),
-    CalculationRepo = require('../../dataLayer/repositories/calculations/calculationRepo'),
-    ForfeitDetailsRepo = require('../../dataLayer/repositories/forfeitDetails/forfeitDetailsRepo');
+    PaymentDetailsRepo = require('../../dataLayer/repositories/payment/paymentFizRepo'),
+    CalculationRepo = require('../../dataLayer/repositories/calculations/calculationFizRepo'),
+    ForfeitDetailsRepo = require('../../dataLayer/repositories/forfeitDetails/forfeitDetailsFizRepo');
 
 
 exports.add = function (balance, done) {
