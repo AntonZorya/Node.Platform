@@ -33,6 +33,7 @@ exports = $data.Entity.extend("colleges._ClientPopulatedAndAggregated", {
     Объем_начисленной_канализации : {type: "int"},
     Тенге_начисленной_воды : {type: "number"},
     Тенге_начисленной_канализации : {type: "number"},
+    Тенге_начисленной_общая: {type: "number"},
     Потреблено_ниже_нормы : {type: "string"},
     Потребление_ниже_нормы_на_м3 : {type: "int"},
     Потребление_ниже_нормы_на_тенге : {type: "int"},

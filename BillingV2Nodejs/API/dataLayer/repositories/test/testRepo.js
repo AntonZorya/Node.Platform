@@ -273,6 +273,7 @@ exports.unwindData = function (done) {
                         "Объем_начисленной_канализации": doc.canalCubicMetersCount,
                         "Тенге_начисленной_воды": doc.waterSum,
                         "Тенге_начисленной_канализации": doc.canalSum,
+                        "Тенге_начисленной_общая": doc.waterSum+doc.canalSum,
                         "Потреблено_ниже_нормы": doc.isShortage,
                         "Потребление_ниже_нормы_на_м3": doc.shortageCubicMeters,
                         "Потребление_ниже_нормы_на_тенге": doc.shortageSum,
