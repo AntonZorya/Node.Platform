@@ -132,11 +132,11 @@ function fizicalController($scope, dataService, toastr, printSvc, $templateCache
     };
 
     $scope.editTechData = function () {
-        modalSvc.showModal('/app/operator/fisical/editTechData.html', 'editTechDataModal', $scope);
+        modalSvc.showModal('/app/operator/fizical/editTechData.html', 'editTechDataModal', $scope);
     };
 
     $scope.editPassportData = function () {
-        modalSvc.showModal('/app/operator/fisical/editPassportData.html', 'editPassportDataModal', $scope);
+        modalSvc.showModal('/app/operator/fizical/editPassportData.html', 'editPassportDataModal', $scope);
     };
 
     //streets
