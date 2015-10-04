@@ -6,6 +6,7 @@ _helpersCommonPath = _rootPath + '/helpers/common/';
 _helpersMongoosePath = _rootPath + '/helpers/mongoose/';
 _helpersPassportPath = _rootPath + '/helpers/passport/';
 _logicPath = _rootPath + '/logicLayer/';
+global.errorBuilder = require('../helpers/mongoose/errorBuilder').buildError;
 
 global.rootRequire = function (name) {
     return require(__dirname + '/../' + name);
@@ -261,7 +262,7 @@ async.series([
                 description: 'Ввод',
                 addressId: null,
                 counters: counters,
-                sourceCounts: 0,// 1 по счетчику, 2 по среднему, 3 по норме
+                sourceCounts: 0,// 0 по счетчику, 1 по среднему, 2 по норме
                 waterPercent: 100,
                 canalPercent: row[17] ? (row[17].substring('без канал') ? 0 : 100) : 100,
 
@@ -295,7 +296,7 @@ async.series([
                 var row = data[indexInData];
                 clientFizRepo.add(makeClient(row), function (response) {
                     if (response.operationResult != 0) {
-                        console.log(result.result);
+                        console.log(response.result);
                     }
                     else {
                         console.log(indexInData);
@@ -303,15 +304,16 @@ async.series([
                             addClientToRepo();
                         } else{
                             console.log('Done');
+                            callback();
                         }
                     }
                 });
             });
         }
 
-        for(var i = 0; i < 10; i++) {
+        //for(var i = 0; i < 10; i++) {
             addClientToRepo();
-        }
+        //}
     }
 
     //\\ ФИЗИКИ
