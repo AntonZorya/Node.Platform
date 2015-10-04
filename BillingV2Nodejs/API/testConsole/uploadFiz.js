@@ -26,7 +26,7 @@ var addressTypeRepo = rootRequire('dataLayer/repositories/location/addressTypeRe
 
 var clientTypeFiz = {};
 clientTypeFizRepo.getAll(function (data) {
-    clientTypeFiz = data.result;
+    clientTypeFiz = data.result[0]._doc;
 });
 
 var workbook = XLS.readFile('inputData/clientFiz.xls');
@@ -34,7 +34,7 @@ var sheet_name_list = workbook.SheetNames;
 var sheet = workbook.Sheets[sheet_name_list[0]];
 var data = XLS.utils.sheet_to_json(sheet, {header: 1});
 data = _.rest(data, 1);
-data = data.slice(0, 10000);
+//data = data.slice(0, 5000);
 console.log('clientFiz readed');
 
 var workbook = XLS.readFile('inputData/vodomerFiz.xls');
@@ -197,43 +197,6 @@ async.series([
     // ФИЗИКИ
 
     function (callback) {
-        async.each(data, function (row, eachDone) {
-            if (row[5]) {
-                addressRepo.getByValue(row[5].trim(), function (street) {
-                    if (row[6]) {
-                        addressRepo.getChildrenByParentId(street.result._doc._id, function (houses) {
-                            var foundHouse = _.find(houses.result, function (house) {
-                                return house._doc.value == row[6].trim();
-                            });
-                            if (row[7]) {
-                                addressRepo.getChildrenByParentId(foundHouse._id, function (flats) {
-                                    var foundFlat = _.find(flats.result, function (flat) {
-                                        return flat._doc.value == row[7].trim();
-                                    });
-                                    row[70] = foundFlat._doc._id;
-                                    row[71] = street.result._doc.value + ' ' + foundHouse._doc.value + ' ' + foundFlat._doc.value;
-                                    eachDone()
-                                });
-                            } else {
-                                row[70] = foundHouse._doc._id;
-                                row[71] = street.result._doc.value + ' ' + foundHouse._doc.value;
-                                eachDone();
-                            }
-                        });
-                    } else {
-                        row[70] = street.result._doc._id;
-                        row[71] = street.result._doc.value;
-                        eachDone();
-                    }
-                });
-            } else {
-                row[70] = null;
-                row[71] = null;
-                eachDone();
-            }
-        }, function () {
-            console.log('Addresses done');
-        });
 
         function makeClient(row) {
             var vodomer = _.find(vodomerData, function (rowV) {
@@ -241,13 +204,24 @@ async.series([
             });
             var counters = [];
             if (vodomer) {
+                var date = null;
+                if (row[39]) {
+                    var dateRow = row[39].trim();
+                    if (dateRow.indexOf('.') != -1) {
+                        var dateArr = dateRow.split('.');
+                        date = new Date(dateArr[2], dateArr[1], dateArr[0]);
+                    } else {
+                        var dateArr = dateRow.split('/');
+                        date = new Date(dateArr[2], dateArr[0], dateArr[1]);
+                    }
+                }
                 counters.push({
                     counterNumber: vodomer[2] ? vodomer[2].trim() : null,
                     plumbNumber: vodomer[4] ? vodomer[4].trim() : null,
                     currentStatus: vodomer[4] ? '#Опломбирован' : '#Не обломбирован',
                     problem: null,
                     problemDescription: null,
-                    dateOfLastCounts: row[39] ? Date.parse(row[39].trim()) : null,
+                    dateOfLastCounts: date,
                     isActive: true,
 
                     dateOfCurrentCounts: null,
@@ -289,31 +263,72 @@ async.series([
             return newClient;
         }
 
-        var indexInData = 0;
+        function getAddress (row, done) {
+            if (row[5]) {
+                addressRepo.getByValue(row[5].trim(), function (street) {
+                    if (row[6]) {
+                        addressRepo.getChildrenByParentId(street.result._doc._id, function (houses) {
+                            var foundHouse = _.find(houses.result, function (house) {
+                                return house._doc.value == row[6].trim();
+                            });
+                            if (row[7]) {
+                                addressRepo.getChildrenByParentId(foundHouse._id, function (flats) {
+                                    var foundFlat = _.find(flats.result, function (flat) {
+                                        return flat._doc.value == row[7].trim();
+                                    });
+                                    done({
+                                        addressId: foundFlat._doc._id,
+                                        address: street.result._doc.value + ' ' + foundHouse._doc.value + ' ' + foundFlat._doc.value
+                                    });
+                                });
+                            } else {
+                                done({
+                                    addressId: foundHouse._doc._id,
+                                    address: street.result._doc.value + ' ' + foundHouse._doc.value
+                                });
+                            }
+                        });
+                    } else {
+                        done({
+                            addressId: street.result._doc._id,
+                            address: street.result._doc.value
+                        });
+                    }
+                });
+            } else {
+                done({
+                    addressId: null,
+                    address: null
+                });
+            }
+        }
 
+        var indexInData = 0;
         function addClientToRepo() {
             setTimeout(function () {
-                var row = data[indexInData];
-                clientFizRepo.add(makeClient(row), function (response) {
-                    if (response.operationResult != 0) {
-                        console.log(response.result);
-                    }
-                    else {
-                        console.log(indexInData);
-                        if (indexInData < data.length){
-                            addClientToRepo();
-                        } else{
-                            console.log('Done');
-                            callback();
+                var row = data[indexInData++];
+                var client = makeClient(row);
+                getAddress(row, function(address){
+                    client.addressId = address.addressId;
+                    client.address = address.address;
+                    clientFizRepo.add(client, function (response) {
+                        if (response.operationResult != 0) {
+                            console.log(JSON.stringify(response.result[0].errors));
+                        } else {
+                            console.log(indexInData);
+                            if (indexInData < data.length) {
+                                addClientToRepo();
+                            } else {
+                                console.log('Done');
+                                callback();
+                            }
                         }
-                    }
+                    });
                 });
             });
         }
 
-        //for(var i = 0; i < 10; i++) {
-            addClientToRepo();
-        //}
+        addClientToRepo();
     }
 
     //\\ ФИЗИКИ
