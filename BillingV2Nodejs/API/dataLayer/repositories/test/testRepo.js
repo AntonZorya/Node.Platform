@@ -106,6 +106,7 @@ exports.unwindData = function (done) {
                         pipelines_id: "$pipelines._id",
                         "Номер_ввода": "$pipelines.number",
                         "Описание_ввода": "$pipelines.description",
+                        "Исходные_показания": "$pipelines.sourceCounts",
                         pipelines_addressId: "$pipelines.addressId",
                         pipelines_isByCounter: "$pipelines.isByCounter",
                         "Процент_воды_ввода": "$pipelines.waterPercent",
@@ -114,6 +115,7 @@ exports.unwindData = function (done) {
                         pipelines_fileIds: "$pipelines.fileIds",
                         pipelines_avg: "$pipelines.avg",
                         pipelines_norm: "$pipelines.norm",
+                        pipelines_counters_id: "$pipelines.counters._id",
                         "Номер_счетчика": "$pipelines.counters.counterNumber",
                         "Текущий_статус_счетчика": "$pipelines.counters.currentStatus",
                         "Текущие_показания_счетчика": "$pipelines.counters.currentCounts",
@@ -199,18 +201,100 @@ exports.unwindData = function (done) {
                 var props = {};
                 if(doc.clientJurId) props.clientJurId = doc.clientJurId;
                 if(doc.pipelineId) props.pipelines_id = doc.pipelineId;
-                
-                ClientPopulatedAndAggregated.findOne({ clientJurId: doc.clientJurId, pipelines_id: doc.pipelineId  }, function (err, client) {
+                if(doc.counterId) props.pipelines_counters_id = doc.counterId;
+
+
+                ClientPopulatedAndAggregated.findOne(props, function (err, client) {
                     if(err) return callback();
                     if(client==null) return callback();
-                    doc.newClient = client._doc;
-                    
-                    var model = CalculationPopulated(doc);
-    
-                    model.save(function (err) {
+                    ///////////////////////////////////////////////////
+                    //doc, client._doc
+
+                    clientPAAWC = {
+                        clientJurId: client._doc.clientJurId,
+                        phone: client._doc.phone,
+                        email: client._doc.email,
+                        abonentEntryDate: client._doc.abonentEntryDate,
+                        "Лицевой_счет": client._doc.Лицевой_счет,
+                        "Номер": client._doc.Номер,
+                        "Наименование": client._doc.Наименование,
+                        "БИН": client._doc.БИН,
+                        "РНН": client._doc.РНН,
+                        "Адрес": client._doc.Адрес,
+                        "Период": client._doc.Период,
+
+                        pipelines_id: (doc.pipelineId ? client._doc.pipelines_id : ""),
+                        "Номер_ввода": (doc.pipelineId ? client._doc.Номер_ввода : ""),
+                        "Описание_ввода": (doc.pipelineId ? client._doc.Описание_ввода : ""),
+                        "Исходные_показания": (doc.pipelineId ? client._doc.Исходные_показания : ""),
+                        pipelines_addressId: (doc.pipelineId ? client._doc.pipelines_addressId : ""),
+                        pipelines_isByCounter: (doc.pipelineId ? client._doc.pipelines_isByCounter : ""),
+                        "Процент_воды_ввода": (doc.pipelineId ? client._doc.Процент_воды_ввода : ""),
+                        "Процент_канализации_ввода": (doc.pipelineId ? client._doc.Процент_канализации_ввода : ""),
+                        "Ввод_в_действии": (doc.pipelineId ? client._doc.Ввод_в_действии : ""),
+                        pipelines_fileIds: (doc.pipelineId ? client._doc.pipelines_fileIds : ""),
+                        pipelines_avg: (doc.pipelineId ? client._doc.pipelines_avg : ""),
+                        pipelines_norm: (doc.pipelineId ? client._doc.pipelines_norm : ""),
+
+                        pipelines_counters_id: (doc.counterId ? client._doc.pipelines_counters_id : ""),
+                        "Номер_счетчика": (doc.counterId ? client._doc.Номер_счетчика : ""),
+                        "Текущий_статус_счетчика": (doc.counterId ? client._doc.Текущий_статус_счетчика : ""),
+                        "Текущие_показания_счетчика": (doc.counterId ? client._doc.Текущие_показания_счетчика : ""),
+                        "Дата_текущих_показаний_счетчика": (doc.counterId ? client._doc.Дата_текущих_показаний_счетчика : ""),
+                        "Проблемы_счетчика": (doc.counterId ? client._doc.Проблемы_счетчика : ""),
+                        "Описание_проблемы_счетчика": (doc.counterId ? client._doc.Описание_проблемы_счетчика : ""),
+                        "Предыдущие_показания_счетчика": (doc.counterId ? client._doc.Предыдущие_показания_счетчика : ""),
+                        "Дата_предыдущих_показаний_счетчика": (doc.counterId ? client._doc.Дата_предыдущих_показаний_счетчика : ""),
+                        pipelines_counters_hasProblem: (doc.counterId ? client._doc.pipelines_counters_hasProblem : ""),
+                        pipelines_counters_installDate: (doc.counterId ? client._doc.pipelines_counters_installDate : ""),
+                        pipelines_counters_checkDate: (doc.counterId ? client._doc.pipelines_counters_checkDate : ""),
+                        "Номер_пломбы_счетчика": (doc.counterId ? client._doc.Номер_пломбы_счетчика : ""),
+                        pipelines_counters_plumbInstallDate: (doc.counterId ? client._doc.pipelines_counters_plumbInstallDate : ""),
+                        pipelines_counters_markId: (doc.counterId ? client._doc.pipelines_counters_markId : ""),
+                        pipelines_counters_fileIds: (doc.counterId ? client._doc.pipelines_counters_fileIds : ""),
+                        "Счетчик_в_действии": (doc.counterId ? client._doc.Счетчик_в_действии : ""),
+                        pipelines_counters_removeDate: (doc.counterId ? client._doc.pipelines_counters_removeDate : ""),
+
+                        "Имя_контролера": client._doc.Имя_контролера,
+                        "Код_контролера": client._doc.Код_контролера,
+                        "Тип_потребителя": client._doc.Тип_потребителя,
+                        clientType_minConsumption: client._doc.clientType_minConsumption,
+                        clientType_avgConsumption: client._doc.clientType_avgConsumption,
+                        clientType_maxConsumption: client._doc.clientType_maxConsumption,
+                        clientType_parentId: client._doc.clientType_parentId,
+                        "Наименование_тарифа": client._doc.Наименование_тарифа,
+                        "Тариф_за_воду": client._doc.Тариф_за_воду,
+                        "Тариф_за_канализацию": client._doc.Тариф_за_канализацию,
+                        clientType_tariffId_date: client._doc.clientType_tariffId_date,
+                        kskId_name: client._doc.kskId_name,
+
+                        "Тип_баланса": doc.balanceId.balanceTypeId.name,
+                        "Объем_начисленной_воды": doc.waterCubicMetersCount,
+                        "Объем_начисленной_канализации": doc.canalCubicMetersCount,
+                        "Тенге_начисленной_воды": doc.waterSum,
+                        "Тенге_начисленной_канализации": doc.canalSum,
+                        "Тенге_начисленной_общая": doc.waterSum+doc.canalSum,
+                        "Потреблено_ниже_нормы": doc.isShortage,
+                        "Потребление_ниже_нормы_на_м3": doc.shortageCubicMeters,
+                        "Потребление_ниже_нормы_на_тенге": doc.shortageSum,
+                        "Дата_начисления": doc.date
+                    };
+
+                    var model2 = ClientPopulatedAndAggregated(clientPAAWC);
+
+                    model2.save(function(err){
                         if (err) return callback(err);
                         callback();
                     });
+                    ///////////////////////////////////////////////////
+                    //doc.newClient = client._doc;
+                    //
+                    //var model = CalculationPopulated(doc);
+                    //
+                    //model.save(function (err) {
+                    //    if (err) return callback(err);
+                    //    callback();
+                    //});
                 });
             }, function (err) {
                 if (err) {

@@ -2,6 +2,8 @@ billingApplication.service('modalSvc', ['$http', '$q', '$location', '$window', '
 
 function modalSvc($http, $q, $location, $window, $cookies, API_HOST, $compile) {
 
+    var self = this;
+
     this.modals = [];
 
     this.resolveModal = function (modalName) {
@@ -53,7 +55,10 @@ function modalSvc($http, $q, $location, $window, $cookies, API_HOST, $compile) {
         return deferred.promise;
     }
 
+    this.elementScope = {};
+
     this.showModal = function (url, modalName, $scope) {
+        self.elementScope = $scope;
         var deferred = $q.defer();
         var that = this;
         $http.get(url).then(function (data) {
