@@ -26,7 +26,8 @@ function fizicalController($scope, dataService, toastr, printSvc, $templateCache
             });
             var date = new Date();
             var month = date.getMonth() + 1;
-            $scope.period.value = date.getFullYear().toString() + (month < 10 ? '0' + month.toString() : month.toString());
+            var per = {value: date.getFullYear().toString() + (month < 10 ? '0' + month.toString() : month.toString())};
+            $scope.period = per in $scope.periods ? per : $scope.periods[0];
             $scope.getAllBalance();
         });
     };

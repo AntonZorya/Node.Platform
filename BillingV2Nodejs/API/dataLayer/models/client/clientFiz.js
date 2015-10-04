@@ -16,8 +16,8 @@ exports.definition = _.extend({
 	rnn: {type: String},
 	site: {type: String},
 
-	addressId: {type: Schema.Types.ObjectId},//, ref: "AddressFiz", required: true},
-	address: {type: String},//, required: "#address required"},
+	addressId: {type: Schema.Types.ObjectId, ref: "AddressFiz", required: true},
+	address: {type: String, required: "#address required"},
 	phone: {type: String},
 	email: {type: String},
 	period: {type: Number},
