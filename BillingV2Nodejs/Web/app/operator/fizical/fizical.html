@@ -94,7 +94,10 @@
                             {{item.address}}
                         </div>
                         <div class="two wide column">
-                            {{item.bin}}
+                            <label ng-bind="'#ИИН' | translate"></label>: {{item.bin}}
+                        </div>
+                        <div class="two wide column">
+                            <label ng-bind="'#Участок' | translate"></label>: {{item.site}}
                         </div>
                         <div class="tree wide column">
                             <div class="ui black basic button" ng-click="showCounters(item)" style="cursor:pointer;">
@@ -153,126 +156,128 @@
                                     ng-click="editPassportData()"></button>
                             <button class="ui  button" ng-bind="'#История' | translate"
                                     ng-click="getClientBalanceDetails()"></button>
+                            <button class="ui button" ng-class="{green :  item.checkByNorm}"
+                                    ng-click="clickByNorm(item)">
+                                <input type="checkbox" ng-checked="item.checkByNorm"
+                                        />
+                                <b> {{ '#Начислять по норме' | translate}} : ( {{item.norm}} м3)</b>
+                            </button>
+                            <div class="ui segment">
+                                <div class="ui dimmer" ng-class="{active : item.checkByNorm}"></div>
+                                <table class="ui basic table" ng-class="{ disabled: item.checkByNorm }">
+                                    <tbody>
+                                    <tr ng-repeat="pipeline in item.pipelines">
+                                        <td style="width: 20px;">
+                                            <b>Ввод:</b> {{pipeline.description}} <br><br>
+                                            <input type="checkbox" checked="{{pipeline.isCountsByAvg}}"
+                                                   ng-model="pipeline.checkAvg"
+                                                   ng-change="byAverage(pipeline)"/>
+                                            <b>По ср.: (+ {{pipeline.avg}} м3)</b>
+                                        </td>
+                                        <td colspan="8">
+                                            <table class="ui basic table">
+                                                <thead>
+                                                <tr>
+                                                    <th>{{'#counterNumber'|translate}}</th>
+                                                    <th>{{'#counterPlumb'|translate}}</th>
+                                                    <th>{{'#lastCounts'|translate}} &nbsp; (м3)</th>
+                                                    <th>{{'#dateOfLast'|translate}}</th>
+                                                    <th>{{'#currentCounts'|translate}} &nbsp; (м3)</th>
+                                                    <th>*{{'#dateOfCurrent'|translate}}</th>
+                                                    <th>{{'#problemDescription'|translate}}</th>
+                                                    <th></th>
+                                                    <th></th>
+                                                </tr>
 
-                            <table class="ui basic table">
-                                <tbody>
-                                <tr ng-repeat="pipeline in item.pipelines">
-                                    <td style="width: 20px;">
-                                        <b>Ввод:</b> {{pipeline.description}} <br><br>
-                                        <input type="checkbox" checked="{{pipeline.isCountsByAvg}}"
-                                               ng-model="pipeline.checkAvg"
-                                               ng-change="byAverage(pipeline)"/>
-                                        <b>По ср.: (+ {{pipeline.avg}} м3)</b>
-                                        <br>
-                                        <input type="checkbox" checked="{{pipeline.isCountsByNorm}}"
-                                               ng-model="pipeline.checkNorm"
-                                               ng-change="byNorm(pipeline)"/>
-                                        <b>По норме: (+ {{pipeline.norm}} м3)</b>
-                                    </td>
-                                    <td colspan="8">
-                                        <table class="ui basic table">
-                                            <thead>
-                                            <tr>
-                                                <th>{{'#counterNumber'|translate}}</th>
-                                                <th>{{'#counterPlumb'|translate}}</th>
-                                                <th>{{'#lastCounts'|translate}} &nbsp; (м3)</th>
-                                                <th>{{'#dateOfLast'|translate}}</th>
-                                                <th>{{'#currentCounts'|translate}} &nbsp; (м3)</th>
-                                                <th>*{{'#dateOfCurrent'|translate}}</th>
-                                                <th>{{'#problemDescription'|translate}}</th>
-                                                <th></th>
-                                                <th></th>
-                                            </tr>
-
-                                            </thead>
-                                            <tbody>
-                                            <tr ng-repeat="counter in pipeline.counters"
-                                                style="background-color: {{counter.color}}"
-                                                ng-class="{
+                                                </thead>
+                                                <tbody>
+                                                <tr ng-repeat="counter in pipeline.counters"
+                                                    style="background-color: {{counter.color}}"
+                                                    ng-class="{
                                                 'error disabled': !counter.isActive,
                                                 'positive': counter.isActive
                                                 }">
-                                                <td>
-                                                    <span ng-bind="counter.counterNumber"></span>
-                                                </td>
-                                                <td>
-                                                    <span ng-bind="counter.plumbNumber"></span>
-                                                </td>
-                                                <td>
-                                                    <div>
-                                                        <span ng-bind="counter.lastCounts | number"></span>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <span ng-bind="counter.dateOfLastCounts | date:'dd.MM.yyyy HH:mm'"></span>
-                                                </td>
+                                                    <td>
+                                                        <span ng-bind="counter.counterNumber"></span>
+                                                    </td>
+                                                    <td>
+                                                        <span ng-bind="counter.plumbNumber"></span>
+                                                    </td>
+                                                    <td>
+                                                        <div>
+                                                            <span ng-bind="counter.lastCounts | number"></span>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <span ng-bind="counter.dateOfLastCounts | date:'dd.MM.yyyy HH:mm'"></span>
+                                                    </td>
 
-                                                <td>
-                                                    <div class="ui form">
-                                                        <div class="one fields">
-                                                            <div ng-class="{'disabled field': pipeline.checkAvg || pipeline.checkNorm}">
-                                                                <input type="text" ng-model="counter.currentCounts"
-                                                                       ng-disabled="pipeline.checkAvg || pipeline.checkNorm">
+                                                    <td>
+                                                        <div class="ui form">
+                                                            <div class="one fields">
+                                                                <div ng-class="{'disabled field': pipeline.checkAvg || pipeline.checkNorm}">
+                                                                    <input type="text" ng-model="counter.currentCounts"
+                                                                           ng-disabled="pipeline.checkAvg || pipeline.checkNorm">
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
 
 
-                                                </td>
+                                                    </td>
 
-                                                <td>
-                                                    <div class="ui icon small input">
-                                                        <i class="calendar icon"></i>
-                                                        <input ui-date="dateOptions"
-                                                               ng-model='counter.dateOfCurrentCounts'>
-                                                    </div>
-                                                    <!--<span ng-bind='counter.dateOfCurrentCounts | date:"dd.MM.yyyy HH:mm:ss":"+0600"'></span>-->
-                                                </td>
+                                                    <td>
+                                                        <div class="ui icon small input">
+                                                            <i class="calendar icon"></i>
+                                                            <input ui-date="dateOptions"
+                                                                   ng-model='counter.dateOfCurrentCounts'>
+                                                        </div>
+                                                        <!--<span ng-bind='counter.dateOfCurrentCounts | date:"dd.MM.yyyy HH:mm:ss":"+0600"'></span>-->
+                                                    </td>
 
-                                                <td>
-                                                    <checkbox ng-model="counter.hasProblem"></checkbox>
+                                                    <td>
+                                                        <checkbox ng-model="counter.hasProblem"></checkbox>
                                          <textarea ng-model="counter.problemDescription"
                                                    ng-disabled="!counter.hasProblem"></textarea>
-                                                </td>
-                                                <td>
-                                                    <div class="ui small basic icon buttons right floated">
-                                                        <button class="ui button"
-                                                                ng-click="updateClient(item, counter, pipeline, true)">
-                                                            <i
-                                                                    class="large delete icon"></i></button>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="ui small basic icon buttons right floated">
-                                                        <button class="ui button"
-                                                                ng-click="updateClient(item, counter, pipeline)"><i
-                                                                class="large save icon"></i></button>
-                                                    </div>
-                                                </td>
-                                            </tr>
+                                                    </td>
+                                                    <td>
+                                                        <div class="ui small basic icon buttons right floated">
+                                                            <button class="ui button"
+                                                                    ng-click="updateClient(item, counter, pipeline, true)">
+                                                                <i
+                                                                        class="large delete icon"></i></button>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="ui small basic icon buttons right floated">
+                                                            <button class="ui button"
+                                                                    ng-click="updateClient(item, counter, pipeline)"><i
+                                                                    class="large save icon"></i></button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
 
-                                            </tbody>
-                                        </table>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Всего:</td>
-                                    <td ng-repeat="bal in item.balances">
-                                        {{bal.name}} :
-                                        {{(bal.sum<0?bal.sum*-1:bal.sum) | number:2}}
-                                    </td>
-                                    <td>Сальдо:
-                                        {{(item.balances[0].sum +
-                                        item.balances[1].sum +
-                                        item.balances[2].sum)*-1 | number: 2}}
-                                    </td>
-                                    <td>Минимум: {{item.clientType.minConsumption}} (м3)</td>
-                                    <td></td>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Всего:</td>
+                                        <td ng-repeat="bal in item.balances">
+                                            {{bal.name}} :
+                                            {{(bal.sum<0?bal.sum*-1:bal.sum) | number:2}}
+                                        </td>
+                                        <td>Сальдо:
+                                            {{(item.balances[0].sum +
+                                            item.balances[1].sum +
+                                            item.balances[2].sum)*-1 | number: 2}}
+                                        </td>
+                                        <td>Минимум: {{item.clientType.minConsumption}} (м3)</td>
+                                        <td></td>
 
-                                </tr>
-                                </tbody>
-                            </table>
-
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                             <div class="ui compact menu">
                                 <div class="ui compact menu">
 

@@ -266,6 +266,11 @@ function fizicalController($scope, dataService, toastr, printSvc, $templateCache
         }
     };
 
+    $scope.clickByNorm = function(clientFiz) {
+        clientFiz.checkByNorm = !clientFiz.checkByNorm;
+        $scope.byNorm(clientFiz);
+    }
+
     $scope.byNorm = function (clientFiz) {
 
         if (!clientFiz.norm) {
@@ -282,28 +287,29 @@ function fizicalController($scope, dataService, toastr, printSvc, $templateCache
                }).then(function (res) {
                    if (res.result) {
                        if (confirm('#Удалить текущие начисления по вводу?')) {
-                           self.calculateByNorm(clientFiz, pipeline, true);
+                           self.calculateByNorm(clientFiz, true);
                        }
                        else {
-                           self.calculateByNorm(clientFiz, pipeline, false);
+                           self.calculateByNorm(clientFiz, false);
                        }
                    }
                    else
                    {
-                       self.calculateByNorm(clientFiz, pipeline, false);
+                       self.calculateByNorm(clientFiz, false);
                    }
                });
-
-
+        }
+        else
+        {
+            self.removeCalculateByNorm(clientFiz);
         }
     }
 
 
-    this.calculateByNorm = function(client, pipeline, withClear) {
+    this.calculateByNorm = function(client, withClear) {
 
         var body = {
             client: client,
-            pipeline: pipeline,
             period: $scope.period.value,
             withClear: withClear
         };
@@ -311,6 +317,18 @@ function fizicalController($scope, dataService, toastr, printSvc, $templateCache
         dataService.post('/clientFiz/calculateByNorm', body).then(function (response) {
             if (response.operationResult === 0) {
                 toastr.success('', 'Данные успешно сохранены');
+                $scope.getBalanceForClient(client._id);
+                $scope.getAllBalance();
+            } else {
+                toastr.error('', 'Произошла ошибка');
+            }
+        });
+    }
+
+    this.removeCalculateByNorm = function(client) {
+        dataService.post('/clientFiz/removeNormCalculations', {client: client}).then(function (response) {
+            if (response.operationResult === 0) {
+                toastr.success('', 'Данные успешно удалены');
                 $scope.getBalanceForClient(client._id);
                 $scope.getAllBalance();
             } else {

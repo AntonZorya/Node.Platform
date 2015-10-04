@@ -327,17 +327,19 @@ exports.updateClientCounter = function (body, userId, done) {
 
 };
 
-exports.calculateByNorm = function (body, userId, withClear, done) {
+exports.calculateByNorm = function (body, userId, done) {
 
     var clientFiz = body.client;
 
     var period = body.period;
 
+    var withClear = body.withClear;
+
     if (withClear) {
-        CalculationLogic.getByClientIdWithCounters(client._id, period, function (res) {
+        CalculationLogic.getByClientIdWithCounters(clientFiz._id, period, function (res) {
             if (res.operationResult == 0 && res.result && res.result.length > 0) {
                 _.each(res.result, function (calc) {
-                    BalaceLogic.remove(calc.balanceId, function (res) {
+                    BalanceLogic.remove(calc.balanceId, function (res) {
                         if (res.operationResult == 0) {
                             CalculationLogic.remove(calc._id, function (res) {
 
@@ -362,7 +364,6 @@ exports.calculateByNorm = function (body, userId, withClear, done) {
 
         var waterCalcCubicMeters = clientFiz.norm * (clientFiz.waterPercent / 100);
         var canalCalcCubicMetersCount = clientFiz.norm * (clientFiz.canalPercent / 100);
-
 
 
         var waterSum = 0;
@@ -402,8 +403,8 @@ exports.calculateByNorm = function (body, userId, withClear, done) {
             canalSum: canalSum,
             //������� �� ��������
             isShortage: false, //�����/�������,
-            shortageCubicMeters: shortageCubicMeters, //������� �3,
-            shortageSum: shortageSum, //������� ��
+            shortageCubicMeters: 0, //������� �3,
+            shortageSum: 0, //������� ��
             period: period,
             //�����
             date: new Date(),
@@ -414,41 +415,94 @@ exports.calculateByNorm = function (body, userId, withClear, done) {
 
         //������� ���������� ��������� � ���� �������
         CalculationLogic.getByClientId(clientFiz._id, period, function (calcByClientResp) {
-            //���� ��������� ����, �� ���������
-            if (calcByClientResp.operationResult === 0 && calcByClientResp.result) {
+                //���� ��������� ����, �� ���������
+                if (calcByClientResp.operationResult === 0) {
+                    if (calcByClientResp.result) {
 
-                var calcRes = calcByClientResp.result._doc;
-                balance._id = calcRes.balanceId;
-                calculation._id = calcRes._id;
-                calculation.balanceId = calcRes.balanceId;
+                        var calcRes = calcByClientResp.result._doc;
+                        balance._id = calcRes.balanceId;
+                        calculation._id = calcRes._id;
+                        calculation.balanceId = calcRes.balanceId;
 
-                BalanceLogic.update(balance, function (balanceResp) {
-                    CalculationLogic.update(calculation, function (calcResp) {
-                        if (calcResp.operationResult == 0) {
-                            ClientFizRepo.update(clientFiz, function (clientResp) {
-                                return done(clientResp);
-                            });
-                        }
-                    });
-                });
-
-            } else {
-                BalanceLogic.add(balance, function (balanceResp) {
-                    if (balanceResp.operationReuslt == 0) {
-                        CalculationLogic.add(calculation, function (calcResp) {
-                            if (calcResp.operationReuslt == 0) {
-                                ClientFizRepo.update(clientFiz, function (clientResp) {
-                                    done(clientResp)
+                        BalanceLogic.update(balance, function (balanceResp) {
+                            if (balanceResp.operationResult == 0) {
+                                CalculationLogic.update(calculation, function (calcResp) {
+                                    if (calcResp.operationResult == 0) {
+                                        ClientFizRepo.update(clientFiz, function (clientResp) {
+                                            if (clientResp.operationResult != 0) {
+                                                CalculationLogic.remove(calculation._id, function (rem) {
+                                                });
+                                                BalanceLogic.remove(balance._id);
+                                            }
+                                            return done(clientResp);
+                                        });
+                                    }
+                                    else {
+                                        BalanceLogic.remove(balance._id, function (brem) {
+                                        });
+                                        return done(calcResp);
+                                    }
                                 });
+                            }
+                            else {
+                                return done(balanceResp);
+                            }
+                        });
+
+                    }
+                    else {
+                        BalanceLogic.add(balance, function (balanceResp) {
+                            if (balanceResp.operationResult == 0) {
+                                CalculationLogic.add(calculation, function (calcResp) {
+                                    if (calcResp.operationResult == 0) {
+                                        ClientFizRepo.update(clientFiz, function (clientResp) {
+                                            return done(clientResp)
+                                        });
+                                    }
+                                    else {
+                                        return done(calcResp);
+                                    }
+                                });
+                            }
+                            else {
+                                return done(balanceResp);
                             }
                         });
                     }
-                });
+                } else {
+                    return done(calcByClientResp);
+                }
+
             }
-
-        });
-
-
+        );
     });
 
 };
+
+exports.removeNormCalculations = function (client, done) {
+    CalculationLogic.getByClientId(client._id, client.period, function (calcResp) {
+        if (calcResp.operationResult == 0) {
+            if (calcResp.result) {
+                var calculation = calcResp.result;
+                CalculationLogic.remove(calculation._id, function (remCalcResp) {
+                    if (remCalcResp.operationResult == 0) {
+                        BalanceLogic.remove(calculation.balanceId, function (remBalResp) {
+                            ClientFizRepo.update(client, function (upClientResl) {
+                                return done(upClientResl);
+                            })
+                        });
+                    }
+                    else
+                    {
+                        return done(remCalcResp);
+                    }
+                })
+            }
+            else {
+                return done({operationResult: 1, result: "#calculation not found"});
+            }
+        }
+        else
+            return done(calcResp);
+    })
+}

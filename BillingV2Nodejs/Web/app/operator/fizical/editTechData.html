@@ -17,7 +17,7 @@
                                 ng-options="tariff.name for tariff in $parent.tariffs track by tariff._id"></select>
                     </div>
                 </div>
-                <div class=" one wide field">
+                <div class=" two wide field">
                     <label>{{'#Тариф на воду' | translate}}</label>
 
                     <div class="ui large label">{{modalItem.clientType.tariffId.water}}</div>
@@ -26,6 +26,26 @@
                     <label>{{'#Тариф на канализацию' | translate}}</label>
 
                     <div class="ui large label">{{modalItem.clientType.tariffId.canal}}</div>
+                </div>
+                <div class=" two wide field">
+                    <label ng-bind="'#Норма' | translate"></label>
+                    <div class="ui input">
+                        <input type="text" name="norm" ng-model="modalItem.norm">
+                    </div>
+                </div>
+                <div class=" two wide field">
+                    <label ng-bind="'#Процент по воде'  | translate"></label>
+                    <div class="ui input">
+                        <input type="text" name="norm" ng-model="modalItem.waterPercent">
+                    </div>
+
+                </div>
+                <div class=" two wide field">
+                    <label ng-bind="'#Процент по канализации' | translate"></label>
+                    <div class="ui input">
+                        <input type="text" name="norm" ng-model="modalItem.canalPercent">
+                    </div>
+
                 </div>
             </div>
         </form>
@@ -61,14 +81,7 @@
                                     <input type="text" name="canalPercent" ng-model="pipeline.canalPercent">
                                 </div>
                             </td>
-                            <td>
-                                {{'#Норма' | translate}}
-                                <div class="ui input">
-                                    <input type="text" name="norm" ng-model="pipeline.norm">
-                                </div>
-
-                            </td>
-                            <td>
+                           <td>
                                 {{'#Среднее' | translate}}
                                 <div class="ui input">
                                     <input type="text" name="norm" ng-model="pipeline.avg">

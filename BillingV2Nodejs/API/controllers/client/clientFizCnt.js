@@ -74,7 +74,7 @@ module.exports = function (router) {
 
 	router.route('/clientFiz/hasCalcWithCounter')
 		.get(function(req, res) {
-			CalcLogic.hasPipeline(req.query.pipelineId, req.query.period, function(data) {
+			CalcLogic.hasByCounterByClientId(req.query.clientId, req.query.period, function(data) {
 				operationResultBuilder(data, res);
 			})
 		});
@@ -84,6 +84,13 @@ module.exports = function (router) {
 			Logic.calculateByNorm(req.body, req.user._id, function (data) {
 				operationResultBuilder(data, res);
 			});
+		});
+
+	router.route('/clientFiz/removeNormCalculations')
+		.post(function(req, res) {
+			Logic.removeNormCalculations(req.body.client, function(data) {
+				operationResultBuilder(data, res);
+			})
 		});
 
 };
