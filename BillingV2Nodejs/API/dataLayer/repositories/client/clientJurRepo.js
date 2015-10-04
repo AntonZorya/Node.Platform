@@ -38,6 +38,14 @@ exports.getAll = function (orgId, done) {
     });
 };
 
+// For testConsole/updateCurrentCounts
+exports.getAll = function (done) {
+    Collection.find({isDeleted: false}).exec(function (err, clients) {
+        if (err) return done(errorBuilder(err));
+        return done({operationResult: 0, result: clients});
+    });
+}
+
 exports.getAllByCtrlId = function (ctrlId, done) {
     Collection.find({isDeleted: false, controllerId: ctrlId}, function (err, clients) {
         if (err) return done(errorBuilder(err));
@@ -121,7 +129,7 @@ exports.report5 = function (period, done) {
     Collection.aggregate(
         {
             $match: {
-                
+
                 $and: [
                     {period: parseInt(period)},
                     {"pipelines.counters.currentCounts": {$ne: null}},
@@ -149,7 +157,6 @@ exports.report5 = function (period, done) {
 
 exports.report6 = function (period, done) {
     Collection.aggregate(
-
         {
             $group: {
                 _id: {controllerId: "$controllerId"},
@@ -293,8 +300,8 @@ exports.updateClientCounter = function (body, done) {
 
 };
 
-exports.getPeriods = function(done){
-    Collection.find().distinct('period', function(err, periods){
+exports.getPeriods = function (done) {
+    Collection.find().distinct('period', function (err, periods) {
         if (err) return done(errorBuilder(err));
         return done({operationResult: 0, result: periods});
     });
