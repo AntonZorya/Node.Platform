@@ -1,4 +1,5 @@
-var Logic = require('../../logicLayer/client/clientFizLogic');
+var Logic = require('../../logicLayer/client/clientFizLogic'),
+CalcLogic = require('../../logicLayer/calculations/calculationFizLogic')
 
 module.exports = function (router) {
 	router.route('/clientFiz/add').
@@ -70,4 +71,19 @@ module.exports = function (router) {
 				operationResultBuilder(data, res);
 			});
 		});
+
+	router.route('/clientFiz/hasCalcWithCounter')
+		.get(function(req, res) {
+			CalcLogic.hasPipeline(req.query.pipelineId, req.query.period, function(data) {
+				operationResultBuilder(data, res);
+			})
+		});
+
+	router.route('/clientFiz/calculateByNorm')
+		.post(function (req, res) {
+			Logic.calculateByNorm(req.body, req.user._id, function (data) {
+				operationResultBuilder(data, res);
+			});
+		});
+
 };

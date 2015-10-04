@@ -2,6 +2,8 @@ billingApplication.controller('fizicalController', ['$scope', 'dataService', 'to
 
 function fizicalController($scope, dataService, toastr, printSvc, $templateCache, modalSvc, $rootScope) {
 
+    var self = this;
+
     $scope.searchTerm = '';
     $scope.data = [];
     $scope.selectedItem = {};
@@ -241,7 +243,6 @@ function fizicalController($scope, dataService, toastr, printSvc, $templateCache
     };
 
     $scope.byAverage = function (pipeline) {
-
         if (!pipeline.avg) {
             alert('Нет данных "По среднему" ');
             pipeline.checkAvg = false;
@@ -263,21 +264,61 @@ function fizicalController($scope, dataService, toastr, printSvc, $templateCache
                 }
             }
         }
-
     };
 
-    $scope.byNorm = function (pipeline) {
-        if (!pipeline.norm) {
+    $scope.byNorm = function (clientFiz) {
+
+        if (!clientFiz.norm) {
             alert('Нет данных по "По норме"');
-            pipeline.checkNorm = false;
+            clientFiz.checkByNorm = false;
             return;
         }
-        if (pipeline.checkNorm) {
-            pipeline.sourceCounts = 2;
-        } else {
-            pipeline.sourceCounts = 0;
+
+        if (clientFiz.checkByNorm) {
+
+               dataService.get('/clientFiz/hasCalcWithCounter', {
+                   clientId: clientFiz._id,
+                   period: $scope.period.value
+               }).then(function (res) {
+                   if (res.result) {
+                       if (confirm('#Удалить текущие начисления по вводу?')) {
+                           self.calculateByNorm(clientFiz, pipeline, true);
+                       }
+                       else {
+                           self.calculateByNorm(clientFiz, pipeline, false);
+                       }
+                   }
+                   else
+                   {
+                       self.calculateByNorm(clientFiz, pipeline, false);
+                   }
+               });
+
+
         }
     }
+
+
+    this.calculateByNorm = function(client, pipeline, withClear) {
+
+        var body = {
+            client: client,
+            pipeline: pipeline,
+            period: $scope.period.value,
+            withClear: withClear
+        };
+
+        dataService.post('/clientFiz/calculateByNorm', body).then(function (response) {
+            if (response.operationResult === 0) {
+                toastr.success('', 'Данные успешно сохранены');
+                $scope.getBalanceForClient(client._id);
+                $scope.getAllBalance();
+            } else {
+                toastr.error('', 'Произошла ошибка');
+            }
+        });
+    }
+
 
     $scope.fined = function () {
         modalSvc.showModal('/app/operator/fizical/forfeit.html', 'forfeitModal', $scope);

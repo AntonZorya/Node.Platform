@@ -57,6 +57,25 @@ exports.getByCounterId = function (counterId, period, done) {
     });
 };
 
+exports.getByClientId = function(clientId, period, done) {
+    CalcRepo.getByClientId(clientId, period, function(data) {
+       return done(data);
+    });
+}
+
+exports.hasByCounterByClientId = function(clientId, period, done) {
+    CalcRepo.hasByCounter(clientId, period, function(data) {
+       return done(data);
+    });
+}
+
+exports.getByClientIdWithCounters = function(clientId, period, done) {
+    CalcRepo.getByClientIdWithCounters(clientId, period, function(data) {
+       return done(data);
+    });
+}
+
+
 exports.remove = function(calculationId, done){
     CalcRepo.remove(calculationId, done);
 };

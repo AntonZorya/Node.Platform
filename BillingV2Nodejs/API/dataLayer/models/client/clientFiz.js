@@ -27,7 +27,10 @@ exports.definition = _.extend({
 	clientType: clientType,
 	kskId: {type: Schema.Types.ObjectId, ref: 'ksk'},
 	abonentEntryDate: {type: Date},
-
+	norm: {type: Number},
+	checkByNorm: {type: Boolean},
+	waterPercent: {type: Number},
+	canalPercent: {type: Number},
 	abonentAreaNumber: {type: String }
 
 }, ModelBase);

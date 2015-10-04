@@ -222,6 +222,7 @@ exports.search = function (searchTerm, period, user, done) {
             {'$limit': 20}
         )
             .sort({score: {$meta: 'textScore'}})
+            .limit(20)
             .populate('clientType.tariffId')
             .populate('addressId')
             .populate('controllerId')

@@ -119,3 +119,10 @@ exports.getByPeriodAndByClientFizId = function (dateFrom, dateTo, clientFizId, d
             done({operationResult: 0, result: res});
         });
 };
+
+
+
+exports.getGroupedByType = function(period, done)
+{
+
+}

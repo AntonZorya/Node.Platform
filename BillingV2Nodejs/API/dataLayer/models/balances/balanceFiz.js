@@ -8,6 +8,7 @@ exports.definition = _.extend({
     balanceTypeId: {type: schema.Types.ObjectId, ref: "BalanceType", required: true}, //
     clientId: {type: schema.Types.ObjectId, ref: "ClientFiz"},
     counterId: {type: schema.Types.ObjectId},
+    pipelineId: {type: schema.Types.ObjectId},
     sum: {type: Number},
     period: {type: Number, required: true},
     //аудит

@@ -57,3 +57,45 @@ exports.getByCounterId = function (counterId, period, done) {
         done({operationResult: 0, result: res});
     });
 };
+
+exports.hasByCounter = function(clientId, period, done)
+{
+    calcCollection.count({
+        $and: [
+            {period: period},
+            {clientId: clientId},
+            { $or: [ {calculationType: 0}, {calculationType: 1} ]},
+            {isDeleted: false}
+        ]
+    }, function(err, res) {
+       if (err) return done(errorBuilder(err));
+        return done({operationResult: 0, result: res > 0});
+    });
+}
+
+exports.getByClientIdWithCounters = function(clientId, period, done) {
+    calcCollection.find({
+        $and: [
+            {period: period},
+            {clientId: clientId},
+            { $or: [ {calculationType: 0}, {calculationType: 1} ]},
+            {isDeleted: false}
+        ]}, function(err, res) {
+        if (err) return done(errorBuilder(err));
+        return done({operationResult: 0, result: res})
+    });
+}
+
+exports.getByClientId = function (clientId, period, done) {
+    calcCollection.findOne({
+        $and: [
+            {period: period},
+            {clientId: clientId},
+            {calculationType: 2},
+            {isDeleted: false}
+        ]
+    }, function(err, res) {
+       if (err) return done(errorBuilder(err));
+        return done({operationResult: 0, result: res});
+    });
+}
