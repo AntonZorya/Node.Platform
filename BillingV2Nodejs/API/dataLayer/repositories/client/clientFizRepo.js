@@ -21,7 +21,6 @@ CollectionSchema.plugin(deepPopulate, {
     ]
 });
 
-
 exports.add = function (client, done) {
     var model = Collection(client);
     model.save(function (err) {
@@ -36,6 +35,14 @@ exports.getAll = function (orgId, done) {
         return done({operationResult: 0, result: clients});
     });
 };
+
+exports.getByAccountNumber = function (accountNumber, done) {
+    Collection.find({isDeleted: false, accountNumber: accountNumber}).exec(function (err, client) {
+        if (err)return done(errorBuilder(err));
+        return done({operationResult: 0, result: client});
+    });
+}
+
 
 exports.getAllByCtrlId = function (ctrlId, done) {
     Collection.find({isDeleted: false, controllerId: ctrlId}, function (err, clients) {
@@ -148,7 +155,6 @@ exports.report5 = function (period, done) {
 
 exports.report6 = function (period, done) {
     Collection.aggregate(
-
         {
             $group: {
                 _id: {controllerId: "$controllerId"},
@@ -293,8 +299,8 @@ exports.updateClientCounter = function (body, done) {
 
 };
 
-exports.getPeriods = function(done){
-    Collection.find().distinct('period', function(err, periods){
+exports.getPeriods = function (done) {
+    Collection.find().distinct('period', function (err, periods) {
         if (err) return done(errorBuilder(err));
         return done({operationResult: 0, result: periods});
     });
