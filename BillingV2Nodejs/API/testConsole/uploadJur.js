@@ -111,7 +111,7 @@ async.each(uniqData, function (row, eachDone) {
             description: "Ввод" + row[4],
             addressId: row[10],
             counters: [counter],
-            sourceCounts: 1,
+            sourceCounts: 0,
             waterPercent: row[14] ? row[14].replace('%', '') : 0,
             canalPercent: row[15] ? row[15].replace('%', '') : 0,
 
