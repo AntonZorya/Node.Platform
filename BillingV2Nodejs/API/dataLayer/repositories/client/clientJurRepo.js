@@ -31,6 +31,13 @@ exports.add = function (client, done) {
     });
 };
 
+exports.getByBin = function (bin, done) {
+    Collection.findOne({isDeleted: false, bin: bin}).exec(function (err, client) {
+        if (err) return done(errorBuilder(err));
+        return done({operationResult: 0, result: client});
+    });
+};
+
 exports.getAll = function (orgId, done) {
     Collection.find({isDeleted: false}).populate("controllerId").populate('addressId').exec(function (err, clients) {
         if (err) return done(errorBuilder(err));
