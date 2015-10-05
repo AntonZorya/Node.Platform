@@ -1,7 +1,8 @@
-billingApplication.controller('editTechDataController', ['$scope', 'dataService', 'modalSvc', 'toastr', editTechDataController]);
+billingApplication.controller('editTechDataController', ['$scope', 'dataService', 'modalSvc', 'toastr', 'validationSvc', editTechDataController]);
 
-function editTechDataController($scope, dataService, modalSvc, toastr) {
+function editTechDataController($scope, dataService, modalSvc, toastr, valSvc) {
 
+    valSvc.init($scope);
     $scope.modalItem = {};
     $scope.modalItem = _.extend($scope.modalItem, $scope.$parent.selectedItem);
 
@@ -25,6 +26,9 @@ function editTechDataController($scope, dataService, modalSvc, toastr) {
                 if (tariff._id !== prevTarifId) {
                     $scope.$emit('changeTariffId', { clientId: $scope.modalItem._id});
                 }
+            } else{
+                toastr.error('', 'Не все данные введены');
+                $scope.modalItem = _.extend($scope.modalItem, $scope.$parent.selectedItem);
             }
 
         });

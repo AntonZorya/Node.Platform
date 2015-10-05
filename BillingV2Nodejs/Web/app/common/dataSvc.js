@@ -1,4 +1,3 @@
-
 billingApplication.service('dataService', ['$http', '$q', '$location', '$window', '$cookieStore', 'API_HOST', '$indexedDB', dataService]);
 
 function dataService($http, $q, $location, $window, $cookies, API_HOST, $indexedDB) {
@@ -10,13 +9,13 @@ function dataService($http, $q, $location, $window, $cookies, API_HOST, $indexed
 
     var self = this;
 
-    this.checkForIndexedDB = function(){
-        $indexedDB.openStore('user',function(store) {
-           store.count().then(function(count) {
-               if(count > 0){
-               $window.location = "/#/controller/main";
-               }
-           });
+    this.checkForIndexedDB = function () {
+        $indexedDB.openStore('user', function (store) {
+            store.count().then(function (count) {
+                if (count > 0) {
+                    $window.location = "/#/controller/main";
+                }
+            });
         });
 
     };
@@ -30,7 +29,7 @@ function dataService($http, $q, $location, $window, $cookies, API_HOST, $indexed
         var re = /(\/login)|(\/languages)|(\/register)|(\/loginNormal)/;
         if (url.match(re)) return "";
         var token = $.cookie("ArndBooksAuthToken");
-            //$cookies.get('ArndBooksAuthToken');
+        //$cookies.get('ArndBooksAuthToken');
         if (!token)
             this.toLogin();
         else
@@ -46,10 +45,10 @@ function dataService($http, $q, $location, $window, $cookies, API_HOST, $indexed
     this.get = function (url, params, loaderElem) {
         var token = this.checkLogin(url);
         var deferred = $q.defer();
-        
-         if (loaderElem)
+
+        if (loaderElem)
             $(loaderElem).addClass("loading");
-        
+
         $http({
             method: 'GET',
             url: this.urlFor(url),
@@ -59,45 +58,46 @@ function dataService($http, $q, $location, $window, $cookies, API_HOST, $indexed
             },
         })
             .success(function (data) {
-                 if (loaderElem)
-            $(loaderElem).removeClass("loading");
-            deferred.resolve(data);
-        })
+                if (loaderElem)
+                    $(loaderElem).removeClass("loading");
+                deferred.resolve(data);
+            })
             .error(function (error, status) {
-                     if (loaderElem)
-            $(loaderElem).removeClass("loading");
-            if (status == 401) {
-                self.toLogin();
-            } else {
-                
-                if (loaderElem) {
-                     $(loaderElem).dimmer({closable:false, 
-                     template : {
-                          dimmer: function() {
-                           return $('<div class="ui dimmer"><div class="content"><div class="center"><i class="huge frown icon"></i> <h3>Произошла ошибка</h3></div></div></div>').attr('class', 'ui dimmer');
-                          }
-                        }});
-                    
-                    $(loaderElem).dimmer('show');
-                    
+                if (loaderElem)
+                    $(loaderElem).removeClass("loading");
+                if (status == 401) {
+                    self.toLogin();
+                } else {
+
+                    if (loaderElem) {
+                        $(loaderElem).dimmer({
+                            closable: false,
+                            template: {
+                                dimmer: function () {
+                                    return $('<div class="ui dimmer"><div class="content"><div class="center"><i class="huge frown icon"></i> <h3>Произошла ошибка</h3></div></div></div>').attr('class', 'ui dimmer');
+                                }
+                            }
+                        });
+
+                        $(loaderElem).dimmer('show');
+
+                    }
+                    deferred.reject(error);
+
+
                 }
-                deferred.reject(error);
-            
-               
-            }
-        });
+            });
 
         return deferred.promise;
     };
 
     this.post = function (url, data, loaderElem, scope) {
-        
-        if(scope)
-        {
+
+        if (scope) {
             scope.validationErrors = [];
             scope.commonErrors = [];
         }
-        
+
         var token = this.checkLogin(url);
 
         var deferred = $q.defer();
@@ -119,34 +119,35 @@ function dataService($http, $q, $location, $window, $cookies, API_HOST, $indexed
             deferred.resolve(data);
         }).error(function (error, status) {
             if (loaderElem)
-                    $(loaderElem).removeClass("loading");
-           if(status == 400){
-               if (scope) {
-                   if(error.operationResult==2){
-                       scope.validationErrors = error.result[0].errors;
-                   }
-                   if(error.operationResult==3){
-                       scope.commonErrors = error.result;
-                   }
-               }
-           }
-           
-            if (status == 401) {
-               self.toLogin();
+                $(loaderElem).removeClass("loading");
+            if (status == 400) {
+                if (scope) {
+                    if (error.operationResult == 2) {
+                        scope.validationErrors = error.result[0].errors;
+                    }
+                    if (error.operationResult == 3) {
+                        scope.commonErrors = error.result;
+                    }
+                }
             }
-            
-            if(status == 500)
-                {
+
+            if (status == 401) {
+                self.toLogin();
+            }
+
+            if (status == 500) {
                 if (loaderElem) {
-                     $(loaderElem).dimmer({closable:false, 
-                     template : {
-                          dimmer: function() {
-                           return $('<div class="ui dimmer"><div class="content"><div class="center"><i class="huge frown icon"></i> <h3>Произошла ошибка</h3></div></div></div>').attr('class', 'ui dimmer');
-                          }
-                        }});
-                    
+                    $(loaderElem).dimmer({
+                        closable: false,
+                        template: {
+                            dimmer: function () {
+                                return $('<div class="ui dimmer"><div class="content"><div class="center"><i class="huge frown icon"></i> <h3>Произошла ошибка</h3></div></div></div>').attr('class', 'ui dimmer');
+                            }
+                        }
+                    });
+
                     $(loaderElem).dimmer('show');
-                    
+
                 }
                 deferred.reject(error);
             }
@@ -154,17 +155,12 @@ function dataService($http, $q, $location, $window, $cookies, API_HOST, $indexed
 
         return deferred.promise;
     };
-    
-    
-
-
-
 
 
     this.delete = function (url, id, loaderElem) {
 
-    	 var token = this.checkLogin(url);
-    
+        var token = this.checkLogin(url);
+
         var deferred = $q.defer();
 
         if (loaderElem)
@@ -179,36 +175,37 @@ function dataService($http, $q, $location, $window, $cookies, API_HOST, $indexed
             },
         })
             .success(function (data) {
-            
-              if (loaderElem)
-                  $(loaderElem).removeClass("loading");
-                  deferred.resolve(data);
-              })
+
+                if (loaderElem)
+                    $(loaderElem).removeClass("loading");
+                deferred.resolve(data);
+            })
             .error(function (error, status) {
-                  if (loaderElem)
-            $(loaderElem).removeClass("loading");
-            if (status == 401) {  //  temporary detect login calls
-                self.toLogin();
-            } else {
-                if (loaderElem) {
-                     $(loaderElem).dimmer({closable:false, 
-                     template : {
-                          dimmer: function() {
-                           return $('<div class="ui dimmer"><div class="content"><div class="center"><i class="huge frown icon"></i> <h3>Произошла ошибка</h3></div></div></div>').attr('class', 'ui dimmer');
-                          }
-                        }});
-                    
-                    $(loaderElem).dimmer('show');
-                    
+                if (loaderElem)
+                    $(loaderElem).removeClass("loading");
+                if (status == 401) {  //  temporary detect login calls
+                    self.toLogin();
+                } else {
+                    if (loaderElem) {
+                        $(loaderElem).dimmer({
+                            closable: false,
+                            template: {
+                                dimmer: function () {
+                                    return $('<div class="ui dimmer"><div class="content"><div class="center"><i class="huge frown icon"></i> <h3>Произошла ошибка</h3></div></div></div>').attr('class', 'ui dimmer');
+                                }
+                            }
+                        });
+
+                        $(loaderElem).dimmer('show');
+
+                    }
+                    deferred.reject(error);
                 }
-                deferred.reject(error);
-            }
-        });
+            });
 
         return deferred.promise;
 
     };
-
 
 
 }

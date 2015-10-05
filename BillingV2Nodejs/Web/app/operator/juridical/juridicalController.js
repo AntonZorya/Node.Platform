@@ -1,7 +1,8 @@
-billingApplication.controller('juridicalController', ['$scope', 'dataService', 'toastr', 'printSvc', '$templateCache', 'modalSvc', '$rootScope', juridicalController]);
+billingApplication.controller('juridicalController', ['$scope', 'dataService', 'toastr', 'printSvc', '$templateCache', 'modalSvc', '$rootScope', 'validationSvc', juridicalController]);
 
-function juridicalController($scope, dataService, toastr, printSvc, $templateCache, modalSvc, $rootScope) {
+function juridicalController($scope, dataService, toastr, printSvc, $templateCache, modalSvc, $rootScope, valSvc) {
 
+    valSvc.init($scope);
     $scope.searchTerm = '';
     $scope.data = [];
     $scope.selectedItem = {};
