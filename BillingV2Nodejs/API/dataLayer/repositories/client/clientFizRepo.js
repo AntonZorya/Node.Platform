@@ -245,7 +245,8 @@ exports.search = function (searchTerm, period, user, done) {
             {
                 $and: [
                     {period: period},
-                    {$text: {$search: searchTerm}}
+                    {$text: {$search: searchTerm}},
+                    {site: {$in: user.sites}}
                 ]
             },
 

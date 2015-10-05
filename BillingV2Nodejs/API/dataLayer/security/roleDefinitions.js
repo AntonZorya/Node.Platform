@@ -3,5 +3,6 @@
     organizationAdmin: {sysName: "organizationAdmin", displayName: "#organizationAdmin"},
     organizationUser: {sysName: "organizationUser", displayName: "#organizationUser"},
     controller: {sysName: "client", displayName: "#client"},
-    operatorJuridical: {sysName: "operatorJuridical", displayName: "#operatorJuridical"}
+    operatorJuridical: {sysName: "operatorJuridical", displayName: "#operatorJuridical"},
+    operatorFizical:  {sysName: "operatorFizical", displayName: "#operatiorFizical"}
 };

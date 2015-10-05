@@ -68,13 +68,13 @@ module.exports = [
     {
         url: "/operator/juridical",
         name: "Юр. оператор",
-        roles: null,
-        childs: []
+        roles: [roleDefinitions.admin, roleDefinitions.organizationAdmin, roleDefinitions.operatorJuridical],
+        childs: [ ]
     },
     {
         url: "/operator/fizical",
         name: "Физ. оператор",
-        roles: null,
+        roles: [roleDefinitions.admin, roleDefinitions.organizationAdmin, roleDefinitions.operatorFizical],
         childs: []
     },
     {
