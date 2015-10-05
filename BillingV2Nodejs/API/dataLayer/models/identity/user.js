@@ -12,7 +12,8 @@ exports.definition = _.extend({
     employee: {type: Schema.Types.ObjectId, ref: 'Employee', required: false},
     roles: [{type: String}],
     organizationId: {type: Schema.Types.ObjectId, ref: 'Organization', required: false},
-    controllerId: {type: Schema.Types.ObjectId, ref: 'Controller', required: false}
+    controllerId: {type: Schema.Types.ObjectId, ref: 'Controller', required: false},
+    sites: [{type: String}]
 }, ModelBase);
 
 

@@ -13,6 +13,15 @@ var billingApplication = angular.module('billingApplication', ['indexedDB', "hig
             .when("/administration/languages", {
                 templateUrl: "./app/admin/languages/languagesView.html"
             })
+            .when("/administration/users", {
+                templateUrl: "./app/admin/users/users.html"
+            })
+            .when("/admin/users/add", {
+                templateUrl: "./app/admin/users/addUser.html"
+            })
+            .when("/admin/users/update", {
+                templateUrl: "./app/admin/users/updateUser.html"
+            })
             .when("/reports/report1", {
                 templateUrl: "./app/admin/reports/report1View.html"
             })

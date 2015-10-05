@@ -1,3 +1,5 @@
+billingApplication.controller("addUserCtrl", ["$scope", "$rootScope", "dataService", "validationSvc", "$location", addUserCtrl]);
+
 function addUserCtrl($scope, $rootScope, dataSvc, validSvc, $location)
 {
 	validSvc.init($scope);
@@ -5,8 +7,10 @@ function addUserCtrl($scope, $rootScope, dataSvc, validSvc, $location)
 	var self = this;
 
 	$scope.roles = [
-	{sysName: "organizationAdmin", displayName: "#organizationAdmin"},
-	{sysName: "organizationUser", displayName: "#organizationUser" },
+		{sysName: "organizationUser", displayName: "#organizationUser"},
+		{sysName: "client", displayName: "#client"},
+		{sysName: "operatorJuridical", displayName: "#operatorJuridical"},
+		{sysName: "operatorFizical", displayName: "#operatiorFizical"}
 	];
 
 
@@ -26,7 +30,7 @@ function addUserCtrl($scope, $rootScope, dataSvc, validSvc, $location)
 
 
 	$scope.add = function() {
-		$scope.vm.organizationId = $rootScope.user.organizationId;
+		//$scope.vm.organizationId = $rootScope.user.organizationId;
 
 		if ($scope.passwordConfirmation !== $scope.vm.password)
 		{
@@ -35,13 +39,13 @@ function addUserCtrl($scope, $rootScope, dataSvc, validSvc, $location)
 		}
 		$scope.vm.roles = self.selectedRoles();
 		dataSvc.post("/identity/user", $scope.vm, self.container, $scope).then(function(res) {
-			$location.path("/admin/users");
+			$location.path("/administration/users");
 		});
 
 	}
 
 	$scope.cancel = function() {
-		$location.path("/admin/users");
+		$location.path("/administration/users");
 	}
 
 	$scope.isChecked = function(role) {
@@ -57,5 +61,5 @@ function addUserCtrl($scope, $rootScope, dataSvc, validSvc, $location)
 }
 
 
-billingApplication.controller("addUserCtrl", ["$scope", "$rootScope", "dataService", "validationSvc", "$location", addUserCtrl]);
+
 
