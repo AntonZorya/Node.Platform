@@ -61,31 +61,32 @@ function editPassportDataController($scope, dataService, modalSvc, toastr) {
         });
     }
 
-    var address = $scope.modalItem.addressId;
-    if (address.parentAddresses.length == 0) {
-        $scope.address.street = address;
-    } else if (address.parentAddresses.length == 1) {
-        GetByParentId(address.parentAddresses[0].id, function (result) {
-            $scope.houseList = result;
-            $scope.address.street = address.parentAddresses[0];
-            $scope.address.street._id = $scope.address.street.id;
-            $scope.address.street.value = $scope.address.street.name;
-            $scope.address.house = address;
-        });
-    } else {
-        GetByParentId(address.parentAddresses[1].id, function (result) {
-            $scope.houseList = result;
-            $scope.address.street = address.parentAddresses[1];
-            $scope.address.street._id = $scope.address.street.id;
-            $scope.address.street.value = $scope.address.street.name;
-            $scope.address.house = address.parentAddresses[0];
-            $scope.address.house._id = $scope.address.house.id;
-            $scope.address.house.value = $scope.address.house.name;
-            GetByParentId($scope.address.house._id, function(result){
-                $scope.flatList = result;
-                $scope.address.flat = address;
+    if ($scope.modalItem.addressId) {
+        var address = $scope.modalItem.addressId;
+        if (address.parentAddresses.length == 0) {
+            $scope.address.street = address;
+        } else if (address.parentAddresses.length == 1) {
+            GetByParentId(address.parentAddresses[0].id, function (result) {
+                $scope.houseList = result;
+                $scope.address.street = address.parentAddresses[0];
+                $scope.address.street._id = $scope.address.street.id;
+                $scope.address.street.value = $scope.address.street.name;
+                $scope.address.house = address;
             });
-        });
+        } else {
+            GetByParentId(address.parentAddresses[1].id, function (result) {
+                $scope.houseList = result;
+                $scope.address.street = address.parentAddresses[1];
+                $scope.address.street._id = $scope.address.street.id;
+                $scope.address.street.value = $scope.address.street.name;
+                $scope.address.house = address.parentAddresses[0];
+                $scope.address.house._id = $scope.address.house.id;
+                $scope.address.house.value = $scope.address.house.name;
+                GetByParentId($scope.address.house._id, function (result) {
+                    $scope.flatList = result;
+                    $scope.address.flat = address;
+                });
+            });
+        }
     }
-
 }

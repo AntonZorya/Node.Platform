@@ -1,5 +1,4 @@
 var addressLogic = require('../../logicLayer/location/addressLogic');
-var addressLogic = require('../../logicLayer/location/addressFizLogic');
 
 module.exports = function (router) {
 
