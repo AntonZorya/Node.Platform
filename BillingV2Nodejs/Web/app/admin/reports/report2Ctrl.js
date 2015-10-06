@@ -2,173 +2,96 @@ billingApplication.controller('report2Ctrl', ['dataService', '$scope','validatio
 
 function report2Ctrl(dataSvc, $scope, valSvc) {
 
+	$scope.resultTotals = {};
+	$scope.result = [];
+	$scope.yearList = [
+		{ id: 2011, name: '2011' },
+		{ id: 2012, name: '2012' },
+		{ id: 2013, name: '2013' },
+		{ id: 2014, name: '2014' },
+		{ id: 2015, name: '2015' },
+		{ id: 2016, name: '2016' },
+		{ id: 2017, name: '2017' },
+		{ id: 2018, name: '2018' },
+		{ id: 2019, name: '2019' },
+		{ id: 2020, name: '2020' }
+	];
+	$scope.monthList = [
+		{ id: 0, name: 'Январь' },
+		{ id: 1, name: 'Февраль' },
+		{ id: 2, name: 'Март' },
+		{ id: 3, name: 'Апрель' },
+		{ id: 4, name: 'Май' },
+		{ id: 5, name: 'Июнь' },
+		{ id: 6, name: 'Июль' },
+		{ id: 7, name: 'Август' },
+		{ id: 8, name: 'Сентябрь' },
+		{ id: 9, name: 'Октябрь' },
+		{ id: 10, name: 'Ноябрь' },
+		{ id: 11, name: 'Декабрь' }
+	];
+	$scope.selectedYear;
+	$scope.selectedMonth;
 
-	$scope.controllersList = [];
-	$scope.days = getDaysInMonth(6,2015);
-	$scope.data = [];
-	$scope.series = [];
-
-
-	dataSvc.get("/controllers", {}, $("#container")).then(function(res) {
-		$scope.controllersList = res.result;
-
-
-		dataSvc.get("/reportCounts", {period: 201506}, $("#container")).then(function(res) {
-			$scope.data = res;
-
-			for(var j=0;j<$scope.controllersList.length;j++){
-				// var temObj = {};
-				// tempObj.tooltip.headerFormat="";
-				// tempObj.tooltip.pointFormat=$scope.controllersList[j].fullName+':{point.y}<br>';
-				var tempArr = [];
-
-				for(var i=0;i<$scope.days.length;i++){
-					
-					tempArr.push($scope.getCounts2($scope.days[i], $scope.controllersList[j].fullName));
-				}
-
-				$scope.series.push({
-					data: tempArr,
-					tooltip: {
-
-						headerFormat: "",
-						pointFormat: $scope.controllersList[j].fullName+':{point.y}<br>'
-					}
-				});
-
-			}
+	//DECLARE LOGIC
 
 
 
-			$scope.karimovChartConfig = {
-				options: dashboardChartObptions,
-				series: $scope.series
-			}
+	$scope.getReport = function(year, month){
+		//prepare period variable //ex: 201507
+		month++;
+		if(month<10) month="0"+month;
+		var period = ""+year+month;
+		$scope.resultTotals = {};
+
+		dataSvc.get("/report2", {period: period}, $("#container")).then(function(res) {
+			$scope.result = res.result;
+			$scope.resultTotals.passed = 0;
+			$scope.resultTotals.sumWaterCubic = 0;
+			$scope.resultTotals.sumCanalCubic = 0;
+			$scope.resultTotals.sumWaterMoney = 0;
+			$scope.resultTotals.sumCanalMoney = 0;
+			$scope.resultTotals.sumForfeitMoney = 0;
+			$scope.resultTotals.sumTotalMoney = 0;
+
+			_.each(res.result, function(elem){
+				console.log(parseFloat(elem.passed));
+				console.log(parseFloat(elem.sumWaterCubic));
+				if(elem.passed)
+				$scope.resultTotals.passed += parseFloat(elem.passed);
+				if(elem.sumWaterCubic)
+				$scope.resultTotals.sumWaterCubic += parseFloat(elem.sumWaterCubic);
+				if(elem.sumCanalCubic)
+				$scope.resultTotals.sumCanalCubic += parseFloat(elem.sumCanalCubic);
+				if(elem.sumWaterMoney)
+				$scope.resultTotals.sumWaterMoney += parseFloat(elem.sumWaterMoney);
+				if(elem.sumCanalMoney)
+				$scope.resultTotals.sumCanalMoney += parseFloat(elem.sumCanalMoney);
+				if(elem.sumForfeitMoney)
+				$scope.resultTotals.sumForfeitMoney += parseFloat(elem.sumForfeitMoney);
+				if(elem.sumTotalMoney)
+				$scope.resultTotals.sumTotalMoney += parseFloat(elem.sumTotalMoney);
+			});
+
+			$scope.resultTotals.passed = $scope.resultTotals.passed.toFixed(2);
+			$scope.resultTotals.sumWaterCubic = $scope.resultTotals.sumWaterCubic.toFixed(2);
+			$scope.resultTotals.sumCanalCubic = $scope.resultTotals.sumCanalCubic.toFixed(2);
+			$scope.resultTotals.sumWaterMoney = $scope.resultTotals.sumWaterMoney.toFixed(2);
+			$scope.resultTotals.sumCanalMoney = $scope.resultTotals.sumCanalMoney.toFixed(2);
+			$scope.resultTotals.sumForfeitMoney = $scope.resultTotals.sumForfeitMoney.toFixed(2);
+			$scope.resultTotals.sumTotalMoney = $scope.resultTotals.sumTotalMoney.toFixed(2);
 
 
 		});
-
-	});
-
-	function getDaysInMonth(month, year) {
-	     var date = new Date(year, month, 1, 6, 0, 0);
-	     var days = [];
-	     var iter=1;
-	     while (date.getMonth() === month) {
-	     	dayAsStr = new Date(date).getFullYear().toString() + "-0" + (new Date(date).getMonth()+1).toString() + "-" + ((iter < 10) ? ("0"+iter) : iter);
-	        days.push(dayAsStr);
-	        date.setDate(date.getDate() + 1);
-	        iter++;
-	     }
-	     return days;
-	}
-
-	$scope.getCounts = function(day,con){
-		var look = _.findWhere($scope.data, {controllerId: con, date: day});
-		if(look){
-			return look.total;
-		}
-
-	}
-
-	$scope.getCounts2 = function(day,con){
-		var look = _.findWhere($scope.data, {controllerId: con, date: day});
-		if(look){
-			return look.total;
-		}
-		return 0;
-		
-	}
-
-
-
-
-	var dashboardChartObptions = {
-		chart: {
-			renderTo: this,
-			backgroundColor: null,
-			borderWidth: 0,
-			type: 'area',
-			margin: [2, 0, 2, 0],
-			width: 1000,
-			height: 300,
-			style: {
-				overflow: 'visible'
-			},
-			skipClone: true
-		},
-		title: {
-			text: ''
-		},
-		credits: {
-			enabled: false
-		},
-		xAxis: {
-			labels: {
-				enabled: false
-			},
-			title: {
-				text: null
-			},
-			startOnTick: false,
-			endOnTick: false,
-			tickPositions: []
-		},
-		yAxis: {
-			endOnTick: false,
-			startOnTick: false,
-			labels: {
-				enabled: false
-			},
-			title: {
-				text: null
-			},
-			tickPositions: [0]
-		},
-		legend: {
-			enabled: false
-		},
-		tooltip: {
-			backgroundColor: null,
-			borderWidth: 0,
-			shadow: false,
-			useHTML: true,
-			hideDelay: 0,
-			shared: true,
-			padding: 0,
-			positioner: function (w, h, point) {
-				return {x: point.plotX - w / 2, y: point.plotY - h};
-			}
-		},
-		plotOptions: {
-			series: {
-				animation: false,
-				lineWidth: 1,
-				shadow: false,
-				states: {
-					hover: {
-						lineWidth: 1
-					}
-				},
-				marker: {
-					radius: 1,
-					states: {
-						hover: {
-							radius: 2
-						}
-					}
-				},
-				fillOpacity: 0.25
-			},
-			column: {
-				negativeColor: '#910000',
-				borderColor: 'silver'
-			}
-		}
-
-
 	};
 
+	$scope.initDate = function(){
+		var currentDate = new Date();
+		$scope.selectedMonth = $scope.monthList[currentDate.getMonth()];
+		$scope.selectedYear = _.find($scope.yearList, function(year){ return year.id == currentDate.getFullYear(); });
+		$scope.getReport($scope.selectedYear.id,$scope.selectedMonth.id);
+	};
+	$scope.initDate();
 
 
 	

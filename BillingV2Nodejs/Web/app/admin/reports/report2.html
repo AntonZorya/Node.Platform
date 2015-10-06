@@ -1,21 +1,65 @@
 <div ng-controller="report2Ctrl" id="container">
 
-<h4>Отчет по контролерам (кол-во пройденых объектов)</h4>
+	<h4>Отчет по водопотреблению</h4>
 
-	<div>
-		<highchart config="karimovChartConfig"></highchart>
+	<div class="ui grid">
+		<div class="four wide column">
+			<span>Месяц:</span>
+			<select ng-model="selectedMonth" ng-options="month.name for month in monthList track by month.id" ng-change="getReport(selectedYear.id,selectedMonth.id)"></select>
+		</div>
+		<div class="four wide column">
+			<span>Год:</span>
+			<select ng-model="selectedYear" ng-options="year.name for year in yearList track by year.id" ng-change="getReport(selectedYear.id,selectedMonth.id)"></select>
+		</div>
+		<div class="four wide column"></div>
+		<div class="four wide column"></div>
 	</div>
 
+
+
 	<table class="ui very compact celled  table">
-		
-		<tr>
-			<td >Дата/Контролер</td>
-			<td  ng-repeat="con in controllersList">{{con.fullName}}</td>
-		</tr>
-		<tr ng-repeat="day in days">
-			<td style="font-size: 12px;">{{day}}</td>
-			<td  ng-repeat="con in controllersList">{{getCounts(day,con.fullName)}}</td>
-		</tr>
+		<thead>
+			<tr>
+				<th >Контролер</th>
+				<th >Количество объектов</th>
+				<th >Вода, м3</th>
+				<th >Канализация, м3</th>
+				<th >Вода, тенге</th>
+				<th >Канализация, тенге</th>
+				<th >Штраф, тенге</th>
+				<th >Всего, тенге</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="res in result">
+				<td >{{res.controllerId}}</td>
+				<td >{{res.passed}}</td>
+				<td >{{res.sumWaterCubic}}</td>
+				<td >{{res.sumCanalCubic}}</td>
+				<td >{{res.sumWaterMoney}}</td>
+				<td >{{res.sumCanalMoney}}</td>
+				<td >{{res.sumForfeitMoney}}</td>
+				<td >{{res.sumTotalMoney}}</td>
+			</tr>
+		</tbody>
+		<tfoot>
+			<tr >
+				<th >Общий итог</th>
+				<th >{{resultTotals.passed}}</th>
+				<th >{{resultTotals.sumWaterCubic}}</th>
+				<th >{{resultTotals.sumCanalCubic}}</th>
+				<th >{{resultTotals.sumWaterMoney}}</th>
+				<th >{{resultTotals.sumCanalMoney}}</th>
+				<th >{{resultTotals.sumForfeitMoney}}</th>
+				<th >{{resultTotals.sumTotalMoney}}</th>
+			</tr>
+		</tfoot>
 	</table>
 
 </div>
+
+<style>
+	.ui.table tfoot th{
+		background: #f9fafb;
+	}
+</style>
