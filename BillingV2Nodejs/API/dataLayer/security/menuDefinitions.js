@@ -26,6 +26,12 @@ module.exports = [
                 name: 'Отчет по водопотреблению',
                 childs: [],
                 roles: null
+            },
+            {
+                url: "/reports/report3",
+                name: 'Обновить данные для ODATA',
+                childs: [],
+                roles: null
             }
         ],
         roles: [roleDefinitions.admin, roleDefinitions.organizationAdmin]

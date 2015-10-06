@@ -28,6 +28,9 @@ var billingApplication = angular.module('billingApplication', ['indexedDB', "hig
             .when("/reports/report2", {
                 templateUrl: "./app/admin/reports/report2View.html"
             })
+            .when("/reports/report3", {
+                templateUrl: "./app/admin/reports/report3View.html"
+            })
 
             .when("/login", {
                 templateUrl: "./app/login/login.html"
