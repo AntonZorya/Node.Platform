@@ -37,5 +37,8 @@ exports = $data.Entity.extend("colleges._ClientPopulatedAndAggregated", {
     Потреблено_ниже_нормы : {type: "string"},
     Потребление_ниже_нормы_на_м3 : {type: "int"},
     Потребление_ниже_нормы_на_тенге : {type: "int"},
-    Дата_начисления : {type: "date"}
+    Дата_начисления : {type: "date"},
+    Сумма_штрафа : {type:"number"},
+    Дата_штрафа : {type: "date"},
+    Комментарий_к_штрафу : {type: "string"}
 });
