@@ -174,12 +174,16 @@ function fizicalController($scope, dataService, toastr, printSvc, $templateCache
     };
 
     $scope.editTechData = function () {
-        modalSvc.showModal('/app/operator/fizical/editTechData.html', 'editTechDataModal', $scope);
+        modalSvc.showModal('/app/operator/fizical/editFizClient.html', 'editFizClientModal', $scope);
     };
 
     $scope.editPassportData = function () {
         modalSvc.showModal('/app/operator/fizical/editPassportData.html', 'editPassportDataModal', $scope);
     };
+
+    $scope.addClient = function() {
+        modalSvc.showModal('/app/operator/fizical/addFizClient.html', 'addFizClientModal', $scope);
+    }
 
     //streets
     $scope.getStreets = function () {

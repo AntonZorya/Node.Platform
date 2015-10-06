@@ -4,12 +4,16 @@ function editTechDataFizController($scope, dataService, modalSvc, toastr) {
 
     $scope.modalItem = {};
     $scope.modalItem = _.extend($scope.modalItem, $scope.$parent.selectedItem);
+    var idsRmPiplines = [];
 
     var prevTarifId = $scope.modalItem.clientType.tariffId._id;
 
     $scope.save = function () {
         var tariff = $scope.modalItem.clientType.tariffId;
-        dataService.post('/clientFiz/update', $scope.modalItem).then(function (response) {
+        dataService.post('/clientFiz/update', {
+            client: $scope.modalItem,
+            idsRmPipelines: idsRmPiplines
+        }).then(function (response) {
 
             if (response.operationResult === 0) {
                 toastr.success('', 'Данные успешно сохранены');
@@ -23,7 +27,7 @@ function editTechDataFizController($scope, dataService, modalSvc, toastr) {
                 $scope.$parent.selectedItem.clientType.tariffId = tariff;
 
                 if (tariff._id !== prevTarifId) {
-                    $scope.$emit('changeTariffId', { clientId: $scope.modalItem._id});
+                    $scope.$emit('changeTariffId', {clientId: $scope.modalItem._id});
                 }
             }
 
@@ -32,6 +36,31 @@ function editTechDataFizController($scope, dataService, modalSvc, toastr) {
 
     $scope.cancel = function () {
         modalSvc.resolveModal('editTechDataModal');
+    };
+
+    $scope.addPipeline = function () {
+        var newPipeline = {
+            number: $scope.modalItem.pipelines.length,
+            description: '',
+            addressId: $scope.modalItem.addressId,
+            counters: [],
+            waterPercent: null,
+            canalPercent: null,
+            isActive: true,
+            fileIds: [],
+            sourceCounts: 1,
+            avg: null,
+            norm: null
+        }
+        $scope.modalItem.pipelines.push(newPipeline);
+    };
+
+    $scope.removePipeline = function (pipIndex, event) {
+        var button = $(event.currentTarget);
+        idsRmPiplines.push($scope.modalItem.pipelines[pipIndex]._id);
+        if (confirm('Вы действительно хотите удалить ввод?')) {
+            $scope.modalItem.pipelines.splice(pipIndex, 1);
+        }
     };
 
     $scope.addNewCounter = function (pipelineIndex) {

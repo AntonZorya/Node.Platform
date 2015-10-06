@@ -9,12 +9,12 @@ var clientType = require(_modelsPath + 'client/clientTypeFiz').definition;
 var clientPipelines = require(_modelsPath + 'client/clientPipelines').definition;
 
 exports.definition = _.extend({
-	accountNumber: {type: String},
+	accountNumber: {type: String, required: "#accountNumber required"},
 	number: {type: String},
 	name: {type: String, required: "#name required"},
 	bin: {type: String, required: "#bin required"},
 	rnn: {type: String},
-	site: {type: String},
+	site: {type: String, required: "#site required"},
 
 	addressId: {type: Schema.Types.ObjectId, ref: "Address", required: true},
 	address: {type: String},//, required: "#address required"},
@@ -24,7 +24,7 @@ exports.definition = _.extend({
 	pipelines: clientPipelines,
 
 	controllerId: {type: Schema.Types.ObjectId, ref: "Controller"},
-	clientType: clientType,
+	clientType: {type: clientType, required: "#clienttype required"},
 	kskId: {type: Schema.Types.ObjectId, ref: 'ksk'},
 	abonentEntryDate: {type: Date},
 	norm: {type: Number},

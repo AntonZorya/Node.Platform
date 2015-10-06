@@ -213,43 +213,44 @@ exports.report2 = function (period, done) {
     );
 };
 
-exports.search = function (searchTerm, period, user, done) {
-    if (user.controllerId) {//test commit
-        Collection
-            .find(
-            {
-                $and: [
-                    {controllerId: user.controllerId},
-                    {period: period},
-                    {$text: {$search: searchTerm}}
-                ]
-            },
-            {score: {$meta: "textScore"}},
-            {'$limit': 20}
-        )
-            .sort({score: {$meta: 'textScore'}})
-            .limit(20)
-            .populate('clientType.tariffId')
-            .populate('addressId')
-            .populate('controllerId')
-            .populate('kskId')
-            .exec(function (err, docs) {
-                if (err) return done(errorBuilder(err));
+exports.searchByControllerId = function (searchTerm, period, controllerId, done) {
 
-                return done({operationResult: 0, result: docs});
+    Collection
+        .find(
+        {
+            $and: [
+                {controllerId: controllerId},
+                {period: period},
+                {$text: {$search: searchTerm}}
+            ]
+        },
+        {score: {$meta: "textScore"}},
+        {'$limit': 20}
+    )
+        .sort({score: {$meta: 'textScore'}})
+        .limit(20)
+        .populate('clientType.tariffId')
+        .populate('addressId')
+        .populate('controllerId')
+        .populate('kskId')
+        .exec(function (err, docs) {
+            if (err) return done(errorBuilder(err));
 
-            });
-    } else {
+            return done({operationResult: 0, result: docs});
+
+        });
+}
+ exports.searhcBySite = function(searchTerm, period, sites, done) {
+
         Collection
             .find(
             {
                 $and: [
                     {period: period},
                     {$text: {$search: searchTerm}},
-                    {site: {$in: user.sites}}
+                    {site: {$in: sites}}
                 ]
             },
-
             {score: {$meta: "textScore"}}
         )
             .sort({score: {$meta: 'textScore'}})
@@ -261,10 +262,31 @@ exports.search = function (searchTerm, period, user, done) {
             .exec(function (err, docs) {
                 if (err) return done(errorBuilder(err));
                 return done({operationResult: 0, result: docs});
-
             });
-    }
+};
 
+exports.search = function(searchTerm, period, done) {
+
+    Collection
+        .find(
+        {
+            $and: [
+                {period: period},
+                {$text: {$search: searchTerm}}
+            ]
+        },
+        {score: {$meta: "textScore"}}
+    )
+        .sort({score: {$meta: 'textScore'}})
+        .limit(20)
+        .populate('clientType.tariffId')
+        .populate('addressId')
+        .populate('controllerId')
+        .populate('kskId')
+        .exec(function (err, docs) {
+            if (err) return done(errorBuilder(err));
+            return done({operationResult: 0, result: docs});
+        });
 };
 
 exports.updateClientCounter = function (body, done) {

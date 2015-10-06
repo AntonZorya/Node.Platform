@@ -43,7 +43,8 @@ exports.get = function (id, done) {
     });
 };
 
-exports.update = function (clientJur, done) {
+exports.update = function (data, done) {
+    var clientJur = data.client;
     clientJurValidator('clientJur', clientJurDefinition, clientJur, function (validationRes) {
         if (validationRes.operationResult == 0) {
 
@@ -54,7 +55,18 @@ exports.update = function (clientJur, done) {
                 }
 
             ClientJurRepo.update(clientJur, function (res) {
-                return done(res);
+                if (data.idsRmPipelines.length > 0) {
+                    async.each(data.idsRmPipelines, function (id, eachDone) {
+                        BalanceLogic.removeByPipelineId(id, function (err) {
+                            eachDone(err);
+                        });
+                    }, function (err) {
+                        if (err) return done(err);
+                        else return done(res);
+                    });
+                } else {
+                    return done(res);
+                }
             });
         }
         else {
@@ -95,13 +107,13 @@ exports.getPeriods = function (done) {
 exports.search = function (searchTerm, period, user, done) {
     ClientJurRepo.search(searchTerm, period, user, function (res) {
 
-        if(res.operationResult==0){
-            async.each(res.result, function(client, callback){
-                BalanceLogic.getTotalByClientJurId(client._doc._id, period, function(balancesRes){
+        if (res.operationResult == 0) {
+            async.each(res.result, function (client, callback) {
+                BalanceLogic.getTotalByClientJurId(client._doc._id, period, function (balancesRes) {
                     client._doc.balances = balancesRes.result;
                     callback();
                 });
-            }, function(){
+            }, function () {
                 return done(res);
             })
         } else {
@@ -154,7 +166,7 @@ exports.updateClientCounter = function (body, userId, done) {
         if (pipeline.sourceCounts != 2) {
             waterCalcCubicMeters = (counter.currentCounts - counter.lastCounts) * (pipeline.waterPercent / 100);
             canalCalcCubicMetersCount = (counter.currentCounts - counter.lastCounts) * (pipeline.canalPercent / 100);
-        } else{
+        } else {
             waterCalcCubicMeters = pipeline.norm * (pipeline.waterPercent / 100);
             canalCalcCubicMetersCount = pipeline.norm * (pipeline.canalPercent / 100);
         }

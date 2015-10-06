@@ -20,6 +20,9 @@ exports.add = function (balance, done) {
     });
 };
 
+exports.removeByPipelineId = function(pipelineId, done){
+    BalanceRepo.removeByPipelineId(id, done);
+}
 
 exports.addMany = function (balances, done) {
 

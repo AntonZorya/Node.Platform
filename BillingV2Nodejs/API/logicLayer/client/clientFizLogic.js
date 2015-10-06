@@ -8,7 +8,7 @@ var CalculationLogic = require('../../logicLayer/calculations/calculationFizLogi
 var TariffLogic = require('../../logicLayer/tariff/tariffFizLogic');
 var mongoose = require('mongoose');
 var _ = require('underscore');
-
+var roleDefinitions = require("../../dataLayer/security/roleDefinitions");
 
 exports.add = function (clientFiz, orgId, done) {
 
@@ -93,24 +93,43 @@ exports.getPeriods = function (done) {
 }
 
 exports.search = function (searchTerm, period, user, done) {
-    ClientFizRepo.search(searchTerm, period, user, function (res) {
 
-        if (res.operationResult == 0) {
-            async.each(res.result, function (client, callback) {
-                BalanceLogic.getTotalByClientId(client._doc._id, period, function (balancesRes) {
-                    client._doc.balances = balancesRes.result;
-                    callback();
-                });
-            }, function () {
-                return done(res);
-            })
-        } else {
-            return done(res);
-        }
-
-
-    });
+    if (_.contains(user.roles, roleDefinitions.admin.sysName))
+    {
+        ClientFizRepo.search(searchTerm, period, function (res) {
+            searchCallback(res, period, done);
+        });
+    } else
+    if (_.contains(user.roles, roleDefinitions.operatorFizical.sysName)) {
+        ClientFizRepo.searhcBySite(searchTerm, period, user.sites, function(res) {
+           searchCallback(res, period, done);
+        });
+    } else
+    if (user.controllerId)
+    {
+        ClientFizRepo.searchByControllerId(searchTerm, period, user.controllerId, function(res) {
+           searchCallback(res, period, done);
+        });
+    } else {
+        return done({operationResult: 1, result: "#access denied"});
+    }
 };
+
+function searchCallback(res, period, done)
+{
+    if (res.operationResult == 0) {
+        async.each(res.result, function (client, callback) {
+            BalanceLogic.getTotalByClientId(client._doc._id, period, function (balancesRes) {
+                client._doc.balances = balancesRes.result;
+                callback();
+            });
+        }, function () {
+            return done(res);
+        })
+    } else {
+        return done(res);
+    }
+}
 
 exports.updateClientCounter = function (body, userId, done) {
 
@@ -409,7 +428,7 @@ exports.calculateByNorm = function (body, userId, done) {
             //?????
             date: new Date(),
             userId: userId,
-            calculationType: 2 //0 - ?? ????????, 1 - ?? ????????, 2 - по норме
+            calculationType: 2 //0 - ?? ????????, 1 - ?? ????????, 2 - пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
         };
 
 

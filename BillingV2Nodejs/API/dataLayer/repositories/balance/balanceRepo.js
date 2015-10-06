@@ -15,6 +15,13 @@ exports.add = function (balance, done) {
     });
 };
 
+exports.removeByPipelineId = function (pipelineId, done) {
+    Collection.findOneAndRemove({pipelineId: pipelineId}, function(err){
+        if (err) return done(errorBuilder(err));
+        return done({operationResult: 0});
+    });
+};
+
 exports.update = function (balance, done) {
     if (balance._id) {
         Collection.findOneAndUpdate({_id: balance._id}, balance, function (err, res) {
@@ -27,9 +34,9 @@ exports.update = function (balance, done) {
     }
 };
 
-exports.remove = function(balanceId, done){
-    if (balanceId){
-        Collection.findOneAndRemove({_id: balanceId}, function(err){
+exports.remove = function (balanceId, done) {
+    if (balanceId) {
+        Collection.findOneAndRemove({_id: balanceId}, function (err) {
             if (err) return done(errorBuilder(err));
             return done({operationResult: 0});
         });
@@ -121,8 +128,6 @@ exports.getByPeriodAndByClientFizId = function (dateFrom, dateTo, clientFizId, d
 };
 
 
-
-exports.getGroupedByType = function(period, done)
-{
+exports.getGroupedByType = function (period, done) {
 
 }
