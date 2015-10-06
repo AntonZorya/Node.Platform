@@ -68,11 +68,22 @@
 
             <div class="field">
                 <form ng-submit="search()">
-                    <label>{{ '#Поиск' | translate }}</label>
+                    <div class="two fields">
+                        <div class="field">
+                            <label>{{ '#Поиск' | translate }}</label>
 
-                    <div class="ui action input">
-                        <input type="text" ng-model="searchTerm" placeholder="{{ '#Поиск кнопка'  | translate }}"/>
-                        <input type="submit" id="submit" class="ui button" value="{{ '#Поиск кнопка' | translate }}"/>
+                            <div class="ui action input">
+                                <input type="text" ng-model="searchTerm"
+                                       placeholder="{{ '#Поиск кнопка'  | translate }}"/>
+                                <input type="submit" id="submit" class="ui button"
+                                       value="{{ '#Поиск кнопка' | translate }}"/>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui action round green button" ng-click="addClient()">
+                                +
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>

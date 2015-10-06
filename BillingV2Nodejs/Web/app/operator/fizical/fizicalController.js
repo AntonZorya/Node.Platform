@@ -181,6 +181,10 @@ function fizicalController($scope, dataService, toastr, printSvc, $templateCache
         modalSvc.showModal('/app/operator/fizical/editPassportData.html', 'editPassportDataModal', $scope);
     };
 
+    $scope.addClient = function() {
+        modalSvc.showModal('/app/operator/fizical/addFizClient.html', 'addFizClientModal', $scope);
+    }
+
     //streets
     $scope.getStreets = function () {
         dataService.get('/streets').then(function (response) {
