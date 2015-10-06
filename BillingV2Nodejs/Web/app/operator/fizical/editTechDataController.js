@@ -6,6 +6,7 @@ function editTechDataFizController($scope, dataService, modalSvc, toastr) {
     $scope.modalItem = _.extend($scope.modalItem, $scope.$parent.selectedItem);
 
     $scope.save = function () {
+
         dataService.post('/clientFiz/update', $scope.modalItem).then(function (response) {
 
             if (response.operationResult === 0) {
@@ -14,7 +15,6 @@ function editTechDataFizController($scope, dataService, modalSvc, toastr) {
                 $scope.modalItem = response.result;
                 _.extend($scope.$parent.selectedItem, $scope.modalItem);
             }
-
         });
 
 
@@ -24,6 +24,28 @@ function editTechDataFizController($scope, dataService, modalSvc, toastr) {
         modalSvc.resolveModal('editTechDataModal');
     };
 
+    $scope.addPipeline=function(){
+        var pLines = $scope.modalItem.pipelines;
+        if(pLines[0].number)
+        var  nextNumber=pLines[0].number;
+        for(var i=1;i<pLines.length;i++)
+            if(pLines[i].number>nextNumber)
+                nextNumber=pLines[i];
+        nextNumber++;
+        $scope.modalItem.pipelines.push({
+            addressId: null,
+            avg: 0,
+            canalPercent: 100,
+            counters: [],
+            description: "",
+            fileIds: [],
+            isActive: true,
+            norm: 0,
+            number: nextNumber,
+            sourceCounts: 0,
+            waterPercent: 100});
+            console.log("addPipeline",$scope.modalItem.pipelines)
+    }
     //TODO: Тех. данные - add newCounter
     $scope.addNewCounter = function (pipelineIndex) {
 
