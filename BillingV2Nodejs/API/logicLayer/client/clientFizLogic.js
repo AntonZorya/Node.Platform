@@ -167,21 +167,21 @@ exports.updateClientCounter = function (body, userId, done) {
         //}
 
         var balanceId = mongoose.Types.ObjectId();
-        var balanceTypeId = '55cdf641fb777624231ab6d9'; // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+        var balanceTypeId = '55cdf641fb777624231ab6d9'; // ??????????
         var balance = {
             _id: balanceId,
             balanceTypeId: balanceTypeId,
             clientId: clientFiz._id,
             sum: waterSum + canalSum,
             period: period,
-            //пїЅпїЅпїЅпїЅпїЅ
+            //?????
             date: new Date(),
             userId: userId
         };
-        //пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-        var balanceAvg = null;//пїЅ CalculationLogic пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ null
+        //??? ???????? ?? ????????
+        var balanceAvg = null;//? CalculationLogic ???? ???????? ?? null
 
-        //пїЅпїЅпїЅпїЅпїЅ/пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+        //?????/???????
         var isShortage = false;
         var isShortageAvg = false;
         var shortageCubicMeters = 0;
@@ -197,22 +197,22 @@ exports.updateClientCounter = function (body, userId, done) {
             tariff: tariff,
             waterSum: waterSum,
             canalSum: canalSum,
-            //пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-            isShortage: isShortage, //пїЅпїЅпїЅпїЅпїЅ/пїЅпїЅпїЅпїЅпїЅпїЅпїЅ,
-            shortageCubicMeters: shortageCubicMeters, //пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ3,
-            shortageSum: shortageSum, //пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ
+            //??????? ?? ????????
+            isShortage: isShortage, //?????/???????,
+            shortageCubicMeters: shortageCubicMeters, //??????? ?3,
+            shortageSum: shortageSum, //??????? ??
             period: period,
-            //пїЅпїЅпїЅпїЅпїЅ
+            //?????
             date: new Date(),
             userId: userId,
-            calculationType: 0 //0 - пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, 1 - пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ,
+            calculationType: 0 //0 - ?? ????????, 1 - ?? ????????,
         };
-        var calculationAvg = null;//пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅ CalculationLogic пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ null
+        var calculationAvg = null;//??? ???????? ?? ????????, ? CalculationLogic ???? ???????? ?? null
         var minConsumption = clientFiz.clientType.minConsumption;
 
-        //пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+        //??????? ?????????? ????????? ? ???? ???????
         CalculationLogic.getByCounterId(counter._id, period, function (calcByCounterResp) {
-            //пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+            //???? ????????? ????, ?? ?????????
             if (calcByCounterResp.operationResult === 0 && calcByCounterResp.result) {
                 var calcRes = calcByCounterResp.result._doc;
                 balance._id = calcRes.balanceId;
@@ -227,9 +227,9 @@ exports.updateClientCounter = function (body, userId, done) {
                     });
                 });
 
-            } else {//пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+            } else {//????? ????????? ????? ?????????
 
-                //пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ" - пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ "пїЅпїЅпїЅпїЅ" пїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ-пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+                //?????? ?? "????????" - ????? ?????? ??????? ???????? ? "????" ??? ??? ???????? ???????????? ???-?? ???????
                 var previousCounterIndex = pipeline.counters.length - 2;
 
                 if (previousCounterIndex > 0 && !counter.isPrevAvgCalculated) {
@@ -243,7 +243,7 @@ exports.updateClientCounter = function (body, userId, done) {
 
                     var prevDate = pipeline.counters[previousCounterIndex].dateOfCurrentCounts;
                     var currentDate = counter.dateOfCurrentCounts;
-                    //пїЅпїЅпїЅ-пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+                    //???-?? ???? ??? ????????
                     var daysDifferenceCount = 0;
                     if (currentDate && prevDate) {
                         currentDate = new Date(currentDate);
@@ -253,13 +253,13 @@ exports.updateClientCounter = function (body, userId, done) {
 
                         var year = prevDate.getFullYear();
                         var month = prevDate.getMonth() + 1;
-                        //пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ-пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+                        //?????? ???-?? ???? ? ??????, ????? ????????? ???? ??????
                         var lastDayOfMonth = new Date(year, month, 0).getDate();
-                        //пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ (пїЅ3)
+                        //??????? ?? ???? (?3)
                         var avgCountsPerDay = avgCountsPerMonth / lastDayOfMonth;
                         var avgCountsByPeriod = avgCountsPerDay * daysDifferenceCount;
-                        var waterCount = avgCountsByPeriod * (pipeline.waterPercent / 100); //пїЅ3
-                        var canalCount = avgCountsByPeriod * (pipeline.canalPercent / 100); //пїЅ3
+                        var waterCount = avgCountsByPeriod * (pipeline.waterPercent / 100); //?3
+                        var canalCount = avgCountsByPeriod * (pipeline.canalPercent / 100); //?3
                         var avgWaterSum = avgCountsByPeriod * waterCount * tariff.water * -1;
                         var avgCanalSum = avgCountsByPeriod * canalCount * tariff.canal * -1;
 
@@ -272,13 +272,13 @@ exports.updateClientCounter = function (body, userId, done) {
 
                         calculationAvg = {};
                         calculationAvg = _.extend(calculationAvg, calculation);
-                        calculationAvg.counterId = null; //пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+                        calculationAvg.counterId = null; //??? ????????
                         calculationAvg.balanceId = balanceIdForAvg;
                         calculationAvg.waterCubicMetersCount = waterCount;
                         calculationAvg.canalCubicMetersCount = canalCount;
                         calculationAvg.waterSum = avgWaterSum;
                         calculationAvg.canalSum = avgCanalSum;
-                        calculationAvg.calculationType = 1; //0 - пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, 1 - пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ,
+                        calculationAvg.calculationType = 1; //0 - ?? ????????, 1 - ?? ????????,
                         calculationAvg.daysCountByAvg = daysDifferenceCount;
 
                         if (minConsumption) {
@@ -310,11 +310,11 @@ exports.updateClientCounter = function (body, userId, done) {
                                     done(counterResp);
                                 });
                             } else {
-                                console.log('пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ calculations');
+                                console.log('?????? ??????? ? ????????? calculations');
                             }
                         });
                     } else {
-                        console.log('пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ balances');
+                        console.log('?????? ??????? ? ????????? balances');
                     }
 
                 });
@@ -374,21 +374,21 @@ exports.calculateByNorm = function (body, userId, done) {
         //}
 
         var balanceId = mongoose.Types.ObjectId();
-        var balanceTypeId = '55cdf641fb777624231ab6d9'; // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+        var balanceTypeId = '55cdf641fb777624231ab6d9'; // ??????????
         var balance = {
             _id: balanceId,
             balanceTypeId: balanceTypeId,
             clientId: clientFiz._id,
             sum: waterSum + canalSum,
             period: period,
-            //пїЅпїЅпїЅпїЅпїЅ
+            //?????
             date: new Date(),
             userId: userId
         };
-        //пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-        var balanceAvg = null;//пїЅ CalculationLogic пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ null
+        //??? ???????? ?? ????????
+        var balanceAvg = null;//? CalculationLogic ???? ???????? ?? null
 
-        //пїЅпїЅпїЅпїЅпїЅ/пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+        //?????/???????
 
 
         var calculation = {
@@ -401,21 +401,21 @@ exports.calculateByNorm = function (body, userId, done) {
             tariff: tariff,
             waterSum: waterSum,
             canalSum: canalSum,
-            //пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-            isShortage: false, //пїЅпїЅпїЅпїЅпїЅ/пїЅпїЅпїЅпїЅпїЅпїЅпїЅ,
-            shortageCubicMeters: 0, //пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ3,
-            shortageSum: 0, //пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ
+            //??????? ?? ????????
+            isShortage: false, //?????/???????,
+            shortageCubicMeters: 0, //??????? ?3,
+            shortageSum: 0, //??????? ??
             period: period,
-            //пїЅпїЅпїЅпїЅпїЅ
+            //?????
             date: new Date(),
             userId: userId,
-            calculationType: 2 //0 - пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, 1 - пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, 2 - РїРѕ РЅРѕСЂРјРµ
+            calculationType: 2 //0 - ?? ????????, 1 - ?? ????????, 2 - по норме
         };
 
 
-        //пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+        //??????? ?????????? ????????? ? ???? ???????
         CalculationLogic.getByClientId(clientFiz._id, period, function (calcByClientResp) {
-                //пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+                //???? ????????? ????, ?? ?????????
                 if (calcByClientResp.operationResult === 0) {
                     if (calcByClientResp.result) {
 
