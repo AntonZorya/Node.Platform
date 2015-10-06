@@ -4,8 +4,8 @@ var CollectionSchema = new require('../../../helpers/mongoose/modelBuilder')('Cl
 var Collection = new require('../../../helpers/mongoose/modelBuilder')('ClientFiz', ClientFizDef);
 var ClientType = new require('../../../helpers/mongoose/modelBuilder')('ClientTypeFiz', clientTypeDef);
 
-var addressDef = require('../../models/location/addressFiz');
-var Address = new require('../../../helpers/mongoose/modelBuilder')('AddressFiz', addressDef);
+var addressDef = require('../../models/location/address');
+var Address = new require('../../../helpers/mongoose/modelBuilder')('Address', addressDef);
 
 var tariffDef = require('../../models/tariff/tariffFiz');
 var Tariff = new require('../../../helpers/mongoose/modelBuilder')('TariffFiz', tariffDef);
