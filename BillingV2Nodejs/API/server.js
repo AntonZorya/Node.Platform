@@ -21,8 +21,8 @@ app.use(cors());
 _ = require('underscore');
 
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://192.168.66.27/BillingController'); // connect to our database
-//mongoose.connect('mongodb://localhost/BillingController');
+//mongoose.connect('mongodb://192.168.66.27/BillingController'); // connect to our database
+mongoose.connect('mongodb://localhost/BillingController');
 
 // run message broker
 require('./MessageBroker/server');

@@ -29,12 +29,14 @@
                 </div>
                 <div class=" two wide field">
                     <label ng-bind="'#Норма' | translate"></label>
+
                     <div class="ui input">
                         <input type="text" name="norm" ng-model="modalItem.norm">
                     </div>
                 </div>
                 <div class=" two wide field">
                     <label ng-bind="'#Процент по воде'  | translate"></label>
+
                     <div class="ui input">
                         <input type="text" name="norm" ng-model="modalItem.waterPercent">
                     </div>
@@ -42,6 +44,7 @@
                 </div>
                 <div class=" two wide field">
                     <label ng-bind="'#Процент по канализации' | translate"></label>
+
                     <div class="ui input">
                         <input type="text" name="norm" ng-model="modalItem.canalPercent">
                     </div>
@@ -50,11 +53,8 @@
             </div>
         </form>
 
-
         <table>
-
             <tbody>
-
             <tr ng-repeat="pipeline in modalItem.pipelines">
 
                 <td colspan="6">
@@ -63,6 +63,7 @@
                         <tr>
                             <td>
                                 <b>Ввод:</b>
+
                                 <div class="ui input">
                                     <input type="text" ng-model="pipeline.description"/>
                                 </div>
@@ -81,7 +82,7 @@
                                     <input type="text" name="canalPercent" ng-model="pipeline.canalPercent">
                                 </div>
                             </td>
-                           <td>
+                            <td>
                                 {{'#Среднее' | translate}}
                                 <div class="ui input">
                                     <input type="text" name="norm" ng-model="pipeline.avg">
@@ -89,6 +90,11 @@
                             </td>
                             <td>
                                 <button class="ui button" ng-click="addNewCounter($index)">Добавить счетчик</button>
+                            </td>
+                            <td>
+                                <button class="ui button" ng-click="removePipeline($index, $event)">
+                                    {{'#removePipeline'|translate}}
+                                </button>
                             </td>
                         </tr>
                     </table>
@@ -166,6 +172,11 @@
                     </table>
                     <br>
 
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <button class="ui button" ng-click="addPipeline()">{{'#addPipeline' | translate}}</button>
                 </td>
             </tr>
             </tbody>
