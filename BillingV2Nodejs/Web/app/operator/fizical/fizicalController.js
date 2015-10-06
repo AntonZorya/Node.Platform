@@ -174,7 +174,7 @@ function fizicalController($scope, dataService, toastr, printSvc, $templateCache
     };
 
     $scope.editTechData = function () {
-        modalSvc.showModal('/app/operator/fizical/editTechData.html', 'editTechDataModal', $scope);
+        modalSvc.showModal('/app/operator/fizical/editFizClient.html', 'editFizClientModal', $scope);
     };
 
     $scope.editPassportData = function () {
