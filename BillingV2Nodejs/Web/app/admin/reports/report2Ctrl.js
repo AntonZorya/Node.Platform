@@ -58,7 +58,7 @@ function report2Ctrl(dataSvc, $scope, valSvc) {
 				console.log(parseFloat(elem.passed));
 				console.log(parseFloat(elem.sumWaterCubic));
 				if(elem.passed)
-				$scope.resultTotals.passed += parseFloat(elem.passed);
+				$scope.resultTotals.passed += parseInt(elem.passed);
 				if(elem.sumWaterCubic)
 				$scope.resultTotals.sumWaterCubic += parseFloat(elem.sumWaterCubic);
 				if(elem.sumCanalCubic)
@@ -73,7 +73,7 @@ function report2Ctrl(dataSvc, $scope, valSvc) {
 				$scope.resultTotals.sumTotalMoney += parseFloat(elem.sumTotalMoney);
 			});
 
-			$scope.resultTotals.passed = $scope.resultTotals.passed.toFixed(2);
+			//$scope.resultTotals.passed = $scope.resultTotals.passed.toFixed(2);
 			$scope.resultTotals.sumWaterCubic = $scope.resultTotals.sumWaterCubic.toFixed(2);
 			$scope.resultTotals.sumCanalCubic = $scope.resultTotals.sumCanalCubic.toFixed(2);
 			$scope.resultTotals.sumWaterMoney = $scope.resultTotals.sumWaterMoney.toFixed(2);
