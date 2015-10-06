@@ -4,7 +4,7 @@
     <div class="header">
         {{'#Добавить абонента' | translate }}. {{selectedItem.name}}
     </div>
-    <div class="content">
+    <div class="content" id="addFizClientContainer">
 
         <form class="ui form">
             <div class="fields">
@@ -12,16 +12,19 @@
                     <label>{{'#Лицевой счет' | translate}}</label>
                     <input type="text" name="accountNumber" placeholder="{{'#Лицевой счет' | translate}}"
                            ng-model="modalItem.accountNumber">
+                    <div ng-show="isErrorForField('accountNumber', this)" class="ui red pointing prompt label transition">{{getErrorForField('accountNumber', this)}}</div>
                 </div>
                 <div class="two wide field">
-                    <label>{{'#Наименование компании' | translate}}</label>
+                    <label>{{'#Наименование абонента' | translate}}</label>
                     <input type="text" name="name" placeholder="{{'#Наименование компании' | translate}}"
                            ng-model="modalItem.name">
+                    <div ng-show="isErrorForField('name', this)" class="ui red pointing prompt label transition">{{getErrorForField('name', this)}}</div>
                 </div>
                 <div class=" two wide field">
-                    <label>{{'#БИН' | translate}}</label>
+                    <label>{{'#ИИН' | translate}}</label>
                     <input type="text" name="bin" placeholder="{{'#БИН' | translate}}"
                            ng-model="modalItem.bin">
+                    <div ng-show="isErrorForField('bin', this)" class="ui red pointing prompt label transition">{{getErrorForField('bin', this)}}</div>
                 </div>
                 <div class="two wide field">
                     <label>{{'#Адрес' | translate}}</label>
@@ -55,6 +58,7 @@
                     <label>{{'#Кол-во проживающих' | translate}}</label>
                     <input type="text" name="residentsCount" placeholder="{{'#Кол-во проживающих' | translate}}"
                            ng-model="modalItem.residentsCount">
+                    <div ng-show="isErrorForField('residentsCount', this)" class="ui red pointing prompt label transition">{{getErrorForField('residentsCount', this)}}</div>
                 </div>
                 <div class="two wide field">
                     <label>{{'#Телефон' | translate}}</label>
@@ -84,6 +88,7 @@
                     <select class="ui search dropdown" ng-model="modalItem.controllerId"
                             ng-options="controller.fullName for controller in $parent.controllers track by controller._id">
                     </select>
+                    <div ng-show="isErrorForField('controllerId', this)" class="ui red pointing prompt label transition">{{getErrorForField('controllerId', this)}}</div>
                 </div>
 
                 <div class="two wide field">
@@ -91,13 +96,20 @@
                     <select class="ui search dropdown" ng-model="modalItem.clientType"
                             ng-options="clientType.name for clientType in $parent.clientTypes track by clientType._id">
                     </select>
+                    <div ng-show="isErrorForField('clientType', this)" class="ui red pointing prompt label transition">{{getErrorForField('clientType', this)}}</div>
+                </div>
+
+                <div class="two wide field">
+                    <label>{{'#Абонентский участок' | translate}}</label>
+                    <input type="text" name="site" placeholder="{{'#Абонентский участок' | translate}}"
+                           ng-model="modalItem.site">
+                    <div ng-show="isErrorForField('site', this)" class="ui red pointing prompt label transition">{{getErrorForField('site', this)}}</div>
                 </div>
 
             </div>
         </form>
 
-
-    <div class="content" style="height: 500px; overflow: auto;">
+        <div class="ui divider"></div>
 
         <form class="ui form">
             <div class="ui dividing header">
@@ -125,12 +137,14 @@
                 </div>
                 <div class=" two wide field">
                     <label ng-bind="'#Норма' | translate"></label>
+
                     <div class="ui input">
                         <input type="text" name="norm" ng-model="modalItem.norm">
                     </div>
                 </div>
                 <div class=" two wide field">
                     <label ng-bind="'#Процент по воде'  | translate"></label>
+
                     <div class="ui input">
                         <input type="text" name="norm" ng-model="modalItem.waterPercent">
                     </div>
@@ -138,8 +152,17 @@
                 </div>
                 <div class=" two wide field">
                     <label ng-bind="'#Процент по канализации' | translate"></label>
+
                     <div class="ui input">
                         <input type="text" name="norm" ng-model="modalItem.canalPercent">
+                    </div>
+
+                </div>
+                <div class=" two wide field">
+                    <label ng-bind="'#Начислять по канализации' | translate"></label>
+
+                    <div class="ui checkbox">
+                        <input type="checkbox" name="checkByNorm" ng-model="modalItem.checkByNorm">
                     </div>
 
                 </div>
@@ -159,6 +182,7 @@
                         <tr>
                             <td>
                                 <b>Ввод:</b>
+
                                 <div class="ui input">
                                     <input type="text" ng-model="pipeline.description"/>
                                 </div>
@@ -266,11 +290,15 @@
             </tr>
             </tbody>
         </table>
+        <div class="ui red message" style="margin-top:30px;" ng-show="commonErrors.length>0">
+            <ul>
+                <li ng-repeat="error in commonErrors">{{error}}</li>
+            </ul>
+        </div>
 
-    </div>
-
-    <div class="actions">
-        <div class="ui button red" ng-click="cancel()">{{'#cancel' | translate}}</div>
-        <div class="ui button green" ng-click="save()">{{'#save' | translate}}</div>
+        <div class="ui right floated buttons">
+            <div class="ui button red" ng-click="cancel()">{{'#cancel' | translate}}</div>
+            <div class="ui positive button" ng-click="save()">{{'#save' | translate}}</div>
+        </div>
     </div>
 </div>

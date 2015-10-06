@@ -4,11 +4,13 @@
 billingApplication.controller('addFizClientController', ['$scope', 'dataService', 'modalSvc', 'toastr', 'validationSvc', addFizClientController]);
 
 function addFizClientController($scope, dataService, modalSvc, toastr, valSvc) {
-
-    valSvc.init($scope);
+    var self = this;
+    this.container = $("#addFizClientContainer");
+     valSvc.init($scope);
 
 
     $scope.modalItem = {
+        period: $scope.$parent.period.value,
         pipelines: [{
             number: 1,
             counters: [],
@@ -16,30 +18,32 @@ function addFizClientController($scope, dataService, modalSvc, toastr, valSvc) {
     }] };
 
     $scope.save = function () {
+        $scope.commonErrors = [];
         if ($scope.flatList.length > 0 && !$scope.address.flat.value) {
-            toastr.error('', 'Выберите квартиру');
+            $scope.commonErrors.push('Р’С‹Р±РµСЂРёС‚Рµ РєРІР°СЂС‚РёСЂСѓ');
         } else if ($scope.houseList.length > 0 && !$scope.address.house.value) {
-            toastr.error('', 'Выберите дом');
+            $scope.commonErrors.push('Р’С‹Р±РµСЂРёС‚Рµ РґРѕРј');
         } else if (!$scope.address.street.value) {
-            toastr.error('', 'Выберите улицу');
+            $scope.commonErrors.push('Р’С‹Р±РµСЂРёС‚Рµ СѓР»РёС†Сѓ');
         }
         else {
             var street = $scope.address.street.value;
             var house = '';
             var flat = '';
             if ($scope.address.house && $scope.address.house.value) house = ' ' + $scope.address.house.value;
-            if ($scope.address.flat && $scope.address.flat.value) flat = ' кв.' + $scope.address.flat.value;
+            if ($scope.address.flat && $scope.address.flat.value) flat = ' РєРІ.' + $scope.address.flat.value;
             $scope.modalItem.address = street + house + flat;
             $scope.modalItem.addressId = flat == '' ? $scope.address.house : $scope.address.flat;
-            dataService.post('/clientFiz/add', $scope.modalItem).then(function (response) {
-                toastr.success('', 'Данные успешно сохранены');
-                $scope.$parent.selectedItem = response.result._doc;
+            dataService.post('/clientFiz/add', $scope.modalItem, self.container, $scope).then(function (response) {
+                toastr.success('', 'Р”Р°РЅРЅС‹Рµ СѓСЃРїРµС€РЅРѕ СЃРѕС…СЂР°РЅРµРЅС‹');
+                modalSvc.closeModal('addFizClientModal');
+                $scope.$parent.search();
             });
         }
     };
 
     $scope.cancel = function () {
-        modalSvc.resolveModal('editPassportDataModal');
+        modalSvc.closeModal('addFizClientModal');
     };
 
     $scope.close = function () {
@@ -55,7 +59,7 @@ function addFizClientController($scope, dataService, modalSvc, toastr, valSvc) {
             if (response.operationResult === 0) {
                 done(response.result);
             } else {
-                toastr.error('', 'Произошла ошибка');
+                toastr.error('', 'РџСЂРѕРёР·РѕС€Р»Р° РѕС€РёР±РєР°');
             }
         });
     }
@@ -83,7 +87,7 @@ function addFizClientController($scope, dataService, modalSvc, toastr, valSvc) {
         });
 
         if (foundActiveCounter) {
-            toastr.warning('Необходимо снять старый счетчик и добавить новый', 'Предупреждение')
+            toastr.warning('РќРµРѕР±С…РѕРґРёРјРѕ СЃРЅСЏС‚СЊ СЃС‚Р°СЂС‹Р№ СЃС‡РµС‚С‡РёРє Рё РґРѕР±Р°РІРёС‚СЊ РЅРѕРІС‹Р№', 'РџСЂРµРґСѓРїСЂРµР¶РґРµРЅРёРµ')
         } else {
             var newCounter = {
                 lastCounts: 0,
@@ -101,12 +105,12 @@ function addFizClientController($scope, dataService, modalSvc, toastr, valSvc) {
         if ($scope.modalItem.pipelines[pipelineIndex].avg == null ||
             $scope.modalItem.pipelines[pipelineIndex].avg == "") {
 
-            toastr.warning('"Среднее" должно быть заполнено');
+            toastr.warning('"РЎСЂРµРґРЅРµРµ" РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ Р·Р°РїРѕР»РЅРµРЅРѕ');
 
         } else {
-            if (confirm('Вы действительно хотите снять счетчик?')) {
+            if (confirm('Р’С‹ РґРµР№СЃС‚РІРёС‚РµР»СЊРЅРѕ С…РѕС‚РёС‚Рµ СЃРЅСЏС‚СЊ СЃС‡РµС‚С‡РёРє?')) {
 
-                //TODO: после тестирования раскометировать проверку дат
+                //TODO: РїРѕСЃР»Рµ С‚РµСЃС‚РёСЂРѕРІР°РЅРёСЏ СЂР°СЃРєРѕРјРµС‚РёСЂРѕРІР°С‚СЊ РїСЂРѕРІРµСЂРєСѓ РґР°С‚
                 /*var day1 = (new Date($scope.modalItem.pipelines[pipelineIndex].counters[counterIndex].dateOfCurrentCounts)).getDate();
                  var day2 = new Date().getDate();
 
@@ -116,7 +120,7 @@ function addFizClientController($scope, dataService, modalSvc, toastr, valSvc) {
                 $scope.modalItem.pipelines[pipelineIndex].counters[counterIndex].removeDate = new Date();
                 /*} */
                 /*else {
-                 toastr.error('Чтобы снять счетчик, необходимо внести показания на сегодшний день!');
+                 toastr.error('Р§С‚РѕР±С‹ СЃРЅСЏС‚СЊ СЃС‡РµС‚С‡РёРє, РЅРµРѕР±С…РѕРґРёРјРѕ РІРЅРµСЃС‚Рё РїРѕРєР°Р·Р°РЅРёСЏ РЅР° СЃРµРіРѕРґС€РЅРёР№ РґРµРЅСЊ!');
                  }*/
 
             }
