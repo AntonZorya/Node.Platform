@@ -1,23 +1,22 @@
 /**
  * Created by Alibek on 06.10.2015.
  */
-billingApplication.controller('addFizClientController', ['$scope', 'dataService', 'modalSvc', 'toastr', 'validationSvc', addFizClientController]);
+billingApplication.controller('addJurClientController', ['$scope', 'dataService', 'modalSvc', 'toastr', 'validationSvc', addJurClientController]);
 
-function addFizClientController($scope, dataService, modalSvc, toastr, valSvc) {
+function addJurClientController($scope, dataService, modalSvc, toastr, valSvc) {
     var self = this;
-    this.container = $("#addFizClientContainer");
+    this.container = $("#addJurClientContainer");
      valSvc.init($scope);
 
 
     $scope.modalItem = {
         period: $scope.$parent.period.value,
-        norm: 0,
-        waterPercent: 100,
-        kanalPercent: 100,
         pipelines: [{
+            norm: 0,
+            avg: 0,
+            waterPercent: 0,
+            canalPercent: 0,
             number: 1,
-            waterPercent: 100,
-            kanalPercent: 100,
             counters: [],
             fields: []
     }] };
@@ -39,16 +38,16 @@ function addFizClientController($scope, dataService, modalSvc, toastr, valSvc) {
             if ($scope.address.flat && $scope.address.flat.value) flat = ' кв.' + $scope.address.flat.value;
             $scope.modalItem.address = street + house + flat;
             $scope.modalItem.addressId = flat == '' ? $scope.address.house : $scope.address.flat;
-            dataService.post('/clientFiz/add', $scope.modalItem, self.container, $scope).then(function (response) {
+            dataService.post('/clientJur/add', $scope.modalItem, self.container, $scope).then(function (response) {
                 toastr.success('', 'Данные успешно сохранены');
-                modalSvc.closeModal('addFizClientModal');
+                modalSvc.closeModal('addJurClientModal');
                 $scope.$parent.search();
             });
         }
     };
 
     $scope.cancel = function () {
-        modalSvc.closeModal('addFizClientModal');
+        modalSvc.closeModal('addJurClientModal');
     };
 
     $scope.close = function () {

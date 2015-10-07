@@ -33,25 +33,25 @@
 		<tbody>
 			<tr ng-repeat="res in result">
 				<td >{{res.controllerId}}</td>
-				<td >{{res.passed}}</td>
-				<td >{{res.sumWaterCubic}}</td>
-				<td >{{res.sumCanalCubic}}</td>
-				<td >{{res.sumWaterMoney}}</td>
-				<td >{{res.sumCanalMoney}}</td>
-				<td >{{res.sumForfeitMoney}}</td>
-				<td >{{res.sumTotalMoney}}</td>
+				<td class="right aligned">{{res.passed | number:0}}</td>
+				<td class="right aligned">{{res.sumWaterCubic | number:2}}</td>
+				<td class="right aligned">{{res.sumCanalCubic | number:2}}</td>
+				<td class="right aligned">{{res.sumWaterMoney | number:2}}</td>
+				<td class="right aligned">{{res.sumCanalMoney | number:2}}</td>
+				<td class="right aligned">{{res.sumForfeitMoney | number:2}}</td>
+				<td class="right aligned">{{res.sumTotalMoney | number:2}}</td>
 			</tr>
 		</tbody>
 		<tfoot>
 			<tr >
 				<th >Общий итог</th>
-				<th >{{resultTotals.passed}}</th>
-				<th >{{resultTotals.sumWaterCubic}}</th>
-				<th >{{resultTotals.sumCanalCubic}}</th>
-				<th >{{resultTotals.sumWaterMoney}}</th>
-				<th >{{resultTotals.sumCanalMoney}}</th>
-				<th >{{resultTotals.sumForfeitMoney}}</th>
-				<th >{{resultTotals.sumTotalMoney}}</th>
+				<th class="right aligned">{{resultTotals.passed | number:0}}</th>
+				<th class="right aligned">{{resultTotals.sumWaterCubic | number:2}}</th>
+				<th class="right aligned">{{resultTotals.sumCanalCubic | number:2}}</th>
+				<th class="right aligned">{{resultTotals.sumWaterMoney | number:2}}</th>
+				<th class="right aligned">{{resultTotals.sumCanalMoney | number:2}}</th>
+				<th class="right aligned">{{resultTotals.sumForfeitMoney | number:2}}</th>
+				<th class="right aligned">{{resultTotals.sumTotalMoney | number:2}}</th>
 			</tr>
 		</tfoot>
 	</table>

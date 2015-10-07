@@ -69,7 +69,7 @@
             <div class="field">
                 <form ng-submit="search()">
                     <div class="two fields">
-                        <div class="field">
+                        <div class="fifteen wide field">
                             <label>{{ '#Поиск' | translate }}</label>
 
                             <div class="ui action input">
@@ -79,9 +79,8 @@
                                        value="{{ '#Поиск кнопка' | translate }}"/>
                             </div>
                         </div>
-                        <div class="field">
-                            <div class="ui action round green button" ng-click="addClient()">
-                                +
+                        <div class="one wide field" style="vertical-align: middle">
+                            <div style="margin: 20px" class="ui circular positive plus icon button" ng-click="addClient()"><i class="plus icon"></i>
                             </div>
                         </div>
                     </div>
