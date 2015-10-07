@@ -180,6 +180,11 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
         modalSvc.showModal('/app/operator/juridical/editPassportData.html', 'editPassportDataModal', $scope);
     };
 
+
+    $scope.addJurClient = function() {
+        modalSvc.showModal('/app/operator/juridical/addJurClient.html', 'addJurClientModal', $scope);
+    }
+
     //streets
     $scope.getStreets = function () {
         dataService.get('/streets').then(function (response) {

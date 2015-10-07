@@ -11,8 +11,13 @@ function addFizClientController($scope, dataService, modalSvc, toastr, valSvc) {
 
     $scope.modalItem = {
         period: $scope.$parent.period.value,
+        norm: 0,
+        waterPercent: 100,
+        kanalPercent: 100,
         pipelines: [{
             number: 1,
+            waterPercent: 100,
+            kanalPercent: 100,
             counters: [],
             fields: []
     }] };

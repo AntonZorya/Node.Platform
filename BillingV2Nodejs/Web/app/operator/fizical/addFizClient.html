@@ -12,8 +12,8 @@
                     <label>{{'#Лицевой счет' | translate}}</label>
                     <input type="text" name="accountNumber" placeholder="{{'#Лицевой счет' | translate}}"
                            ng-model="modalItem.accountNumber">
-                    <div ng-show="isErrorForField('accountNumber', this)" class="ui red pointing prompt label transition">{{getErrorForField('accountNumber', this)}}</div>
                 </div>
+                <div ng-show="isErrorForField('accountNumber', this)" class="ui red pointing prompt label transition">{{getErrorForField('accountNumber', this)}}</div>
                 <div class="two wide field">
                     <label>{{'#Наименование абонента' | translate}}</label>
                     <input type="text" name="name" placeholder="{{'#Наименование компании' | translate}}"
@@ -159,12 +159,8 @@
 
                 </div>
                 <div class=" two wide field">
-                    <label ng-bind="'#Начислять по канализации' | translate"></label>
-
-                    <div class="ui checkbox">
-                        <input type="checkbox" name="checkByNorm" ng-model="modalItem.checkByNorm">
-                    </div>
-
+                    <label ng-bind="'#Начислять по норме' | translate"></label>
+                    <checkbox name="checkByNorm"  ng-model="modalItem.checkByNorm"></checkbox>
                 </div>
             </div>
         </form>
