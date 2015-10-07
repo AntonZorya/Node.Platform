@@ -78,7 +78,7 @@
                     </div>
                 </div>
             </td>
-            <td width="500" rowspan="2">
+            <td width="500" rowspan="3">
                 <div id="container">
                     <!--<highchart config="highChartConfig"></highchart>-->
                 </div>
@@ -107,35 +107,99 @@
         <tr>
             <td colspan="2" style="vertical-align: top">
                 <table class="ui basic table">
+                    <thead>
                     <tr>
                         <th>
-                            Контроллер
+                            Контролер
                         </th>
-                        <th>
+                        <th class="center aligned">
                             Пройдено
                         </th>
-                        <th>
+                        <th class="center aligned">
                             Осталось
                         </th>
                     </tr>
+                    </thead>
+                    <tbody>
                     <tr ng-repeat="item in controllers">
                         <td>
                             {{item.fullName}}
                         </td>
-                        <td>
+                        <td class="center aligned">
                             {{getContollersPassed(item._id)}}
                         </td>
-                        <td>
+                        <td class="center aligned">
                             {{getContollersRest(item._id)}}
                         </td>
                     </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>Всего</th>
+                            <th class="center aligned">
+                                {{getContollersPassed()}}
+                            </th>
+                            <th class="center aligned">
+                                {{getContollersRest()}}
+                            </th>
+                        </tr>
+                    </tfoot>
                 </table>
             </td>
 
         </tr>
+        <tr>
+            <td colspan="2" style="vertical-align: top">
+
+
+                <table class="ui very compact small celled  table">
+                    <thead>
+                    <tr>
+                        <th >Контролер</th>
+                        <th >Количество объектов</th>
+                        <th >Вода, м3</th>
+                        <th >Канализация, м3</th>
+                        <th >Вода, тенге</th>
+                        <th >Канализация, тенге</th>
+                        <th >Штраф, тенге</th>
+                        <th >Всего, тенге</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="res in result">
+                        <td >{{res.controllerId}}</td>
+                        <td class="right aligned">{{res.passed | number:0}}</td>
+                        <td class="right aligned">{{res.sumWaterCubic | number:2}}</td>
+                        <td class="right aligned">{{res.sumCanalCubic | number:2}}</td>
+                        <td class="right aligned">{{res.sumWaterMoney | number:2}}</td>
+                        <td class="right aligned">{{res.sumCanalMoney | number:2}}</td>
+                        <td class="right aligned">{{res.sumForfeitMoney | number:2}}</td>
+                        <td class="right aligned">{{res.sumTotalMoney | number:2}}</td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <tr >
+                        <th >Общий итог</th>
+                        <th class="right aligned">{{resultTotals.passed | number:0}}</th>
+                        <th class="right aligned">{{resultTotals.sumWaterCubic | number:2}}</th>
+                        <th class="right aligned">{{resultTotals.sumCanalCubic | number:2}}</th>
+                        <th class="right aligned">{{resultTotals.sumWaterMoney | number:2}}</th>
+                        <th class="right aligned">{{resultTotals.sumCanalMoney | number:2}}</th>
+                        <th class="right aligned">{{resultTotals.sumForfeitMoney | number:2}}</th>
+                        <th class="right aligned">{{resultTotals.sumTotalMoney | number:2}}</th>
+                    </tr>
+                    </tfoot>
+                </table>
+
+            </td>
+        </tr>
     </table>
 
-
+    <style>
+        .ui.basic.table tfoot th, .ui.basic.table thead th{
+            background: #f9fafb;
+        }
+    </style>
 
 
 </div>

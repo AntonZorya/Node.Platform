@@ -55,8 +55,6 @@ function report2Ctrl(dataSvc, $scope, valSvc) {
 			$scope.resultTotals.sumTotalMoney = 0;
 
 			_.each(res.result, function(elem){
-				console.log(parseFloat(elem.passed));
-				console.log(parseFloat(elem.sumWaterCubic));
 				if(elem.passed)
 				$scope.resultTotals.passed += parseInt(elem.passed);
 				if(elem.sumWaterCubic)
