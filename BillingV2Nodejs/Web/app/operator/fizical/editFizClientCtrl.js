@@ -9,8 +9,8 @@ function editFizClientController($scope, dataService, modalSvc, toastr, valSvc) 
     valSvc.init($scope);
 
     $scope.modalItem = {};
-    var clone = JSON.parse(JSON.stringify($scope.$parent.selectedItem));
-    $scope.modalItem = _.extend($scope.modalItem, clone);
+    var selected = JSON.parse(JSON.stringify($scope.$parent.selectedItem));
+    $scope.modalItem = _.extend($scope.modalItem, selected);
 
     $scope.address = {street: {}, house: {}, flat: {}};
     $scope.houseList = [];
@@ -74,18 +74,16 @@ function editFizClientController($scope, dataService, modalSvc, toastr, valSvc) 
                     $scope.address.street
                 ];
             }
-            $scope.modalItem.address = street + house + flat;
-            $scope.modalItem.addressId = flat == '' ? $scope.address.house : $scope.address.flat;
-            var tarrif = $scope.modalItem.clientType.tariffId;
-            $scope.modalItem.clientType.tariffId = tarrif._id;
+            var current = JSON.parse(JSON.stringify($scope.modalItem));
+            current.address = street + house + flat;
+            current.addressId = flat == '' ? $scope.address.house : $scope.address.flat;
+            current.clientType.tariffId = $scope.modalItem.clientType.tariffId._id;
             var query = {
-                client: $scope.modalItem,
+                client: current,
                 removedPipelines: removedPipelines
             };
             dataService.post('/clientFiz/update', query, self.container, $scope).then(function (response) {
-                $scope.modalItem.clientType.tariffId = tarrif;
-                $scope.modalItem.addressId = address;
-                $scope.$parent.selectedItem = $scope.modalItem;
+                $scope.$parent.selectedItem = _.extend($scope.$parent.selectedItem, $scope.modalItem);
                 toastr.success('', 'Данные успешно сохранены');
                 modalSvc.closeModal('editFizClientModal');
                 $scope.$parent.search();
@@ -176,7 +174,7 @@ function editFizClientController($scope, dataService, modalSvc, toastr, valSvc) 
             canalPercent: 100,
             isActive: true,
             fileIds: [],
-            sourceCounts: 2,// 0 по счетчику, 1 по среднему, 2 по норме
+            sourceCounts: 0,// 0 по счетчику, 1 по среднему, 2 по норме
             avg: null,
             norm: null
         });
