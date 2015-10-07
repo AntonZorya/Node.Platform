@@ -161,10 +161,8 @@
                                     ng-click="fined()"></button>
                             <button class="ui  button" ng-click="showModalPayment(item)"
                                     ng-bind="'#Принять оплату' | translate"></button>
-                            <button class="ui  button" ng-bind="'#Технические данные' | translate"
-                                    ng-click="editTechData()"></button>
-                            <button class="ui  button" ng-bind="'#Паспортные данные' | translate"
-                                    ng-click="editPassportData()"></button>
+                            <button class="ui  button" ng-bind="'#edit' | translate"
+                                    ng-click="editClient()"></button>
                             <button class="ui  button" ng-bind="'#История' | translate"
                                     ng-click="getClientBalanceDetails()"></button>
                             <button class="ui button" ng-class="{green :  item.checkByNorm}"

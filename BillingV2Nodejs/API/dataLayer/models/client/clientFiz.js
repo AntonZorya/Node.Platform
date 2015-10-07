@@ -24,7 +24,7 @@ exports.definition = _.extend({
 	pipelines: clientPipelines,
 
 	controllerId: {type: Schema.Types.ObjectId, ref: "Controller"},
-	clientType: {type: clientType, required: "#clienttype required"},
+	clientType: clientType,
 	kskId: {type: Schema.Types.ObjectId, ref: 'ksk'},
 	abonentEntryDate: {type: Date},
 	norm: {type: Number},

@@ -43,7 +43,9 @@ exports.get = function (id, done) {
     });
 };
 
-exports.update = function (clientFiz, done) {
+exports.update = function (data, done) {
+    var clientFiz = data.client;
+    var removedPipelines = data.removedPipelines;
     clientFizValidator('clientFiz', clientFizDefinition, clientFiz, function (validationRes) {
         if (validationRes.operationResult == 0) {
 
@@ -54,7 +56,49 @@ exports.update = function (clientFiz, done) {
                 }
 
             ClientFizRepo.update(clientFiz, function (res) {
-                return done(res);
+                if (res.operationResult == 0 && removedPipelines && removedPipelines.length > 0) {
+                    async.each(removedPipelines, function(pipelineId, doneEach){
+                        CalculationLogic.getByPipelineId(pipelineId, function(result){
+                            if (result.operationResult == 0){
+                                if (result.result){
+                                    async.each(result.result, function(calc, eachCalcDone){
+                                        BalanceLogic.remove(calc.balanceId, function(res){
+                                            if (res.operationResult == 0){
+                                                CalculationLogic.remove(calc._id, function(res){
+                                                    if (res.operationResult == 0){
+                                                        eachCalcDone();
+                                                    } else {
+                                                        eachCalcDone(res.result);
+                                                    }
+                                                });
+                                            } else {
+                                                eachCalcDone(res.result);
+                                            }
+                                        });
+                                    }, function(err){
+                                        if (err) {
+                                            doneEach(err[0]);
+                                        } else {
+                                            doneEach();
+                                        }
+                                    });
+                                } else {
+                                    doneEach(result.result);
+                                }
+                            } else{
+                                doneEach(result.result);
+                            }
+                        });
+                    }, function(err){
+                        if (err){
+                            done(err[0]);
+                        } else{
+                            done(res);
+                        }
+                    });
+                } else {
+                    return done(res);
+                }
             });
         }
         else {

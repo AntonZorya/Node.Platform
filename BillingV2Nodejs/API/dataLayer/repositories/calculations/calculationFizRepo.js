@@ -21,9 +21,20 @@ exports.update = function (calculation, done) {
     }
 };
 
-exports.remove = function(calculationId, done){
-    if (calculationId){
-        calcCollection.findOneAndRemove({_id: calculationId}, function(err){
+exports.getByPipelineId = function (pipelineId, done) {
+    if (pipelineId) {
+        calcCollection.find({pipelineId: pipelineId}, function (err, result) {
+            if (err) return done(errorBuilder(err));
+            return done({operationResult: 0, result: result});
+        });
+    } else {
+        done({operationResult: 0});
+    }
+};
+
+exports.remove = function (calculationId, done) {
+    if (calculationId) {
+        calcCollection.findOneAndRemove({_id: calculationId}, function (err) {
             if (err) return done(errorBuilder(err));
             return done({operationResult: 0});
         });
@@ -58,29 +69,29 @@ exports.getByCounterId = function (counterId, period, done) {
     });
 };
 
-exports.hasByCounter = function(clientId, period, done)
-{
+exports.hasByCounter = function (clientId, period, done) {
     calcCollection.count({
         $and: [
             {period: period},
             {clientId: clientId},
-            { $or: [ {calculationType: 0}, {calculationType: 1} ]},
+            {$or: [{calculationType: 0}, {calculationType: 1}]},
             {isDeleted: false}
         ]
-    }, function(err, res) {
-       if (err) return done(errorBuilder(err));
+    }, function (err, res) {
+        if (err) return done(errorBuilder(err));
         return done({operationResult: 0, result: res > 0});
     });
 }
 
-exports.getByClientIdWithCounters = function(clientId, period, done) {
+exports.getByClientIdWithCounters = function (clientId, period, done) {
     calcCollection.find({
         $and: [
             {period: period},
             {clientId: clientId},
-            { $or: [ {calculationType: 0}, {calculationType: 1} ]},
+            {$or: [{calculationType: 0}, {calculationType: 1}]},
             {isDeleted: false}
-        ]}, function(err, res) {
+        ]
+    }, function (err, res) {
         if (err) return done(errorBuilder(err));
         return done({operationResult: 0, result: res})
     });
@@ -94,8 +105,8 @@ exports.getByClientId = function (clientId, period, done) {
             {calculationType: 2},
             {isDeleted: false}
         ]
-    }, function(err, res) {
-       if (err) return done(errorBuilder(err));
+    }, function (err, res) {
+        if (err) return done(errorBuilder(err));
         return done({operationResult: 0, result: res});
     });
 }

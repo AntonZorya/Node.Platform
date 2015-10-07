@@ -75,6 +75,9 @@ exports.getByClientIdWithCounters = function(clientId, period, done) {
     });
 }
 
+exports.getByPipelineId = function(pipelineId, done){
+    CalcRepo.getByPipelineId(pipelineId, done);
+};
 
 exports.remove = function(calculationId, done){
     CalcRepo.remove(calculationId, done);

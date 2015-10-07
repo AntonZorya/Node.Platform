@@ -173,7 +173,7 @@ function fizicalController($scope, dataService, toastr, printSvc, $templateCache
         $scope.print();
     };
 
-    $scope.editTechData = function () {
+    $scope.editClient = function () {
         modalSvc.showModal('/app/operator/fizical/editFizClient.html', 'editFizClientModal', $scope);
     };
 
