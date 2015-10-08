@@ -199,6 +199,7 @@ exports.unwindData = function (done) {
                     if(client==null) return callback();
                     ///////////////////////////////////////////////////
                     //doc, client._doc
+                    console.log(doc._id);
 
                     clientPAAWC = {
                         clientJurId: client._doc.clientJurId,
@@ -258,7 +259,7 @@ exports.unwindData = function (done) {
                         clientType_tariffId_date: client._doc.clientType_tariffId_date,
                         kskId_name: client._doc.kskId_name,
 
-                        "Тип_баланса": doc.balanceId.balanceTypeId.name,
+                        "Тип_баланса": (doc.balanceId ? doc.balanceId.balanceTypeId.name : null),
                         "Объем_начисленной_воды": doc.waterCubicMetersCount,
                         "Объем_начисленной_канализации": doc.canalCubicMetersCount,
                         "Тенге_начисленной_воды": doc.waterSum,
