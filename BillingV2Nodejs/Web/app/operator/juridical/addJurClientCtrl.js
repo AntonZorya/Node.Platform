@@ -6,20 +6,13 @@ billingApplication.controller('addJurClientController', ['$scope', 'dataService'
 function addJurClientController($scope, dataService, modalSvc, toastr, valSvc) {
     var self = this;
     this.container = $("#addJurClientContainer");
-     valSvc.init($scope);
+    valSvc.init($scope);
 
 
     $scope.modalItem = {
         period: $scope.$parent.period.value,
-        pipelines: [{
-            norm: 0,
-            avg: 0,
-            waterPercent: 0,
-            canalPercent: 0,
-            number: 1,
-            counters: [],
-            fields: []
-    }] };
+        pipelines: []
+    };
 
     $scope.save = function () {
         $scope.commonErrors = [];
@@ -69,7 +62,6 @@ function addJurClientController($scope, dataService, modalSvc, toastr, valSvc) {
     }
 
 
-
     $scope.StreetChange = function () {
         GetByParentId($scope.address.street._id, function (result) {
             $scope.houseList = result;
@@ -81,7 +73,6 @@ function addJurClientController($scope, dataService, modalSvc, toastr, valSvc) {
             $scope.flatList = result;
         });
     }
-
 
 
     $scope.addNewCounter = function (pipelineIndex) {
@@ -129,7 +120,82 @@ function addJurClientController($scope, dataService, modalSvc, toastr, valSvc) {
 
             }
         }
-
-
     };
+
+    $scope.removeCounter = function (pipelineIndex, counterIndex) {
+        $scope.modalItem.pipelines[pipelineIndex].counters.splice(counterIndex, 1);
+    }
+
+    $scope.addPipeline = function () {
+        var newPipeline = {
+            norm: 0,
+            avg: 0,
+            waterPercent: 100,
+            canalPercent: 100,
+            number: 1,
+            counters: [],
+            fields: [],
+            sourceCounts: 0,
+            checkNorm: false,
+            checkAvg: false
+        };
+        $scope.modalItem.pipelines.push(newPipeline);
+        $scope.$watch(function () {
+            return newPipeline.checkNorm;
+        }, function () {
+            if (!self.byNorm(newPipeline)) {
+                newPipeline.checkNorm = false;
+            }
+        }, true);
+        $scope.$watch(function () {
+            return newPipeline.checkAvg;
+        }, function () {
+            if (!self.byAvg(newPipeline)) {
+                newPipeline.checkAvg = false;
+            }
+        }, true);
+    }
+
+    $scope.removePipeline = function (pIndex) {
+        $scope.modalItem.pipelines.splice(pIndex, 1);
+    }
+
+    this.byNorm = function (pipeline) {
+        if (pipeline.checkNorm && !pipeline.norm) {
+            alert('Нет данных по "По норме"');
+            return false;
+        }
+        if (pipeline.checkNorm) {
+            pipeline.sourceCounts = 2;
+        } else {
+            pipeline.sourceCounts = 0;
+        }
+        return true;
+    }
+
+    this.byAvg = function (pipeline) {
+        if (pipeline.checkAvg && !pipeline.avg) {
+            alert('Нет данных "По среднему" ');
+            return false;
+        }
+        var foundCounter = _.find(pipeline.counters, function (counter) {
+            return counter.isActive === true;
+        });
+
+        if (pipeline.checkAvg && !foundCounter) {
+            alert("Нет активного счетчика");
+            return false;
+        }
+
+        if (pipeline.checkAvg) {
+            foundCounter.currentCounts = foundCounter.lastCounts * 1 + pipeline.avg * 1;
+            pipeline.sourceCounts = 1;
+        } else {
+            if (foundCounter) foundCounter.currentCounts = 0;
+            pipeline.sourceCounts = 0;
+        }
+        return true;
+    }
+
+
 }

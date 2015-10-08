@@ -158,6 +158,10 @@
                                 </div>
                             </td>
                             <td>
+                                <label translate="#Начислять по среднему"></label>
+                                <checkbox type="toggle" name="checkAvg" ng-model="pipeline.checkAvg" ng-change="byAvg(pipeline)"></checkbox>
+                            </td>
+                            <td>
                                 <label ng-bind="'#Норма' | translate"></label>
 
                                 <div class="ui input">
@@ -166,14 +170,13 @@
                             </td>
                             <td>
                                     <label ng-bind="'#Начислять по норме' | translate"></label>
-
-                                    <div class="ui checkbox">
-                                        <input type="checkbox" name="checkByNorm" ng-model="pipeline.checkNorm" ng-click="clickByNorm">
-                                    </div>
+                                    <checkbox type="toggle" name="checkByNorm" ng-model="pipeline.checkNorm" ng-change="byNorm(pipeline)" ></checkbox>
 
                             </td>
                             <td>
-                                <button class="ui button" ng-click="addNewCounter($index)">Добавить счетчик</button>
+                                <div class="ui negative remove icon button" ng-click="removePipeline($index)">
+                                    <i class="remove icon"></i>
+                                </div>
                             </td>
                         </tr>
                     </table>
@@ -196,7 +199,7 @@
 
                         <tr ng-repeat="counter in pipeline.counters"
                             ng-class="{
-                            'error disabled': !counter.isActive,
+                            'error': !counter.isActive,
                             'positive': counter.isActive
                             }">
                             <td>
@@ -243,17 +246,38 @@
                                 </div>
                             </td>
                             <td>
-                                <button class="ui button" ng-click="disableCounter($parent.$index, $index)">Снять
-                                </button>
+                                <div class="ui button" ng-click="disableCounter($parent.$index, $index)" translate="#Снять">
+                                </div>
+                                <div class="ui negative remove icon button" ng-click="removeCounter($parent.$index, $index)">
+                                    <i class="remove icon"></i>
+                                </div>
                             </td>
                         </tr>
                         </tbody>
+                        <tfoot>
+                        <tr>
+                            <td colspan="8">
+                                <div class="ui positive plus icon button" ng-click="addNewCounter($index)"  ><i class="plus icon"></i><label translate="#счетчик"></label></div>
+                            </td>
+                        </tr>
+                        </tfoot>
                     </table>
                     <br>
 
                 </td>
             </tr>
             </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="6">
+                    <div class="ui positive plus icon button" ng-click="addPipeline()">
+                        <i class="plus icon"></i>
+                        <label translate="#Ввод"></label>
+                    </div>
+                </td>
+            </tr>
+            </tfoot>
+
         </table>
         <div class="ui red message" style="margin-top:30px;" ng-show="commonErrors.length>0">
             <ul>
