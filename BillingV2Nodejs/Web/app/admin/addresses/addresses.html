@@ -1,37 +1,39 @@
-<div class="ui modal" ng-controller="addressesCtrl">
-    <i class="close icon"></i>
+<div ng-controller="addressesCtrl">
 
-    <div class="header">{{header}}</div>
     <div class="content">
         {{addressTextRepresentation}}
         <form id="form" class="ui form attached fluid segment">
-            <div class="ui grid">
-                <div class="four wide column">
-                    <div ng-repeat="addressTypeItem in addressTypeItems track by $index" style="margin-bottom:20px;">
-                        <select ng-model="selectedAddressTypes[$index]" ng-change="getAddressAtIndex($index)"
-                                ng-options="addressTypeName['_id'] as addressTypeName.name for addressTypeName in addressTypeItem">
-                        </select>
-                        <!--{{selectedAddressTypes[$index]}}-->
-                    </div>
 
-                </div>
-                <div class="one wide column"></div>
-                <div class="four wide column">
-                    <div ng-repeat="addressItem in addressItems track by $index" style="margin-bottom:20px;">
-                        <select ng-model="selectedAddresses[$index]" ng-change="getAddressTypeAtIndex($index)"
-                                ng-options="address['_id'] as address.name for address in addressItem">
-                        </select>
-                        <!--{{selectedAddresses[$index]}}-->
-                    </div>
-                </div>
-                <div class="seven wide column">
 
+            <div class="ui equal width grid">
+                <div class="row">
+                    <div class="column">
+                        <div ng-repeat="addressTypeItem in addressTypeItems track by $index" style="margin-bottom:10px;">
+                            <select style="padding: .2em;" ng-model="selectedAddressTypes[$index]" ng-change="getAddressAtIndex($index)"
+                                    ng-options="addressTypeName['_id'] as addressTypeName.name for addressTypeName in addressTypeItem">
+                            </select>
+                            <!--{{selectedAddressTypes[$index]}}-->
+                        </div>
+                    </div>
+                    <div class="column">
+                        <div ng-repeat="addressItem in addressItems track by $index" style="margin-bottom:10px;">
+                            <select style="padding: .2em;" ng-model="selectedAddresses[$index]" ng-change="getAddressTypeAtIndex($index)"
+                                    ng-options="address['_id'] as address.name for address in addressItem">
+                            </select>
+                            <!--{{selectedAddresses[$index]}}-->
+                        </div>
+                    </div>
                 </div>
             </div>
+
         </form>
     </div>
-    <div class="actions">
-        <button class="ui negative  tiny button" ng-click="clickCancel()">{{'#cancel' | translate}}</button>
-        <button class="ui positive  tiny button" ng-click="clickOk()">{{'#add' | translate}}</button>
+    <div class="ui grid">
+        <div class="right floated right aligned sixteen wide column">
+            <div style="margin-top:10px;">
+                <button class="ui negative mini button" ng-click="clickCancel()">{{'#cancel' | translate}}</button>
+                <button class="ui positive mini button" ng-click="clickOk()">{{'#add' | translate}}</button>
+            </div>
+        </div>
     </div>
 </div>

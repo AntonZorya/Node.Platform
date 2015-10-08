@@ -99,8 +99,9 @@ function addressesCtrl(dataSvc, $scope, valSvc, modalSvc) {
             var temp2 = _.find($scope.addressItems[index], function(i){
                 return i._id==$scope.selectedAddresses[index];
             });
-            if(index!=0)
+            if(index!=0 && $scope.selectedAddressTypes.length>index){
                 $scope.addressTextRepresentation += ", ";
+            }
             $scope.addressTextRepresentation += (temp && temp.shortName ? temp.shortName : "");
             $scope.addressTextRepresentation += " ";
             $scope.addressTextRepresentation += (temp2 && temp2.name ? temp2.name : "");
@@ -109,20 +110,20 @@ function addressesCtrl(dataSvc, $scope, valSvc, modalSvc) {
     };
 
     $scope.clickOk = function(){
-        modalSvc.elementScope.id = $scope.selectedAddresses[$scope.selectedAddresses.length-1];
-        modalSvc.closeModal("addressesModal");
-        // fill parent scope
-
+        $scope.$parent.addressid = $scope.selectedAddresses[$scope.selectedAddresses.length-1];
+        $scope.$parent.addresstext = $scope.addressTextRepresentation;
+        $scope.$parent.closePopup();
     };
 
     $scope.clickCancel = function(){
-        modalSvc.resolveModal("addressesModal");
+        $scope.$parent.closePopup();
     };
 
-    if(modalSvc.elementScope.id){
-        $scope.getAllParents(modalSvc.elementScope.id);
+    if($scope.addressid){
+        $scope.getAllParents($scope.addressid);
     }
     else{
         $scope.getAddressTypeAtIndex(0);
     }
+
 }

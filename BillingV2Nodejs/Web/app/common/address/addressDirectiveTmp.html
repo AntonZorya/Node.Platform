@@ -1,0 +1,26 @@
+<div class="ui action input">
+    <input type="text" placeholder="Адрес" ng-model="addresstext"/>
+    <!--<input type="text" ng-model="addressid" />-->
+
+    <div class="ui icon button" ng-click="loadConstructor()">
+        <i class="add icon"></i>
+    </div>
+    <div class="ui popup">
+        <div class="addressConstructorWrapper" style="width:500px;"></div>
+    </div>
+</div>
+
+<script>
+    $('.ui .button').popup({
+        inline   : true,
+        transition: 'fade down',
+        on: 'click',
+        position: 'bottom left'
+    });
+</script>
+
+<style>
+    .ui.popup{
+        max-width:none;
+    }
+</style>

@@ -1,8 +1,12 @@
 <div id="languages" ng-controller="testCtrl">
-    <div class="ui icon button" ng-click="callAddressModal()">
-        <i class="plus icon"></i>
-        {{'#callAddressesModal' | translate}}
-    </div>
-    id={{id}}
+    <input ng-model="addressId1">
+    <input ng-model="addressText1">
+    <address-input addressid="addressId1" addresstext="addressText1"></address-input>
+    <br>
+    <address-input addressid="addressId1" addresstext="addressText1"></address-input>
+    <br>
+    <address-input addressid="addressId1" addresstext="addressText1"></address-input>
+    <br>
+    <address-input addressid="addressId1" addresstext="addressText1"></address-input>
 </div>
 

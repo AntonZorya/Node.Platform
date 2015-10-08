@@ -4,13 +4,8 @@
 billingApplication.controller('testCtrl', ['dataService', '$scope', 'validationSvc', 'modalSvc', testCtrl]);
 
 function testCtrl(dataSvc, $scope, valSvc, modalSvc) {
-    $scope.id = "";
-    $scope.callAddressModal = function () {
-
-        modalSvc.showModal("/app/admin/addresses/addresses.html", 'addressesModal', $scope).then(function () {});
-
-
-    };
+    $scope.addressId1 = "560a2a165d686ed818ffa892";
+    $scope.addressText1 = "Астана, Алматинский, Кенесары, 45, 4";
 }
 
 
