@@ -185,6 +185,10 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
         modalSvc.showModal('/app/operator/juridical/addJurClient.html', 'addJurClientModal', $scope);
     }
 
+    $scope.editJurClient = function() {
+        modalSvc.showModal('/app/operator/juridical/editJurClient.html', 'editJurClientModal', $scope);
+    }
+
     //streets
     $scope.getStreets = function () {
         dataService.get('/streets').then(function (response) {
