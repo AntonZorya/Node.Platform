@@ -403,8 +403,8 @@ function fizicalController($scope, dataService, toastr, printSvc, $templateCache
 
     };
 
-    $scope.$on('changeTariffId', function (event, args) {
-        var client = _.where($scope.data, {_id: args.clientId})[0];
+    $scope.updateClientBalance = function (clientId) {
+        var client = _.find($scope.data, {_id: clientId});
         if (client) {
             client.pipelines.forEach(function (pipeline) {
                 pipeline.counters.forEach(function (counter) {
@@ -428,7 +428,7 @@ function fizicalController($scope, dataService, toastr, printSvc, $templateCache
                 });
             });
         }
-    });
+    };
 
 }
 

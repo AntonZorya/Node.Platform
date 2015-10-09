@@ -17,7 +17,7 @@ exports.definition = _.extend({
 	site: {type: String, required: "#site required"},
 
 	addressId: {type: Schema.Types.ObjectId, ref: "Address", required: true},
-	address: {type: String},//, required: "#address required"},
+	address: {type: String, required: "#address required"},
 	phone: {type: String},
 	email: {type: String},
 	period: {type: Number},

@@ -34,15 +34,15 @@ var sheet_name_list = workbook.SheetNames;
 var sheet = workbook.Sheets[sheet_name_list[0]];
 var data = XLS.utils.sheet_to_json(sheet, {header: 1});
 data = _.rest(data, 1);
-//data = data.slice(57900);
+data = data.slice(57831);
 console.log('clientFiz readed');
 
-var workbook = XLS.readFile('inputData/vodomerFiz.xls');
-var sheet_name_list = workbook.SheetNames;
-var sheet = workbook.Sheets[sheet_name_list[0]];
-var vodomerData = XLS.utils.sheet_to_json(sheet, {header: 1});
-vodomerData = _.rest(vodomerData, 1);
-console.log('vodomerFiz readed');
+//var workbook = XLS.readFile('inputData/vodomerFiz.xls');
+//var sheet_name_list = workbook.SheetNames;
+//var sheet = workbook.Sheets[sheet_name_list[0]];
+//var vodomerData = XLS.utils.sheet_to_json(sheet, {header: 1});
+//vodomerData = _.rest(vodomerData, 1);
+//console.log('vodomerFiz readed');
 
 var clients = [];
 var i = 0;
@@ -53,145 +53,145 @@ clientTypeFizRepo.getAll(function (types) {
 
         // АДРЕСА ФИЗИКОВ
 
-        /*function (callback) {
-         var addresses = [];
-         var districtTypeId = mongoose.Types.ObjectId('55c20bb0d39acd07553e4fe3');
-         var streetTypeId = mongoose.Types.ObjectId('55c1f1d0d39acd07553e4fdd');
-         var houseTypeId = mongoose.Types.ObjectId('55c1f5bfd39acd07553e4fdf');
-         var flatTypeId = mongoose.Types.ObjectId('55c1f5d7d39acd07553e4fe1');
-
-         var i = 0;
-
-         async.each(data, function (rowArray, eachDone) {
-
-         if (typeof rowArray[5] != 'undefined') {
-
-         var parentAddresses = [];
-
-         var streetId = mongoose.Types.ObjectId().toString();
-         var streetName = rowArray[5];
-         streetName = streetName.toString().trim();
-         var foundStreet = null;
-
-         var newStreet = {
-         _id: streetId,
-         addressTypeId: streetTypeId,
-         value: streetName,
-         parentId: null,
-         isDeleted: false,
-         createDateTime: null
-         };
-
-         if (addresses.length == 0) {
-         addresses.push(newStreet);
-         } else {
-         foundStreet = _.find(addresses, function (addr) {
-         return addr.value == streetName;
-         });
-         if (!foundStreet) {
-         addresses.push(newStreet);
-         } else {
-         streetId = foundStreet._id;
-         }
-         }
-
-         if (typeof rowArray[6] != 'undefined') {
-
-         var houseId = mongoose.Types.ObjectId().toString();
-         var house = rowArray[6];
-         house = house.toString().trim();
-
-         //вытаскиваем дома улицы
-         var foundHousesForStreet = _.filter(addresses, function (addr) {
-         return addr.parentId === streetId;
-         });
-         if (foundHousesForStreet) {
-         var foundHouse = _.find(foundHousesForStreet, function (h) {
-         return h.value === house;
-         });
-         //если такого дома для улицы в базе еще нет
-         if (!foundHouse) {
-         addresses.push({
-         _id: houseId,
-         addressTypeId: houseTypeId,
-         value: house,
-         parentId: streetId,
-         parentAddresses: [
-         {
-         typeId: streetTypeId,
-         typeName: 'Улица',
-         shortTypeName: 'ул.',
-         id: streetId,
-         name: streetName
-         }
-         ]
-         });
-         } else {
-         houseId = foundHouse._id;
-         }
-
-         } else {
-         addresses.push({
-         _id: houseId,
-         addressTypeId: houseTypeId,
-         value: house,
-         parentId: streetId,
-         parentAddresses: [
-         {
-         typeId: streetTypeId,
-         typeName: 'Улица',
-         shortTypeName: 'ул.',
-         id: streetId,
-         name: streetName
-         }
-         ]
-
-         });
-         }
-
-         if (typeof rowArray[7] != 'undefined') {
-
-         var flat = rowArray[7];
-         flat = flat.toString().trim();
-
-         addresses.push({
-         addressTypeId: flatTypeId,
-         value: flat,
-         parentId: houseId,
-         parentAddresses: [
-         {
-         typeId: houseTypeId,
-         typeName: 'Дом',
-         shortTypeName: 'д.',
-         id: houseId,
-         name: house
-         },
-         {
-         typeId: streetTypeId,
-         typeName: 'Улица',
-         shortTypeName: 'ул.',
-         id: streetId,
-         name: streetName
-         }
-         ]
-         });
-
-         }
-         }
-         }
-         console.log(i++);
-         eachDone();
-         }, function () {
-         async.each(addresses, function (addr, done) {
-         addressRepo.add(addr, function () {
-         console.log('Added address:', addr.value);
-         done();
-         });
-         }, function () {
-         callback();
-         });
-         });
-         }*/
+        //function (callback) {
+        //    var addresses = [];
+        //    var districtTypeId = mongoose.Types.ObjectId('55c20bb0d39acd07553e4fe3');
+        //    var streetTypeId = mongoose.Types.ObjectId('55c1f1d0d39acd07553e4fdd');
+        //    var houseTypeId = mongoose.Types.ObjectId('55c1f5bfd39acd07553e4fdf');
+        //    var flatTypeId = mongoose.Types.ObjectId('55c1f5d7d39acd07553e4fe1');
+        //
+        //    var i = 0;
+        //
+        //    async.each(data, function (rowArray, eachDone) {
+        //
+        //        if (typeof rowArray[5] != 'undefined') {
+        //
+        //            var parentAddresses = [];
+        //
+        //            var streetId = mongoose.Types.ObjectId().toString();
+        //            var streetName = rowArray[5];
+        //            streetName = streetName.toString().trim();
+        //            var foundStreet = null;
+        //
+        //            var newStreet = {
+        //                _id: streetId,
+        //                addressTypeId: streetTypeId,
+        //                value: streetName,
+        //                parentId: null,
+        //                isDeleted: false,
+        //                createDateTime: null
+        //            };
+        //
+        //            if (addresses.length == 0) {
+        //                addresses.push(newStreet);
+        //            } else {
+        //                foundStreet = _.find(addresses, function (addr) {
+        //                    return addr.value == streetName;
+        //                });
+        //                if (!foundStreet) {
+        //                    addresses.push(newStreet);
+        //                } else {
+        //                    streetId = foundStreet._id;
+        //                }
+        //            }
+        //
+        //            if (typeof rowArray[6] != 'undefined') {
+        //
+        //                var houseId = mongoose.Types.ObjectId().toString();
+        //                var house = rowArray[6];
+        //                house = house.toString().trim();
+        //
+        //                //вытаскиваем дома улицы
+        //                var foundHousesForStreet = _.filter(addresses, function (addr) {
+        //                    return addr.parentId === streetId;
+        //                });
+        //                if (foundHousesForStreet) {
+        //                    var foundHouse = _.find(foundHousesForStreet, function (h) {
+        //                        return h.value === house;
+        //                    });
+        //                    //если такого дома для улицы в базе еще нет
+        //                    if (!foundHouse) {
+        //                        addresses.push({
+        //                            _id: houseId,
+        //                            addressTypeId: houseTypeId,
+        //                            value: house,
+        //                            parentId: streetId,
+        //                            parentAddresses: [
+        //                                {
+        //                                    typeId: streetTypeId,
+        //                                    typeName: 'Улица',
+        //                                    shortTypeName: 'ул.',
+        //                                    id: streetId,
+        //                                    name: streetName
+        //                                }
+        //                            ]
+        //                        });
+        //                    } else {
+        //                        houseId = foundHouse._id;
+        //                    }
+        //
+        //                } else {
+        //                    addresses.push({
+        //                        _id: houseId,
+        //                        addressTypeId: houseTypeId,
+        //                        value: house,
+        //                        parentId: streetId,
+        //                        parentAddresses: [
+        //                            {
+        //                                typeId: streetTypeId,
+        //                                typeName: 'Улица',
+        //                                shortTypeName: 'ул.',
+        //                                id: streetId,
+        //                                name: streetName
+        //                            }
+        //                        ]
+        //
+        //                    });
+        //                }
+        //
+        //                if (typeof rowArray[7] != 'undefined') {
+        //
+        //                    var flat = rowArray[7];
+        //                    flat = flat.toString().trim();
+        //
+        //                    addresses.push({
+        //                        addressTypeId: flatTypeId,
+        //                        value: flat,
+        //                        parentId: houseId,
+        //                        parentAddresses: [
+        //                            {
+        //                                typeId: houseTypeId,
+        //                                typeName: 'Дом',
+        //                                shortTypeName: 'д.',
+        //                                id: houseId,
+        //                                name: house
+        //                            },
+        //                            {
+        //                                typeId: streetTypeId,
+        //                                typeName: 'Улица',
+        //                                shortTypeName: 'ул.',
+        //                                id: streetId,
+        //                                name: streetName
+        //                            }
+        //                        ]
+        //                    });
+        //
+        //                }
+        //            }
+        //        }
+        //        console.log(i++);
+        //        eachDone();
+        //    }, function () {
+        //        async.each(addresses, function (addr, done) {
+        //            addressRepo.add(addr, function () {
+        //                console.log('Added address:', addr.value);
+        //                done();
+        //            });
+        //        }, function () {
+        //            callback();
+        //        });
+        //    });
+        //},
 
         //\\ АДРЕСА ФИЗИКОВ
 
@@ -202,38 +202,38 @@ clientTypeFizRepo.getAll(function (types) {
         function (callback) {
 
             function makeClient(row) {
-                var vodomer = _.find(vodomerData, function (rowV) {
-                    return rowV[1] == row[2];
-                });
+                //var vodomer = _.find(vodomerData, function (rowV) {
+                //    return rowV[1] == row[2];
+                //});
                 var counters = [];
-                if (vodomer) {
-                    var date = null;
-                    if (row[39]) {
-                        var dateRow = row[39].trim();
-                        if (dateRow.indexOf('.') != -1) {
-                            var dateArr = dateRow.split('.');
-                            date = new Date(dateArr[2], dateArr[1], dateArr[0]);
-                        } else {
-                            var dateArr = dateRow.split('/');
-                            date = new Date(dateArr[2], dateArr[0], dateArr[1]);
-                        }
-                    }
-                    counters.push({
-                        counterNumber: vodomer[2] ? vodomer[2].trim() : null,
-                        plumbNumber: vodomer[4] ? vodomer[4].trim() : null,
-                        currentStatus: vodomer[4] ? '#Опломбирован' : '#Не обломбирован',
-                        problem: null,
-                        problemDescription: null,
-                        dateOfLastCounts: date,
-                        isActive: true,
-
-                        dateOfCurrentCounts: null,
-                        lastCounts: row[38] ? row[38].trim() : null,
-                        currentCounts: null,
-
-                        installDate: vodomer[3] ? Date.parse(vodomer[3].trim()) : null,
-                    });
-                }
+                //if (vodomer) {
+                //    var date = null;
+                //    if (row[39]) {
+                //        var dateRow = row[39].trim();
+                //        if (dateRow.indexOf('.') != -1) {
+                //            var dateArr = dateRow.split('.');
+                //            date = new Date(dateArr[2], dateArr[1], dateArr[0]);
+                //        } else {
+                //            var dateArr = dateRow.split('/');
+                //            date = new Date(dateArr[2], dateArr[0], dateArr[1]);
+                //        }
+                //    }
+                //    counters.push({
+                //        counterNumber: vodomer[2] ? vodomer[2].trim() : null,
+                //        plumbNumber: vodomer[4] ? vodomer[4].trim() : null,
+                //        currentStatus: vodomer[4] ? '#Опломбирован' : '#Не обломбирован',
+                //        problem: null,
+                //        problemDescription: null,
+                //        dateOfLastCounts: date,
+                //        isActive: true,
+                //
+                //        dateOfCurrentCounts: null,
+                //        lastCounts: row[38] ? row[38].trim() : null,
+                //        currentCounts: null,
+                //
+                //        installDate: vodomer[3] ? Date.parse(vodomer[3].trim()) : null,
+                //    });
+                //}
                 var clientPipelines = [{
                     number: 1,
                     description: 'Ввод',
@@ -245,6 +245,16 @@ clientTypeFizRepo.getAll(function (types) {
 
                     isActive: true,
                 }];
+                var clientNorm;
+                try {
+                    clientNorm = row[8] ? row[8].trim() * 200 : 200;
+                } catch (error) {
+                    clientNorm = 200;
+                }
+                var typeName = row[17] ? row[17].trim() : 'абонент';
+                if (!(row[18] in ['Благоустроенная квартира', 'Жилой дом'])) {
+                    typeName = 'абонент';
+                }
                 var newClient = {
                     accountNumber: row[2],
                     number: row[0],
@@ -262,11 +272,11 @@ clientTypeFizRepo.getAll(function (types) {
 
                     controllerId: null,
                     clientType: _.find(clientTypes, function (type) {
-                        return type._doc.name == row[18] ? row[18].trim() : 'абонент';
+                        return type._doc.name == typeName;
                     })._doc,
                     waterPercent: clientPipelines[0].waterPercent,
                     canalPercent: clientPipelines[0].canalPercent,
-                    norm: 0,
+                    norm: clientNorm,
                     checkByNorm: counters.length == 0 ? true : false
                 };
                 return newClient;

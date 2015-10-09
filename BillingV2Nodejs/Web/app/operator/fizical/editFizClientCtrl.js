@@ -86,7 +86,7 @@ function editFizClientController($scope, dataService, modalSvc, toastr, valSvc) 
                 $scope.$parent.selectedItem = _.extend($scope.$parent.selectedItem, $scope.modalItem);
                 toastr.success('', 'Данные успешно сохранены');
                 modalSvc.closeModal('editFizClientModal');
-                $scope.$parent.search();
+                $scope.$parent.updateClientBalance($scope.modalItem._id);
             });
         }
     };

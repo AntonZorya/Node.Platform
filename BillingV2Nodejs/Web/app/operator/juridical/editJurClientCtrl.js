@@ -11,29 +11,6 @@ function editJurClientController($scope, dataService, modalSvc, toastr, valSvc) 
     $scope.modalItem = {};
     $scope.modalItem = _.extend($scope.modalItem, $scope.$parent.selectedItem);
 
-    $scope.save = function () {
-        if ($scope.flatList.length > 0 && !$scope.address.flat.value) {
-            toastr.error('', 'Выберите квартиру');
-        } else if ($scope.houseList.length > 0 && !$scope.address.house.value) {
-            toastr.error('', 'Выберите дом');
-        } else if (!$scope.address.street.value) {
-            toastr.error('', 'Выберите улицу');
-        }
-        else {
-            var street = $scope.address.street.value;
-            var house = '';
-            var flat = '';
-            if ($scope.address.house && $scope.address.house.value) house = ' ' + $scope.address.house.value;
-            if ($scope.address.flat && $scope.address.flat.value) flat = ' кв.' + $scope.address.flat.value;
-            $scope.modalItem.address = street + house + flat;
-            $scope.modalItem.addressId = flat == '' ? $scope.address.house : $scope.address.flat;
-            dataService.post('/clientJur/update', $scope.modalItem, self.container, $scope).then(function (response) {
-                toastr.success('', 'Данные успешно сохранены');
-                _.extend($scope.$parent.selectedItem, $scope.modalItem);
-            });
-        }
-    };
-
     $scope.cancel = function () {
         modalSvc.resolveModal('editPassportDataModal');
     };

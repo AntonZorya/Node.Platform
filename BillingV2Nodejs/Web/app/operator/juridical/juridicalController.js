@@ -296,37 +296,10 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
 
 
     $scope.getAllBalance = function () {
-        //TODO: оптимизировать - посчитать на сервере и вернуть на клиента только суммы по всем клиентам
         dataService.get('/balance/getAllBalance', {period: $scope.period.value}).then(function (response) {
-
-            var groupedBalances = _(response.result).groupBy(function (bal) {
-                return bal.balanceTypeId.name;
-            });
-
-            $scope.nachisl = {
-                name: 'Начисления',
-                sum: 0
-            };
-            _.each(groupedBalances['Начисление'], function (bal) {
-                $scope.nachisl.sum = $scope.nachisl.sum + bal.sum;
-            });
-
-            $scope.forfeit = {
-                name: 'Штрафы',
-                sum: 0
-            };
-            _.each(groupedBalances['Штраф'], function (bal) {
-                $scope.forfeit.sum = $scope.forfeit.sum + bal.sum;
-            });
-
-            $scope.payment = {
-                name: 'Оплата',
-                sum: 0
-            };
-            _.each(groupedBalances['Оплата'], function (bal) {
-                $scope.payment.sum = $scope.payment.sum + bal.sum;
-            });
-
+            $scope.nachisl = response.result.nachisl;
+            $scope.forfeit = response.result.forfeit;
+            $scope.payment = response.result.payment;
         });
     };
 

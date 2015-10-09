@@ -30,7 +30,7 @@ exports.add = function (client, done) {
 };
 
 exports.getAll = function (orgId, done) {
-    Collection.find({isDeleted: false}).populate("controllerId").populate('addressId').exec(function (err, clients) {
+    Collection.find({isDeleted: false}).exec(function (err, clients) {
         if (err) return done(errorBuilder(err));
         return done({operationResult: 0, result: clients});
     });
