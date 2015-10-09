@@ -3,13 +3,11 @@
     <div class="content">
         {{addressTextRepresentation}}
         <form id="form" class="ui form attached fluid segment">
-
-
             <div class="ui equal width grid">
                 <div class="row">
                     <div class="column">
                         <div ng-repeat="addressTypeItem in addressTypeItems track by $index" style="margin-bottom:10px;">
-                            <select style="padding: .2em;" ng-model="selectedAddressTypes[$index]" ng-change="getAddressAtIndex($index)"
+                            <select class="ui search selection dropdown" ng-model="selectedAddressTypes[$index]" ng-change="getAddressAtIndex($index)"
                                     ng-options="addressTypeName['_id'] as addressTypeName.name for addressTypeName in addressTypeItem">
                             </select>
                             <!--{{selectedAddressTypes[$index]}}-->
@@ -17,7 +15,7 @@
                     </div>
                     <div class="column">
                         <div ng-repeat="addressItem in addressItems track by $index" style="margin-bottom:10px;">
-                            <select style="padding: .2em;" ng-model="selectedAddresses[$index]" ng-change="getAddressTypeAtIndex($index)"
+                            <select class="ui search selection dropdown" ng-model="selectedAddresses[$index]" ng-change="getAddressTypeAtIndex($index)"
                                     ng-options="address['_id'] as address.name for address in addressItem">
                             </select>
                             <!--{{selectedAddresses[$index]}}-->
@@ -25,7 +23,6 @@
                     </div>
                 </div>
             </div>
-
         </form>
     </div>
     <div class="ui grid">
@@ -37,3 +34,13 @@
         </div>
     </div>
 </div>
+
+<style>
+    div.ui.search.selection.dropdown{
+        width:100%;
+        padding: .4em;
+    }
+    div.ui.search.selection.dropdown>input.search{
+        padding: .4em;
+    }
+</style>

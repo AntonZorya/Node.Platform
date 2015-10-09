@@ -1,6 +1,6 @@
-billingApplication.controller('addressesCtrl', ['dataService', '$scope', 'validationSvc', 'modalSvc', addressesCtrl]);
+billingApplication.controller('addressesCtrl', ['dataService', '$scope', 'validationSvc', 'modalSvc', '$timeout', addressesCtrl]);
 
-function addressesCtrl(dataSvc, $scope, valSvc, modalSvc) {
+function addressesCtrl(dataSvc, $scope, valSvc, modalSvc, $timeout) {
     $scope.header = "#constructAddress";
     $scope.addressTypeItems = [];
     $scope.addressItems = [];
@@ -12,73 +12,91 @@ function addressesCtrl(dataSvc, $scope, valSvc, modalSvc) {
 
 
     $scope.getAddressTypeAtIndex = function (index) {
-        dataSvc.get("/addressType/getChildList", {
-            id: $scope.selectedAddressTypes[index]
-        }, $("#form")).then(function (res) {
+        if(($scope.selectedAddresses[index] && $scope.selectedAddresses[index]!=null) || (index==0 && !$scope.selectedAddressTypes[0])) {
+            dataSvc.get("/addressType/getChildList", {
+                id: $scope.selectedAddressTypes[index]
+            }, $("#form")).then(function (res) {
+                console.log(res);
+                if (res.operationResult == 0) {
 
-            if (typeof res.result !== 'undefined' && res.result.length > 0) {
-                $scope.addressTypeItems = $scope.addressTypeItems.slice(0, index+1);
-                $scope.selectedAddressTypes = $scope.selectedAddressTypes.slice(0, index+1);
-                $scope.addressItems = $scope.addressItems.slice(0, index+1);
-                $scope.selectedAddresses = $scope.selectedAddresses.slice(0, index+1);
-                $scope.addressTypeItems.push(res.result);
+                    if (typeof res.result !== 'undefined' && res.result.length > 0) {
+                        $scope.addressTypeItems = $scope.addressTypeItems.slice(0, index + 1);
+                        $scope.selectedAddressTypes = $scope.selectedAddressTypes.slice(0, index + 1);
+                        $scope.addressItems = $scope.addressItems.slice(0, index + 1);
+                        $scope.selectedAddresses = $scope.selectedAddresses.slice(0, index + 1);
+                        $scope.addressTypeItems.push(res.result);
 
-                if($scope.mustSelectedAddressTypes[index]){
+                        if ($scope.mustSelectedAddressTypes[index]) {
 
-                    var temp;
-                    if($scope.selectedAddressTypes[index]){
-                        temp = _.find($scope.addressTypeItems[index+1], function(item){
-                            return item._id==$scope.mustSelectedAddressTypes[index+1]._id
-                        });
+                            var temp;
+                            if ($scope.selectedAddressTypes[index]) {
+                                temp = _.find($scope.addressTypeItems[index + 1], function (item) {
+                                    return item._id == $scope.mustSelectedAddressTypes[index + 1]._id
+                                });
+                            }
+                            else {
+                                temp = _.find($scope.addressTypeItems[index], function (item) {
+                                    return item._id == $scope.mustSelectedAddressTypes[index]._id
+                                });
+                            }
+
+
+                            if ($scope.selectedAddressTypes[index]) {
+                                $scope.selectedAddressTypes[index + 1] = temp._id;
+                                $scope.getAddressAtIndex(index + 1);
+                            }
+                            else {
+                                $scope.selectedAddressTypes[index] = temp._id;
+                                $scope.getAddressAtIndex(index);
+                            }
+
+                        }
+
                     }
-                    else{
-                        temp = _.find($scope.addressTypeItems[index], function(item){
-                            return item._id==$scope.mustSelectedAddressTypes[index]._id
-                        });
-                    }
 
-
-                    if($scope.selectedAddressTypes[index]){
-                        $scope.selectedAddressTypes[index+1] = temp._id;
-                        $scope.getAddressAtIndex(index+1);
-                    }
-                    else{
-                        $scope.selectedAddressTypes[index] = temp._id;
-                        $scope.getAddressAtIndex(index);
-                    }
-
+                    $timeout(function () {
+                        $(".ui.search.selection.dropdown").dropdown();
+                    });
+                    $scope.refreshTextRepresentation();
                 }
-
-            }
-            $scope.refreshTextRepresentation();
-        });
+            });
+        }
     };
 
     $scope.getAddressAtIndex = function (index) {
+        if(($scope.selectedAddressTypes[index] && $scope.selectedAddressTypes[index]!=null))
         dataSvc.get("/address/getChildList", {
             parentId: (index == 0 ? $scope.selectedAddresses[index] : $scope.selectedAddresses[index - 1]),
             typeId: $scope.selectedAddressTypes[index]
         }, $("#form")).then(function (res) {
+            console.log(res);
+            if(res.operationResult==0) {
 
-            $scope.addressTypeItems = $scope.addressTypeItems.slice(0, index+1);
-            $scope.selectedAddressTypes = $scope.selectedAddressTypes.slice(0, index+1);
-            $scope.addressItems = $scope.addressItems.slice(0, index);
-            $scope.selectedAddresses = $scope.selectedAddresses.slice(0, index);
-            $scope.addressItems.push(res.result);
 
-            if($scope.mustSelectedAddresses[index]){
+                $scope.addressTypeItems = $scope.addressTypeItems.slice(0, index + 1);
+                $scope.selectedAddressTypes = $scope.selectedAddressTypes.slice(0, index + 1);
+                $scope.addressItems = $scope.addressItems.slice(0, index);
+                $scope.selectedAddresses = $scope.selectedAddresses.slice(0, index);
+                $scope.addressItems.push(res.result);
 
-                var temp = _.find($scope.addressItems[index], function(item){
-                    return item._id==$scope.mustSelectedAddresses[index]._id
-                });
-                $scope.selectedAddresses[index] = temp._id;
-                if(index==$scope.mustSelectedAddresses.length-1){
-                    $scope.mustSelectedAddressTypes = [];
-                    $scope.mustSelectedAddresses = [];
+                if ($scope.mustSelectedAddresses[index]) {
+
+                    var temp = _.find($scope.addressItems[index], function (item) {
+                        return item._id == $scope.mustSelectedAddresses[index]._id
+                    });
+                    $scope.selectedAddresses[index] = temp._id;
+                    if (index == $scope.mustSelectedAddresses.length - 1) {
+                        $scope.mustSelectedAddressTypes = [];
+                        $scope.mustSelectedAddresses = [];
+                    }
+                    $scope.getAddressTypeAtIndex(index);
                 }
-                $scope.getAddressTypeAtIndex(index);
+
+                $timeout(function () {
+                    $(".ui.search.selection.dropdown").dropdown();
+                });
+                $scope.refreshTextRepresentation();
             }
-            $scope.refreshTextRepresentation();
         });
     };
 
