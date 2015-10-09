@@ -199,7 +199,7 @@ exports.unwindData = function (done) {
                     if(client==null) return callback();
                     ///////////////////////////////////////////////////
                     //doc, client._doc
-                    console.log(doc._id);
+                    console.log("calculation._id = "+doc._id);
 
                     clientPAAWC = {
                         clientJurId: client._doc.clientJurId,
