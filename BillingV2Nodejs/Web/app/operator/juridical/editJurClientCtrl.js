@@ -74,35 +74,98 @@ function editJurClientController($scope, dataService, modalSvc, toastr, valSvc) 
         }
     }
 
-
     var prevTarifId = $scope.modalItem.clientType.tariffId._id;
 
     $scope.save = function () {
-        var tariff = $scope.modalItem.clientType.tariffId;
-        dataService.post('/clientJur/update', {client:  $scope.modalItem, idsRmPipelines: []}, self.container, $scope).then(function (response) {
-
-            if (response.operationResult === 0) {
-                modalSvc.closeModal('editJurClientModal');
-                toastr.success('', 'Данные успешно сохранены');
-
-                // Костыль
-                var address = $scope.modalItem.addressId;
-                $scope.modalItem = response.result;
-                $scope.modalItem.addressId = address;
-
-                _.extend($scope.$parent.selectedItem, $scope.modalItem);
-                $scope.$parent.selectedItem.clientType.tariffId = tariff;
-
-                if (tariff._id !== prevTarifId) {
-                    $scope.$emit('changeTariffId', {clientId: $scope.modalItem._id});
-                }
-            } else {
-                toastr.error('', 'Не все данные введены');
-                $scope.modalItem = _.extend($scope.modalItem, $scope.$parent.selectedItem);
+        $scope.commonErrors = [];
+        if (!$scope.address.street.value) {
+            $scope.commonErrors.push('Выберите улицу');
+        } else {
+            var street = $scope.address.street.value;
+            var house = '';
+            var flat = '';
+            var address = $scope.address.street;
+            if ($scope.address.house && $scope.address.house.value) {
+                house = ' ' + $scope.address.house.value;
+                address = $scope.address.house;
+                address.parentId = [
+                    $scope.address.street
+                ];
             }
-
-        });
+            if ($scope.address.flat && $scope.address.flat.value) {
+                flat = ' кв.' + $scope.address.flat.value;
+                address = $scope.address.flat;
+                address.parentId = [
+                    $scope.address.house,
+                    $scope.address.street
+                ];
+            }
+            var current = JSON.parse(JSON.stringify($scope.modalItem));
+            current.address = street + house + flat;
+            current.addressId = flat == '' ? $scope.address.house : $scope.address.flat;
+            current.clientType.tariffId = $scope.modalItem.clientType.tariffId._id;
+            var query = {
+                client: current,
+                removedPipelines: removedPipelines
+            };
+            dataService.post('/clientJur/update', query, self.container, $scope).then(function (response) {
+                $scope.$parent.selectedItem = _.extend($scope.$parent.selectedItem, $scope.modalItem);
+                toastr.success('', 'Данные успешно сохранены');
+                modalSvc.closeModal('editJurClientModal');
+                $scope.$parent.updateClientBalance($scope.modalItem._id);
+            });
+        }
     };
+
+    //$scope.save = function () {
+    //
+    //    if ($scope.houseList.length > 0 && !$scope.address.house.value) {
+    //        toastr.error('', 'Выберите дом');
+    //    } else if (!$scope.address.street.value) {
+    //        toastr.error('', 'Выберите улицу');
+    //    }
+    //    else {
+    //        var street = $scope.address.street.value;
+    //        var house = '';
+    //        var flat = '';
+    //        if ($scope.address.house && $scope.address.house.value) house = ' ' + $scope.address.house.value;
+    //        if ($scope.address.flat && $scope.address.flat.value) flat = ' кв.' + $scope.address.flat.value;
+    //        $scope.modalItem.address = street + house + flat;
+    //        if ($scope.address.house == '') {
+    //            $scope.modalItem
+    //        }
+    //        $scope.modalItem.addressId = flat == '' ? $scope.address.house : $scope.address.flat;
+    //        dataService.post('/clientJur/update', $scope.modalItem).then(function (response) {
+    //            toastr.success('', 'Данные успешно сохранены');
+    //            _.extend($scope.$parent.selectedItem, $scope.modalItem);
+    //        });
+    //    }
+    //
+    //    var tariff = $scope.modalItem.clientType.tariffId;
+    //    dataService.post('/clientJur/update', {
+    //        client: $scope.modalItem,
+    //        idsRmPipelines: []
+    //    }, self.container, $scope).then(function (response) {
+    //
+    //        if (response.operationResult === 0) {
+    //            modalSvc.closeModal('editJurClientModal');
+    //            toastr.success('', 'Данные успешно сохранены');
+    //
+    //            // Костыль
+    //            var address = $scope.modalItem.addressId;
+    //            $scope.modalItem = response.result;
+    //            $scope.modalItem.addressId = address;
+    //
+    //            _.extend($scope.$parent.selectedItem, $scope.modalItem);
+    //            $scope.$parent.selectedItem.clientType.tariffId = tariff;
+    //
+    //        } else {
+    //            toastr.error('', 'Не все данные введены');
+    //            $scope.modalItem = _.extend($scope.modalItem, $scope.$parent.selectedItem);
+    //        }
+    //
+    //    });
+    //};
 
     $scope.cancel = function () {
         modalSvc.closeModal('editJurClientModal');
@@ -128,11 +191,9 @@ function editJurClientController($scope, dataService, modalSvc, toastr, valSvc) 
         }
     };
 
-    $scope.removeCounter = function(pipelineIndex, counterIndex)
-    {
+    $scope.removeCounter = function (pipelineIndex, counterIndex) {
         var pipeline = $scope.modalItem.pipelines[pipelineIndex];
-        if (!pipeline._id)
-        {
+        if (!pipeline._id) {
             pipeline.counters.splice(counterIndex, 1);
         }
     }
@@ -164,8 +225,7 @@ function editJurClientController($scope, dataService, modalSvc, toastr, valSvc) 
         }
     };
 
-    $scope.addPipeline = function()
-    {
+    $scope.addPipeline = function () {
         var newPipeline = {
             norm: 0,
             avg: 0,
