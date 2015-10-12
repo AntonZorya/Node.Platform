@@ -1,4 +1,4 @@
-var definition = require('../../models/tariff/tarifffiz');
+var definition = require('../../models/tariff/tariffFiz');
 var Collection = new require('../../../helpers/mongoose/modelBuilder')('tarifffiz', definition);
 
 exports.getAll = function (done) {

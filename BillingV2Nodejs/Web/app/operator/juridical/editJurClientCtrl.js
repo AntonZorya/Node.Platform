@@ -75,6 +75,7 @@ function editJurClientController($scope, dataService, modalSvc, toastr, valSvc) 
     }
 
     var prevTarifId = $scope.modalItem.clientType.tariffId._id;
+    var idsRmPipelines = [];
 
     $scope.save = function () {
         $scope.commonErrors = [];
@@ -106,7 +107,7 @@ function editJurClientController($scope, dataService, modalSvc, toastr, valSvc) 
             current.clientType.tariffId = $scope.modalItem.clientType.tariffId._id;
             var query = {
                 client: current,
-                removedPipelines: removedPipelines
+                idsRmPipelines: idsRmPipelines
             };
             dataService.post('/clientJur/update', query, self.container, $scope).then(function (response) {
                 $scope.$parent.selectedItem = _.extend($scope.$parent.selectedItem, $scope.modalItem);
