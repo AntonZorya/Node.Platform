@@ -221,7 +221,7 @@ exports.report2 = function (period, done) {
 
                 async.eachSeries(round1Result, function(doc, callback) {
 
-                    Collection.findById(doc.clientJurId,function(err,client){
+                    Collection.findById(doc.clientJurId, {isDeleted: false},function(err,client){
                         if(err) return callback();
                         if(client==null) return callback();
 
@@ -265,6 +265,7 @@ exports.report2 = function (period, done) {
 
                             $and: [
                                 {period: parseInt(period)},
+                                {isDeleted: false},
                                 {"pipelines.counters.currentCounts": {$ne: null}},
                                 {"pipelines.counters.currentCounts": {$ne: ""}},
                                 {"pipelines.counters.currentCounts": {$ne: 0}},
@@ -303,7 +304,7 @@ exports.report2 = function (period, done) {
             function (callback) {
 
                 ForfeitCollection
-                    .find({period:period})
+                    .find({period:period, isDeleted:false})
                     .lean()
                     .deepPopulate('balanceId')
                     .exec(function (err, docs) {
@@ -319,7 +320,7 @@ exports.report2 = function (period, done) {
 
                 async.eachSeries(round6Result, function(doc, callback) {
 
-                    Collection.findById(doc.clientJurId,function(err,client){
+                    Collection.findById(doc.clientJurId, {isDeleted:false},function(err,client){
                         if(err) return callback();
                         if(client==null) return callback();
 
@@ -363,7 +364,7 @@ exports.report2 = function (period, done) {
             },
             function(callback){
                 ControllerCollection
-                    .find()
+                    .find({isDeleted:false})
                     .lean()
                     .exec(function (err, docs) {
                         if (err) {
