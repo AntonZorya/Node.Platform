@@ -430,6 +430,7 @@ exports.search = function (searchTerm, period, user, done) {
                 $and: [
                     {controllerId: user.controllerId},
                     {period: period},
+                    {isDeleted: false},
                     {$text: {$search: searchTerm}}
                 ]
             },
