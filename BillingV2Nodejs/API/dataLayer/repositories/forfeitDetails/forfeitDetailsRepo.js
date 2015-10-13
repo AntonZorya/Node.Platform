@@ -15,7 +15,8 @@ exports.getByPeriodAndClientId = function (period, clientId, done) {
             $and: [
                 //{date: {$gte: dateFrom, $lte: dateTo}},
                 {period: period},
-                {clientJurId: clientId}
+                {clientJurId: clientId},
+                {isDeleted: false}
             ]
         }
     ).populate('clientJurId').populate('balanceId').exec(function (err, res) {

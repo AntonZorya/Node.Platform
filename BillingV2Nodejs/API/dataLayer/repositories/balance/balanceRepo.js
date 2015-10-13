@@ -44,7 +44,7 @@ exports.remove = function (balanceId, done) {
 }
 
 exports.getById = function (id, done) {
-    Collection.find({_id: id}, function (err, res) {
+    Collection.find({_id: id, isDeleted: false}, function (err, res) {
         if (err)return done(errorBuilder(err));
         done({operationResult: 0, result: res});
     });
@@ -55,7 +55,8 @@ exports.getByClientJurId = function (clientJurId, period, done) {
         {
             $and: [
                 {clientJurId: clientJurId},
-                {period: period}
+                {period: period},
+                {isDeleted: false}
             ]
         }
     ).populate('clientJurId').populate('balanceTypeId').exec(function (err, res) {
@@ -68,7 +69,8 @@ exports.getByClientFizId = function (clientFizId, done) {
     Collection.find(
         {
             $and: [
-                {clientFizId: clientFizId}
+                {clientFizId: clientFizId},
+                {isDeleted: false}
             ]
         }
     ).populate('clientFizId').populate('balanceTypeId').exec(function (err, res) {
@@ -81,6 +83,7 @@ exports.getByPeriod = function (dateFrom, dateTo, done) {
     Collection.find(
         {
             $and: [
+                {isDeleted: false},
                 {date: {$gte: dateFrom, $lte: dateTo}}
             ]
         }
@@ -91,7 +94,7 @@ exports.getByPeriod = function (dateFrom, dateTo, done) {
 };
 
 exports.getAllBalance = function (period, done) {
-    Collection.find({period: period}).deepPopulate('clientJurId balanceTypeId').exec(function (err, res) {
+    Collection.find({period: period, isDeleted: false}).deepPopulate('clientJurId balanceTypeId').exec(function (err, res) {
         if (err)return done(errorBuilder(err));
         done({operationResult: 0, result: res});
     });
@@ -103,7 +106,8 @@ exports.getByPeriodAndByClientJurId = function (dateFrom, dateTo, clientJurId, d
         {
             $and: [
                 {date: {$gte: dateFrom, $lte: dateTo}},
-                {clientJurId: clientJurId}
+                {clientJurId: clientJurId},
+                {isDeleted: false}
             ]
         }
     ).populate('clientJurId').exec(function (err, res) {
@@ -118,7 +122,8 @@ exports.getByPeriodAndByClientFizId = function (dateFrom, dateTo, clientFizId, d
         {
             $and: [
                 {date: {$gte: dateFrom, $lte: dateTo}},
-                {clientFizId: clientFizId}
+                {clientFizId: clientFizId},
+                {isDeleted: false}
             ]
         }
     ).populate('clientFizId').populate('counterId').exec(function (err, res) {

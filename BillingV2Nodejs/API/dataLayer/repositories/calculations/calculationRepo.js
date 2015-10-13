@@ -36,7 +36,8 @@ exports.getByPeriodAndClientId = function (period, clientId, done) {
             $and: [
                 //{date: {$gte: dateFrom, $lte: dateTo}},
                 {period: period},
-                {clientJurId: clientId}
+                {clientJurId: clientId},
+                {isDeleted: false}
             ]
         }
     ).populate('clientJurId').populate('balanceId').exec(function (err, res) {
@@ -50,7 +51,8 @@ exports.getByCounterId = function (counterId, period, done) {
     calcCollection.findOne({
         $and: [
             {period: period},
-            {counterId: counterId}
+            {counterId: counterId},
+            {isDeleted: false}
         ]
     }, function (err, res) {
         if (err)return done(errorBuilder(err));
