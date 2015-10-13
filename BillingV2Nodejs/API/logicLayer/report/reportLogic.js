@@ -1,4 +1,4 @@
-var ClientJurRepo = require(_repositoriesPath+'client/clientJurRepo');
+var ClientJurRepo = require('../../dataLayer/repositories/client/clientJurRepo');
 var ControllerRepo = require('../../dataLayer/repositories/identity/controllerRepo');
 var async = require('async');
 

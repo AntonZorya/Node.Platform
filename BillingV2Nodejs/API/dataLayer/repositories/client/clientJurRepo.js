@@ -206,7 +206,7 @@ exports.report2 = function (period, done) {
             function (callback) {
 
                 CalculationCollection
-                    .find({period:period})
+                    .find({period:period, isDeleted: false})
                     .lean()
                     .exec(function (err, docs) {
                         if (err) {

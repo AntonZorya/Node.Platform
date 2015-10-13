@@ -1,4 +1,4 @@
-var ReportLogic = require(_logicPath + 'report/reportLogic');
+var ReportLogic = require('../../logicLayer/report/reportLogic');
 var ClientJurRepo = require('../../dataLayer/repositories/client/clientJurRepo');
 
 module.exports = function (router) {
