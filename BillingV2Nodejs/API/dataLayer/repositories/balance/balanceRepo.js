@@ -6,6 +6,18 @@ var mongoose = require('mongoose');
 var deepPopulate = require('mongoose-deep-populate')(mongoose);
 CollectionSchema.plugin(deepPopulate);
 
+var balanceTypes = [
+    {
+        name: 'forfeit',
+        id: '55cdf5c5bd2c5768423c5796'
+    }, {
+        name: 'payment',
+        id: '55cdf61a2a5acf103fc2b6ed'
+    }, {
+        name: 'nachisl',
+        id: '55cdf641fb777624231ab6d9'
+    }
+];
 
 exports.add = function (balance, done) {
     var model = Collection(balance);
@@ -16,7 +28,7 @@ exports.add = function (balance, done) {
 };
 
 exports.removeByPipelineId = function (pipelineId, done) {
-    Collection.findOneAndRemove({pipelineId: pipelineId}, function(err){
+    Collection.findOneAndRemove({pipelineId: pipelineId}, function (err) {
         if (err) return done(errorBuilder(err));
         return done({operationResult: 0});
     });
@@ -94,11 +106,42 @@ exports.getByPeriod = function (dateFrom, dateTo, done) {
 };
 
 exports.getAllBalance = function (period, done) {
-    Collection.find({period: period, isDeleted: false}).deepPopulate('clientJurId balanceTypeId').exec(function (err, res) {
+    Collection.find({
+        period: period,
+        isDeleted: false
+    }).deepPopulate('clientJurId balanceTypeId').exec(function (err, res) {
         if (err)return done(errorBuilder(err));
         done({operationResult: 0, result: res});
     });
 };
+
+exports.getGroupedSumBalance = function (period, done) {
+    Collection.aggregate(
+        {
+            $match: {
+                period: period,
+                isDeleted: false
+            }
+        }, {
+            $group: {
+                _id: '$balanceTypeId',
+                sum: {
+                    $sum: '$sum'
+                }
+            }
+        }, function (err, result) {
+            if (err) return done(errorBuilder(err[0]));
+            var res = {};
+            result.forEach(function(group){
+                var name = _.find(balanceTypes, function(type){
+                    return type.id == group._id;
+                }).name;
+                res[name] = group.sum;
+            });
+            done({operationResult: 0, result: res});
+        }
+    );
+}
 
 //не используется
 exports.getByPeriodAndByClientJurId = function (dateFrom, dateTo, clientJurId, done) {

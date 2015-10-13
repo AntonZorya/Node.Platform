@@ -5,7 +5,7 @@ function switchLng(dataService,transSvc,  api_host) {
 
         scope: {
         },
-        templateUrl: '/app/Common/i18n/switchLng.html',
+        templateUrl: '/app/common/i18n/switchLng.html',
         link: function (scope, element, attrs, tabsCtrl) {
 
             var defaultLanguage = $.cookie("ArndChoosenLang");

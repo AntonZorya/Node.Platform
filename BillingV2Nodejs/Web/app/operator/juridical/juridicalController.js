@@ -297,9 +297,9 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
 
     $scope.getAllBalance = function () {
         dataService.get('/balance/getAllBalance', {period: $scope.period.value}).then(function (response) {
-            $scope.nachisl = response.result.nachisl;
-            $scope.forfeit = response.result.forfeit;
-            $scope.payment = response.result.payment;
+            $scope.nachisl = { name: 'Начисления', sum: response.result.nachisl};
+            $scope.forfeit = { name: 'Штрафы', sum: response.result.forfeit};
+            $scope.payment = { name: 'Оплата', sum: response.result.payment};
         });
     };
 

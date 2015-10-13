@@ -77,43 +77,7 @@ exports.getByPeriod = function (dateFrom, dateTo, done) {
 };
 
 exports.getAllBalance = function (period, done) {
-    BalanceRepo.getAllBalance(period, function (data) {
-        if (data.operationResult == 0) {
-            var groupedBalances = _(data.result).groupBy(function (bal) {
-                return bal.balanceTypeId.name;
-            });
-
-            var res = {};
-
-            res.nachisl = {
-                name: 'Начисления',
-                sum: 0
-            };
-            _.each(groupedBalances['Начисление'], function (bal) {
-                res.nachisl.sum = res.nachisl.sum + bal.sum;
-            });
-
-            res.forfeit = {
-                name: 'Штрафы',
-                sum: 0
-            };
-            _.each(groupedBalances['Штраф'], function (bal) {
-                res.forfeit.sum = res.forfeit.sum + bal.sum;
-            });
-
-            res.payment = {
-                name: 'Оплата',
-                sum: 0
-            };
-            _.each(groupedBalances['Оплата'], function (bal) {
-                res.payment.sum = res.payment.sum + bal.sum;
-            });
-            data.result = res;
-            done(data);
-        } else {
-            done(data);
-        }
-    });
+    BalanceRepo.getGroupedSumBalance(period * 1, done);
 };
 
 exports.getTotalByClientJurId = function (clientJurId, period, done) {

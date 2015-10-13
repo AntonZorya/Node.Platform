@@ -13,9 +13,9 @@ function mainCtrl(dataService, $scope, valSvc, modalSvc) {
         $scope.controllers = [];
 
         dataService.get('/balance/getAllBalance', {period: 201509}).then(function (response) {
-            $scope.nachisl = response.result.nachisl;
-            $scope.forfeit = response.result.forfeit;
-            $scope.payment = response.result.payment;
+            $scope.nachisl = { name: 'Начисления', sum: response.result.nachisl};
+            $scope.forfeit = { name: 'Штрафы', sum: response.result.forfeit};
+            $scope.payment = { name: 'Оплата', sum: response.result.payment};
         });
     };
 
