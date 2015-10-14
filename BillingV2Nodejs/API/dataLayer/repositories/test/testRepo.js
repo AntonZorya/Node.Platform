@@ -37,7 +37,7 @@ exports.unwindData = function (done) {
             //ROUND1
             //ROUND1
             ClientCollection
-                .find()
+                .find({isDeleted:false})
                 .lean()
                 .deepPopulate('kskId controllerId clientType.tariffId')
                 .exec(function (err, docs) {
@@ -169,7 +169,7 @@ exports.unwindData = function (done) {
             //ROUND5
             //ROUND5
             CalculationCollection
-                .find()
+                .find({isDeleted:false})
                 .lean()
                 .deepPopulate('balanceId.balanceTypeId')
                 .exec(function (err, docs) {
@@ -302,7 +302,7 @@ exports.unwindData = function (done) {
             //ROUND7
             //ROUND7
             ForfeitCollection
-                .find()
+                .find({isDeleted:false})
                 .lean()
                 .deepPopulate('balanceId.balanceTypeId')
                 .exec(function (err, docs) {
