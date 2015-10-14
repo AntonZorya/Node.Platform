@@ -6,7 +6,7 @@ billingApplication.controller('addFizClientController', ['$scope', 'dataService'
 function addFizClientController($scope, dataService, modalSvc, toastr, valSvc) {
     var self = this;
     this.container = $("#addFizClientContainer");
-     valSvc.init($scope);
+    valSvc.init($scope);
 
 
     $scope.modalItem = {
@@ -20,25 +20,31 @@ function addFizClientController($scope, dataService, modalSvc, toastr, valSvc) {
             kanalPercent: 100,
             counters: [],
             fields: []
-    }] };
+        }]
+    };
 
     $scope.save = function () {
         $scope.commonErrors = [];
-        if ($scope.flatList.length > 0 && !$scope.address.flat.value) {
-            $scope.commonErrors.push('Выберите квартиру');
-        } else if ($scope.houseList.length > 0 && !$scope.address.house.value) {
-            $scope.commonErrors.push('Выберите дом');
-        } else if (!$scope.address.street.value) {
+        if (!$scope.address.street.value) {
             $scope.commonErrors.push('Выберите улицу');
         }
         else {
             var street = $scope.address.street.value;
             var house = '';
             var flat = '';
+            var addressId = $scope.address.street._id;
+            if ($scope.address.house && $scope.address.house.value) {
+                house = ' ' + $scope.address.house.value;
+                addressId = $scope.address.house._id;
+            }
+            if ($scope.address.flat && $scope.address.flat.value) {
+                flat = ' кв.' + $scope.address.flat.value;
+                addressId = $scope.address.flat._id;
+            }
             if ($scope.address.house && $scope.address.house.value) house = ' ' + $scope.address.house.value;
             if ($scope.address.flat && $scope.address.flat.value) flat = ' кв.' + $scope.address.flat.value;
             $scope.modalItem.address = street + house + flat;
-            $scope.modalItem.addressId = flat == '' ? $scope.address.house : $scope.address.flat;
+            $scope.modalItem.addressId = addressId;
             dataService.post('/clientFiz/add', $scope.modalItem, self.container, $scope).then(function (response) {
                 toastr.success('', 'Данные успешно сохранены');
                 modalSvc.closeModal('addFizClientModal');
@@ -70,7 +76,6 @@ function addFizClientController($scope, dataService, modalSvc, toastr, valSvc) {
     }
 
 
-
     $scope.StreetChange = function () {
         GetByParentId($scope.address.street._id, function (result) {
             $scope.houseList = result;
@@ -82,7 +87,6 @@ function addFizClientController($scope, dataService, modalSvc, toastr, valSvc) {
             $scope.flatList = result;
         });
     }
-
 
 
     $scope.addNewCounter = function (pipelineIndex) {
