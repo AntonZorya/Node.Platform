@@ -206,7 +206,7 @@ exports.report2 = function (period, done) {
             function (callback) {
 
                 CalculationCollection
-                    .find({period:period, isDeleted: false})
+                    .find({period: period, isDeleted: false})
                     .lean()
                     .exec(function (err, docs) {
                         if (err) {
@@ -219,11 +219,11 @@ exports.report2 = function (period, done) {
             },
             function (callback) {
 
-                async.eachSeries(round1Result, function(doc, callback) {
+                async.eachSeries(round1Result, function (doc, callback) {
 
-                    Collection.findById(doc.clientJurId, {isDeleted: false},function(err,client){
-                        if(err) return callback();
-                        if(client==null) return callback();
+                    Collection.findById(doc.clientJurId, {isDeleted: false}, function (err, client) {
+                        if (err) return callback();
+                        if (client == null) return callback();
 
                         doc.controllerId = client._doc.controllerId;
                         return callback();
@@ -238,14 +238,24 @@ exports.report2 = function (period, done) {
                 });
 
             },
-            function(callback){
+            function (callback) {
                 round3Result = _.chain(round1Result)
-                    .groupBy(function(value) { return value.controllerId; })
-                    .map(function(value, key) {
-                        var sumWaterMoney = _.reduce(value, function(memo, val) { return memo + val.waterSum; }, 0);
-                        var sumCanalMoney = _.reduce(value, function(memo, val) { return memo + val.canalSum; }, 0);
-                        var sumWaterCubic = _.reduce(value, function(memo, val) { return memo + val.waterCubicMetersCount; }, 0);
-                        var sumCanalCubic = _.reduce(value, function(memo, val) { return memo + val.canalCubicMetersCount; }, 0);
+                    .groupBy(function (value) {
+                        return value.controllerId;
+                    })
+                    .map(function (value, key) {
+                        var sumWaterMoney = _.reduce(value, function (memo, val) {
+                            return memo + val.waterSum;
+                        }, 0);
+                        var sumCanalMoney = _.reduce(value, function (memo, val) {
+                            return memo + val.canalSum;
+                        }, 0);
+                        var sumWaterCubic = _.reduce(value, function (memo, val) {
+                            return memo + val.waterCubicMetersCount;
+                        }, 0);
+                        var sumCanalCubic = _.reduce(value, function (memo, val) {
+                            return memo + val.canalCubicMetersCount;
+                        }, 0);
                         return {
                             controllerId: key,
                             sumWaterMoney: sumWaterMoney,
@@ -258,7 +268,7 @@ exports.report2 = function (period, done) {
                 //console.log(round3Result);
                 callback(null, 'ROUND3 SUCCESS');
             },
-            function(callback){
+            function (callback) {
                 Collection.aggregate(
                     {
                         $match: {
@@ -290,10 +300,10 @@ exports.report2 = function (period, done) {
                     }
                 );
             },
-            function(callback){
-                _.each(round3Result, function(elem){
-                    _.each(round4Result, function(elem2){
-                        if(elem.controllerId==elem2._id.controllerId){
+            function (callback) {
+                _.each(round3Result, function (elem) {
+                    _.each(round4Result, function (elem2) {
+                        if (elem.controllerId == elem2._id.controllerId) {
                             elem.passed = elem2.total;
                         }
                     })
@@ -304,7 +314,7 @@ exports.report2 = function (period, done) {
             function (callback) {
 
                 ForfeitCollection
-                    .find({period:period, isDeleted:false})
+                    .find({period: period, isDeleted: false})
                     .lean()
                     .deepPopulate('balanceId')
                     .exec(function (err, docs) {
@@ -318,11 +328,11 @@ exports.report2 = function (period, done) {
             },
             function (callback) {
 
-                async.eachSeries(round6Result, function(doc, callback) {
+                async.eachSeries(round6Result, function (doc, callback) {
 
-                    Collection.findById(doc.clientJurId, {isDeleted:false},function(err,client){
-                        if(err) return callback();
-                        if(client==null) return callback();
+                    Collection.findById(doc.clientJurId, {isDeleted: false}, function (err, client) {
+                        if (err) return callback();
+                        if (client == null) return callback();
 
                         doc.controllerId = client._doc.controllerId;
                         return callback();
@@ -337,11 +347,15 @@ exports.report2 = function (period, done) {
                 });
 
             },
-            function(callback){
+            function (callback) {
                 round8Result = _.chain(round6Result)
-                    .groupBy(function(value) { return value.controllerId; })
-                    .map(function(value, key) {
-                        var sumForfeitMoney = _.reduce(value, function(memo, val) { return memo + val.balanceId.sum; }, 0);
+                    .groupBy(function (value) {
+                        return value.controllerId;
+                    })
+                    .map(function (value, key) {
+                        var sumForfeitMoney = _.reduce(value, function (memo, val) {
+                            return memo + val.balanceId.sum;
+                        }, 0);
                         return {
                             controllerId: key,
                             sumForfeitMoney: sumForfeitMoney
@@ -351,10 +365,10 @@ exports.report2 = function (period, done) {
                 //console.log(round8Result);
                 callback(null, 'ROUND8 SUCCESS');
             },
-            function(callback){
-                _.each(round3Result, function(elem){
-                    _.each(round8Result, function(elem2){
-                        if(elem.controllerId==elem2.controllerId){
+            function (callback) {
+                _.each(round3Result, function (elem) {
+                    _.each(round8Result, function (elem2) {
+                        if (elem.controllerId == elem2.controllerId) {
                             elem.sumForfeitMoney = elem2.sumForfeitMoney;
                         }
                     })
@@ -362,9 +376,9 @@ exports.report2 = function (period, done) {
                 //console.log(round3Result);
                 return callback(null, 'ROUND9 SUCCESS');
             },
-            function(callback){
+            function (callback) {
                 ControllerCollection
-                    .find({isDeleted:false})
+                    .find({isDeleted: false})
                     .lean()
                     .exec(function (err, docs) {
                         if (err) {
@@ -374,10 +388,10 @@ exports.report2 = function (period, done) {
                         callback(null, 'ROUND10 SUCCESS');
                     });
             },
-            function(callback){
-                _.each(round3Result, function(elem){
-                    _.each(round10Result, function(elem2){
-                        if(elem.controllerId==elem2._id){
+            function (callback) {
+                _.each(round3Result, function (elem) {
+                    _.each(round10Result, function (elem2) {
+                        if (elem.controllerId == elem2._id) {
                             elem.controllerId = elem2.fullName;
                         }
                     })
@@ -385,29 +399,29 @@ exports.report2 = function (period, done) {
                 //console.log(round3Result);
                 callback(null, 'ROUND11 SUCCESS');
             },
-            function(callback){
-                _.each(round3Result, function(elem){
-                    elem.sumTotalMoney = (elem.sumWaterMoney?elem.sumWaterMoney:0)
-                        +(elem.sumCanalMoney?elem.sumCanalMoney:0)
-                        +(elem.sumForfeitMoney?elem.sumForfeitMoney:0);
+            function (callback) {
+                _.each(round3Result, function (elem) {
+                    elem.sumTotalMoney = (elem.sumWaterMoney ? elem.sumWaterMoney : 0)
+                        + (elem.sumCanalMoney ? elem.sumCanalMoney : 0)
+                        + (elem.sumForfeitMoney ? elem.sumForfeitMoney : 0);
                 });
-                _.each(round3Result, function(elem){//toFixed(2)
-                    if(elem.sumWaterMoney)
+                _.each(round3Result, function (elem) {//toFixed(2)
+                    if (elem.sumWaterMoney)
                         elem.sumWaterMoney = elem.sumWaterMoney.toFixed(2);
-                    if(elem.sumCanalMoney)
+                    if (elem.sumCanalMoney)
                         elem.sumCanalMoney = elem.sumCanalMoney.toFixed(2);
-                    if(elem.sumWaterCubic)
+                    if (elem.sumWaterCubic)
                         elem.sumWaterCubic = elem.sumWaterCubic.toFixed(2);
-                    if(elem.sumCanalCubic)
+                    if (elem.sumCanalCubic)
                         elem.sumCanalCubic = elem.sumCanalCubic.toFixed(2);
-                    if(elem.sumForfeitMoney)
+                    if (elem.sumForfeitMoney)
                         elem.sumForfeitMoney = elem.sumForfeitMoney.toFixed(2);
-                    if(elem.sumTotalMoney)
+                    if (elem.sumTotalMoney)
                         elem.sumTotalMoney = elem.sumTotalMoney.toFixed(2);
                 });
-                _.each(round3Result, function(elem){
-                    if(elem.controllerId == "undefined")
-                        elem.controllerId="Нет контролера";
+                _.each(round3Result, function (elem) {
+                    if (elem.controllerId == "undefined")
+                        elem.controllerId = "Нет контролера";
                 });
                 //console.log(round3Result);
                 callback(null, 'ROUND12 SUCCESS');
@@ -417,7 +431,7 @@ exports.report2 = function (period, done) {
         function (err, results) {
             // results is now equal to ['one', 'two']
             if (err) return done(errorBuilder(err));
-            done({ operationResult: 0, result: round3Result });
+            done({operationResult: 0, result: round3Result});
         });
 
 };
@@ -439,7 +453,6 @@ exports.search = function (searchTerm, period, user, done) {
         )
             .sort({score: {$meta: 'textScore'}})
             .populate('clientType.tariffId')
-            .populate('addressId')
             .populate('controllerId')
             .populate('kskId')
             .exec(function (err, docs) {
@@ -454,6 +467,7 @@ exports.search = function (searchTerm, period, user, done) {
             {
                 $and: [
                     {period: period},
+                    {isDeleted: false},
                     {$text: {$search: searchTerm}}
                 ]
             },
@@ -464,7 +478,6 @@ exports.search = function (searchTerm, period, user, done) {
             .sort({score: {$meta: 'textScore'}})
             .limit(20)
             .populate('clientType.tariffId')
-            .populate('addressId')
             .populate('controllerId')
             .populate('kskId')
             .exec(function (err, docs) {

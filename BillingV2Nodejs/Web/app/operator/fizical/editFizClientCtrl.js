@@ -74,9 +74,10 @@ function editFizClientController($scope, dataService, modalSvc, toastr, valSvc) 
                     $scope.address.street
                 ];
             }
+            $scope.modalItem.address = street + house + flat;
             var current = JSON.parse(JSON.stringify($scope.modalItem));
-            current.address = street + house + flat;
-            current.addressId = flat == '' ? $scope.address.house : $scope.address.flat;
+            $scope.modalItem.addressId = address;
+            current.addressId = address._id;
             current.clientType.tariffId = $scope.modalItem.clientType.tariffId._id;
             var query = {
                 client: current,
