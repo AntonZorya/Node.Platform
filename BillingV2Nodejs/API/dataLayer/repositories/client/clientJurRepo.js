@@ -478,7 +478,6 @@ exports.search = function (searchTerm, period, user, done) {
             .sort({score: {$meta: 'textScore'}})
             .limit(20)
             .populate('clientType.tariffId')
-            .populate('addressId')
             .populate('controllerId')
             .populate('kskId')
             .exec(function (err, docs) {
