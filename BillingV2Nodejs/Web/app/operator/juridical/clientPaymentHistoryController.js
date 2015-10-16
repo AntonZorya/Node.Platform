@@ -4,7 +4,7 @@ function clientPaymentHistoryController($scope, dataService, modalSvc, toastr) {
 
     var selectedItem = $scope.$parent.selectedItem;
     var id = selectedItem._id;
-    var period = $scope.$parent.period.value;
+    var period = $scope.$parent.period.period;
 
 
     $scope.modalItem = {};

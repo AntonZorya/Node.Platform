@@ -4,7 +4,7 @@ function forfeitController($scope, dataService, modalSvc, toastr, $rootScope) {
 
     var selectedItem = $scope.$parent.selectedItem;
     var id = selectedItem._id;
-    var period = $scope.$parent.period.value;
+    var period = $scope.$parent.period.period;
 
     $scope.body = {
         forfeitDetails: {
