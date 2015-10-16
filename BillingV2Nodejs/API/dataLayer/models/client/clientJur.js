@@ -25,8 +25,8 @@ exports.definition = _.extend({
     controllerId: {type: Schema.Types.ObjectId, ref: 'Controller', required: true},
     clientType: clientType,
     kskId: {type: Schema.Types.ObjectId, ref: 'ksk'},
-    abonentEntryDate: {type: Date}
-
+    abonentEntryDate: {type: Date},
+    clientId: {type: Schema.Types.ObjectId}
 
     //floor: {type: Number},//этаж TODO на клиенте сделать добавление floor в коллекцию "Address"
     //floorsTotal: {type: Number}, //всего этажей TODO на клиенте сделать добавление floorsTotal  в коллекцию "Address"
