@@ -16,21 +16,10 @@ function addJurClientController($scope, dataService, modalSvc, toastr, valSvc) {
 
     $scope.save = function () {
         $scope.commonErrors = [];
-        if ($scope.flatList.length > 0 && !$scope.address.flat.value) {
-            $scope.commonErrors.push('Выберите квартиру');
-        } else if ($scope.houseList.length > 0 && !$scope.address.house.value) {
-            $scope.commonErrors.push('Выберите дом');
-        } else if (!$scope.address.street.value) {
-            $scope.commonErrors.push('Выберите улицу');
+        if ($scope.modalItem.addressId){
+            $scope.commonErrors.push('Выберите адрес');
         }
         else {
-            var street = $scope.address.street.value;
-            var house = '';
-            var flat = '';
-            if ($scope.address.house && $scope.address.house.value) house = ' ' + $scope.address.house.value;
-            if ($scope.address.flat && $scope.address.flat.value) flat = ' кв.' + $scope.address.flat.value;
-            $scope.modalItem.address = street + house + flat;
-            $scope.modalItem.addressId = flat == '' ? $scope.address.house : $scope.address.flat;
             dataService.post('/clientJur/add', $scope.modalItem, self.container, $scope).then(function (response) {
                 toastr.success('', 'Данные успешно сохранены');
                 modalSvc.closeModal('addJurClientModal');

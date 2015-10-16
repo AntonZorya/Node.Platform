@@ -26,33 +26,11 @@
                         {{getErrorForField('bin', this)}}
                     </div>
                 </div>
+
                 <div class="two wide field">
                     <label>{{'#Адрес' | translate}}</label>
-                    <span ng-bind="modalItem.address"></span>
-
+                    <address-input class="two wide field" addressid="modalItem.addressId" addresstext="modalItem.address"></address-input>
                 </div>
-
-
-                <div class="two wide field">
-                    <label>{{'#Мкр/Улица' | translate}}</label>
-                    <select class="ui search dropdown" ng-model="address.street"
-                            ng-options="street.value for street in $parent.rootAddresses track by street._id"
-                            ng-change="StreetChange()"></select>
-                </div>
-
-                <div class="two wide field">
-                    <label>{{'#Дом' | translate}}</label>
-                    <select class="ui search dropdown" ng-model="address.house"
-                            ng-options="house.value for house in houseList track by house._id"
-                            ng-change="HouseChange()"></select>
-                </div>
-
-                <div class="two wide field">
-                    <label>{{'#Квартира' | translate}}</label>
-                    <select class="ui search dropdown" ng-model="address.flat"
-                            ng-options="flat.value for flat in flatList track by flat._id"></select>
-                </div>
-
 
                 <div class="two wide field">
                     <label>{{'#Кол-во проживающих' | translate}}</label>
