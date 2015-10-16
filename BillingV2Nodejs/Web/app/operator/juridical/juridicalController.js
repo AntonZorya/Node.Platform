@@ -189,22 +189,6 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
         modalSvc.showModal('/app/operator/juridical/editJurClient.html', 'editJurClientModal', $scope);
     }
 
-    //streets
-    $scope.getStreets = function () {
-        dataService.get('/streets').then(function (response) {
-            $scope.streets = response.result;
-        });
-    };
-    $scope.getStreets();
-
-    //Получение микрорайонов и улиц
-    $scope.getRootAddresses = function () {
-        dataService.get('/location/getByParentId', {parentId: null}).then(function (response) {
-            $scope.rootAddresses = response.result;
-        });
-    };
-    $scope.getRootAddresses();
-
     //counterMarks
     $scope.getCounterMarks = function () {
         dataService.get('/counterMarks').then(function (response) {

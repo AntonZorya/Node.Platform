@@ -16,7 +16,6 @@ var async = require('async');
 CollectionSchema.plugin(deepPopulate, {
     whitelist: [
         'tariffId',
-        'addressId',
         'controllerId'
     ]
 });
@@ -230,7 +229,6 @@ exports.searchByControllerId = function (searchTerm, period, controllerId, done)
         .sort({score: {$meta: 'textScore'}})
         .limit(20)
         .populate('clientType.tariffId')
-        .populate('addressId')
         .populate('controllerId')
         .populate('kskId')
         .exec(function (err, docs) {
@@ -256,7 +254,6 @@ exports.searchByControllerId = function (searchTerm, period, controllerId, done)
             .sort({score: {$meta: 'textScore'}})
             .limit(20)
             .populate('clientType.tariffId')
-            .populate('addressId')
             .populate('controllerId')
             .populate('kskId')
             .exec(function (err, docs) {
@@ -280,7 +277,6 @@ exports.search = function(searchTerm, period, done) {
         .sort({score: {$meta: 'textScore'}})
         .limit(20)
         .populate('clientType.tariffId')
-        .populate('addressId')
         .populate('controllerId')
         .populate('kskId')
         .exec(function (err, docs) {
