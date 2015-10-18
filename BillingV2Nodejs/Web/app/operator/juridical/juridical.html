@@ -12,12 +12,15 @@
         <table class="ui basic table">
             <tr>
                 <td>Период: &nbsp;
-                    <select class="ui search dropdown" ng-model="period.value" ng-change="refresh();">
-                        <option ng-repeat="per in periods" value="{{per.value}}" ng-selected="period">
-                            {{per.value.substring(0, 4) + ' '}}{{'#month' + per.value.substring(4) | translate}}
-                        </option>
-                    </select>
-
+                    <!--<select class="ui search dropdown" ng-model="period.value" ng-change="refresh();">-->
+                        <!--<option ng-repeat="per in periods" value="{{per.value}}" ng-selected="period">-->
+                            <!--{{per.value.substring(0, 4) + ' '}}{{'#month' + per.value.substring(4) | translate}}-->
+                        <!--</option>-->
+                    <!--</select>-->
+                    <strong>
+                    <label ng-bind="'#month' + period.month.toString() | translate"></label>&nbsp;
+                    <label ng-bind="period.year"></label>г.
+                    </strong>
                 </td>
                 <td>
                     <div class="ui green mini statistic">
@@ -212,7 +215,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <span ng-bind="counter.dateOfLastCounts"></span>
+                                                    <span ng-bind="counter.dateOfLastCounts | date: 'dd.MM.yyyy HH.mm'"></span>
                                                 </td>
 
                                                 <td>

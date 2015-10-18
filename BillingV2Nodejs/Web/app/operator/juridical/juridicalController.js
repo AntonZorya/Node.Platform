@@ -18,17 +18,21 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
     $scope.periods = [];
 
     $scope.getPeriods = function () {
-        dataService.get('/clientJur/getPeriods').then(function (response) {
-            response.result.forEach(function (item) {
-                item = item.toString();
-                $scope.periods.unshift({value: item});
-            });
-            var date = new Date();
-            var month = date.getMonth() + 1;
-            var per = {value: date.getFullYear().toString() + (month < 10 ? '0' + month.toString() : month.toString())};
-            $scope.period = per in $scope.periods ? per : $scope.periods[0];
+        dataService.get('/jur/periods/getCurrent').then(function(res) {
+           $scope.period = res.result;
             $scope.getAllBalance();
         });
+        //dataService.get('/clientJur/getPeriods').then(function (response) {
+        //    response.result.forEach(function (item) {
+        //        item = item.toString();
+        //        $scope.periods.unshift({value: item});
+        //    });
+        //    var date = new Date();
+        //    var month = date.getMonth() + 1;
+        //    var per = {value: date.getFullYear().toString() + (month < 10 ? '0' + month.toString() : month.toString())};
+        //    $scope.period = per in $scope.periods ? per : $scope.periods[0];
+        //    $scope.getAllBalance();
+        //});
     };
     $scope.getPeriods();
 
@@ -41,7 +45,7 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
     $scope.search = function () {
         dataService.get('/clientJur/search', {
             searchTerm: $scope.searchTerm,
-            period: $scope.period.value
+            period: $scope.period.period
         }, null).then(function (response) {
             $scope.data = response.result;
         });
@@ -95,7 +99,7 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
             client: client,
             pipeline: pipeline,
             counter: counter,
-            period: $scope.period.value,
+            period: $scope.period.period,
             withClear: withClear
         };
 
@@ -129,7 +133,7 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
             personType: 1,
             //sum: $scope.enteredSum,
             date: new Date(),
-            period: $scope.period.value,
+            period: $scope.period.period,
             user: $rootScope.user
         };
 
@@ -188,22 +192,6 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
     $scope.editJurClient = function() {
         modalSvc.showModal('/app/operator/juridical/editJurClient.html', 'editJurClientModal', $scope);
     }
-
-    //streets
-    $scope.getStreets = function () {
-        dataService.get('/streets').then(function (response) {
-            $scope.streets = response.result;
-        });
-    };
-    $scope.getStreets();
-
-    //Получение микрорайонов и улиц
-    $scope.getRootAddresses = function () {
-        dataService.get('/location/getByParentId', {parentId: null}).then(function (response) {
-            $scope.rootAddresses = response.result;
-        });
-    };
-    $scope.getRootAddresses();
 
     //counterMarks
     $scope.getCounterMarks = function () {
@@ -296,7 +284,7 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
 
 
     $scope.getAllBalance = function () {
-        dataService.get('/balance/getAllBalance', {period: $scope.period.value}).then(function (response) {
+        dataService.get('/balance/getAllBalance', {period: $scope.period.period}).then(function (response) {
             $scope.nachisl = { name: 'Начисления', sum: response.result.nachisl};
             $scope.forfeit = { name: 'Штрафы', sum: response.result.forfeit};
             $scope.payment = { name: 'Оплата', sum: response.result.payment};
@@ -307,7 +295,7 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
 
         dataService.get('/balance/getTotalByClientJurId', {
             clientJurId: id,
-            period: $scope.period.value
+            period: $scope.period.period
         }).then(function (response) {
 
             var foundItem = _.find($scope.data, function (item) {
@@ -333,7 +321,7 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
                             client: client,
                             pipeline: pipeline,
                             counter: counter,
-                            period: $scope.period.value
+                            period: $scope.period.period
                         }).then(function (response) {
                             if (response.operationResult === 0) {
                                 //toastr.success('', 'Данные успешно сохранены');

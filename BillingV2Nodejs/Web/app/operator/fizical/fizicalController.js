@@ -185,22 +185,6 @@ function fizicalController($scope, dataService, toastr, printSvc, $templateCache
         modalSvc.showModal('/app/operator/fizical/addFizClient.html', 'addFizClientModal', $scope);
     }
 
-    //streets
-    $scope.getStreets = function () {
-        dataService.get('/streets').then(function (response) {
-            $scope.streets = response.result;
-        });
-    };
-    $scope.getStreets();
-
-    //Получение микрорайонов и улиц
-    $scope.getRootAddresses = function () {
-        dataService.get('/location/getByParentId', {parentId: null}).then(function (response) {
-            $scope.rootAddresses = response.result;
-        });
-    };
-    $scope.getRootAddresses();
-
     //counterMarks
     $scope.getCounterMarks = function () {
         dataService.get('/counterMarks').then(function (response) {

@@ -25,26 +25,10 @@ function addFizClientController($scope, dataService, modalSvc, toastr, valSvc) {
 
     $scope.save = function () {
         $scope.commonErrors = [];
-        if (!$scope.address.street.value) {
-            $scope.commonErrors.push('Выберите улицу');
+        if (!$scope.addressId) {
+            $scope.commonErrors.push('Выберите адрес');
         }
         else {
-            var street = $scope.address.street.value;
-            var house = '';
-            var flat = '';
-            var addressId = $scope.address.street._id;
-            if ($scope.address.house && $scope.address.house.value) {
-                house = ' ' + $scope.address.house.value;
-                addressId = $scope.address.house._id;
-            }
-            if ($scope.address.flat && $scope.address.flat.value) {
-                flat = ' кв.' + $scope.address.flat.value;
-                addressId = $scope.address.flat._id;
-            }
-            if ($scope.address.house && $scope.address.house.value) house = ' ' + $scope.address.house.value;
-            if ($scope.address.flat && $scope.address.flat.value) flat = ' кв.' + $scope.address.flat.value;
-            $scope.modalItem.address = street + house + flat;
-            $scope.modalItem.addressId = addressId;
             dataService.post('/clientFiz/add', $scope.modalItem, self.container, $scope).then(function (response) {
                 toastr.success('', 'Данные успешно сохранены');
                 modalSvc.closeModal('addFizClientModal');
@@ -60,34 +44,6 @@ function addFizClientController($scope, dataService, modalSvc, toastr, valSvc) {
     $scope.close = function () {
 
     };
-
-    $scope.address = {street: {}, house: {}, flat: {}};
-    $scope.houseList = [];
-    $scope.flatList = [];
-
-    function GetByParentId(parentId, done) {
-        dataService.get('/location/getByParentId', {parentId: parentId}).then(function (response) {
-            if (response.operationResult === 0) {
-                done(response.result);
-            } else {
-                toastr.error('', 'Произошла ошибка');
-            }
-        });
-    }
-
-
-    $scope.StreetChange = function () {
-        GetByParentId($scope.address.street._id, function (result) {
-            $scope.houseList = result;
-        });
-    }
-
-    $scope.HouseChange = function () {
-        GetByParentId($scope.address.house._id, function (result) {
-            $scope.flatList = result;
-        });
-    }
-
 
     $scope.addNewCounter = function (pipelineIndex) {
 
