@@ -8,7 +8,7 @@ var client = new clientFactory.core(clientFactory.netConnector, "localhost", "90
 module.exports = function (router) {
     router.route('/jur/periods/getCurrent')
         .get(function (req, res) {
-            client.sendRequest('/period/getCurrentPeriod', {}, function (err, data) {
+            client.sendRequest('/jur/period/getCurrentPeriod', {}, function (err, data) {
                 if (err) return operationResultBuilder(errorBuilder(err), res);
                 return operationResultBuilder(data, res);
             });
