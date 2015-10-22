@@ -47,6 +47,9 @@ var billingApplication = angular.module('billingApplication', ['indexedDB', "hig
             .when('/operator/juridical', {
                 templateUrl: './app/operator/juridical/juridicalView.html'
             })
+            .when('/operator/juridical/history', {
+                templateUrl: './app/operator/juridical/juridicalHistoryView.html'
+            })
             .when('/operator/juridical/paymentsByPeriod', {
                 templateUrl: './app/operator/juridical/paymentsByPeriodView.html'
             })

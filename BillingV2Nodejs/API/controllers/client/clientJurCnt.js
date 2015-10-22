@@ -65,8 +65,8 @@ module.exports = function (router) {
         });
 
     router.route('/clientJur/getPeriods')
-        .get(function (req, res){
-            Logic.getPeriods(function(data){
+        .get(function (req, res) {
+            Logic.getPeriods(function (data) {
                 operationResultBuilder(data, res);
             });
         });

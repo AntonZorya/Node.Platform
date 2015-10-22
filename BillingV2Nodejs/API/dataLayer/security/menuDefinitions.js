@@ -75,7 +75,7 @@ module.exports = [
         url: "/operator/juridical",
         name: "Юр. оператор",
         roles: [roleDefinitions.admin, roleDefinitions.organizationAdmin, roleDefinitions.operatorJuridical],
-        childs: [ ]
+        childs: []
     },
     {
         url: "/operator/fizical",

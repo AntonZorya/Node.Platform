@@ -1,6 +1,6 @@
-billingApplication.controller('juridicalController', ['$scope', 'dataService', 'toastr', 'printSvc', '$templateCache', 'modalSvc', '$rootScope', 'validationSvc', juridicalController]);
+billingApplication.controller('juridicalController', ['$scope', 'dataService', 'toastr', 'printSvc', '$templateCache', 'modalSvc', '$rootScope', 'validationSvc', '$location', juridicalController]);
 
-function juridicalController($scope, dataService, toastr, printSvc, $templateCache, modalSvc, $rootScope, valSvc) {
+function juridicalController($scope, dataService, toastr, printSvc, $templateCache, modalSvc, $rootScope, valSvc, $location) {
 
     valSvc.init($scope);
     $scope.searchTerm = '';
@@ -15,26 +15,20 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
     $scope.balanceDetailsByClient = [];
 
     $scope.period = {value: ''};
-    $scope.periods = [];
+    $scope.periodObj = {};
 
     $scope.getPeriods = function () {
-        dataService.get('/jur/periods/getCurrent').then(function(res) {
-           $scope.period = res.result;
+        dataService.get('/jur/periods/getCurrent').then(function (res) {
+            $scope.periodObj = res.result;
+            $scope.period = $scope.periodObj.period;
             $scope.getAllBalance();
         });
-        //dataService.get('/clientJur/getPeriods').then(function (response) {
-        //    response.result.forEach(function (item) {
-        //        item = item.toString();
-        //        $scope.periods.unshift({value: item});
-        //    });
-        //    var date = new Date();
-        //    var month = date.getMonth() + 1;
-        //    var per = {value: date.getFullYear().toString() + (month < 10 ? '0' + month.toString() : month.toString())};
-        //    $scope.period = per in $scope.periods ? per : $scope.periods[0];
-        //    $scope.getAllBalance();
-        //});
     };
     $scope.getPeriods();
+
+    $scope.toClosedPeriods = function () {
+        $location.path('/operator/juridical/history');
+    };
 
     $scope.dateOptions = {
         changeYear: true,
@@ -45,7 +39,7 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
     $scope.search = function () {
         dataService.get('/clientJur/search', {
             searchTerm: $scope.searchTerm,
-            period: $scope.period.period
+            period: $scope.period
         }, null).then(function (response) {
             $scope.data = response.result;
         });
@@ -99,7 +93,7 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
             client: client,
             pipeline: pipeline,
             counter: counter,
-            period: $scope.period.period,
+            period: $scope.period,
             withClear: withClear
         };
 
@@ -133,7 +127,7 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
             personType: 1,
             //sum: $scope.enteredSum,
             date: new Date(),
-            period: $scope.period.period,
+            period: $scope.period,
             user: $rootScope.user
         };
 
@@ -185,11 +179,11 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
     };
 
 
-    $scope.addJurClient = function() {
+    $scope.addJurClient = function () {
         modalSvc.showModal('/app/operator/juridical/addJurClient.html', 'addJurClientModal', $scope);
     }
 
-    $scope.editJurClient = function() {
+    $scope.editJurClient = function () {
         modalSvc.showModal('/app/operator/juridical/editJurClient.html', 'editJurClientModal', $scope);
     }
 
@@ -284,10 +278,10 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
 
 
     $scope.getAllBalance = function () {
-        dataService.get('/balance/getAllBalance', {period: $scope.period.period}).then(function (response) {
-            $scope.nachisl = { name: 'Начисления', sum: response.result.nachisl};
-            $scope.forfeit = { name: 'Штрафы', sum: response.result.forfeit};
-            $scope.payment = { name: 'Оплата', sum: response.result.payment};
+        dataService.get('/balance/getAllBalance', {period: $scope.period}).then(function (response) {
+            $scope.nachisl = {name: 'Начисления', sum: response.result.nachisl};
+            $scope.forfeit = {name: 'Штрафы', sum: response.result.forfeit};
+            $scope.payment = {name: 'Оплата', sum: response.result.payment};
         });
     };
 
@@ -295,7 +289,7 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
 
         dataService.get('/balance/getTotalByClientJurId', {
             clientJurId: id,
-            period: $scope.period.period
+            period: $scope.period
         }).then(function (response) {
 
             var foundItem = _.find($scope.data, function (item) {
@@ -321,7 +315,7 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
                             client: client,
                             pipeline: pipeline,
                             counter: counter,
-                            period: $scope.period.period
+                            period: $scope.period
                         }).then(function (response) {
                             if (response.operationResult === 0) {
                                 //toastr.success('', 'Данные успешно сохранены');

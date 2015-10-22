@@ -8,9 +8,17 @@ var client = new clientFactory.core(clientFactory.netConnector, "localhost", "90
 module.exports = function (router) {
     router.route('/jur/periods/getCurrent')
         .get(function (req, res) {
-            client.sendRequest('/period/getCurrentPeriod', {}, function (err, data) {
+            client.sendRequest('/jur/periods/getCurrent', {}, function (err, data) {
                 if (err) return operationResultBuilder(errorBuilder(err), res);
                 return operationResultBuilder(data, res);
             });
         });
-}
+
+    router.route('/jur/periods/getClosed')
+        .get(function (req, res) {
+            client.sendRequest('/jur/periods/getClosed', {}, function (err, data) {
+                if (err) return operationResultBuilder(errorBuilder(err), res);
+                return operationResultBuilder(data, res);
+            });
+        });
+};
