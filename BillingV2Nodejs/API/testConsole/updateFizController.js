@@ -13,7 +13,7 @@ global.rootRequire = function (name) {
 }
 
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://192.168.66.27/BillingController'); // connect to our database
+mongoose.connect('mongodb://localhost/BillingController'); // connect to our database
 
 global._ = require('underscore');
 var XLS = require('xlsjs');
@@ -22,7 +22,7 @@ var async = require('async');
 var collection = rootRequire('dataLayer/repositories/client/clientFizRepo').collection;
 var controllerFizRepo = require('../dataLayer/repositories/identity/controllerFizRepo');
 
-var workbook = XLS.readFile('../inputData/fizAkzhunus.xls');
+var workbook = XLS.readFile('../inputData/fizZhanat.xls');
 var sheet_name_list = workbook.SheetNames;
 var sheet = workbook.Sheets[sheet_name_list[0]];
 var data = XLS.utils.sheet_to_json(sheet, {header: 1});

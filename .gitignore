@@ -28,3 +28,4 @@ node_modules
 !BillingV2Nodejs/API/odata/**/node_modules
 .idea/*
 BillingV2Nodejs/.idea/*
+BillingV2Nodejs/Web/libs/*
