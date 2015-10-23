@@ -23,7 +23,7 @@ exports.definition = _.extend({
 	period: {type: Number},
 	pipelines: clientPipelines,
 
-	controllerId: {type: Schema.Types.ObjectId, ref: "Controller"},
+	controllerId: {type: Schema.Types.ObjectId, ref: "ControllerFiz"},
 	clientType: clientType,
 	kskId: {type: Schema.Types.ObjectId, ref: 'ksk'},
 	abonentEntryDate: {type: Date},

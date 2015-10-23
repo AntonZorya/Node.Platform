@@ -203,7 +203,7 @@ function fizicalController($scope, dataService, toastr, printSvc, $templateCache
 
 
     $scope.getControllers = function () {
-        dataService.get('/controllers').then(function (response) {
+        dataService.get('/controllerFizs').then(function (response) {
             $scope.controllers = response.result;
         });
     };

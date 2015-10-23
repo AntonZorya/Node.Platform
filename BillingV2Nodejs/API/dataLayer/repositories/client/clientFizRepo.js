@@ -13,6 +13,8 @@ var mongoose = require('mongoose');
 var deepPopulate = require('mongoose-deep-populate')(mongoose);
 var async = require('async');
 
+exports.collection = Collection;
+
 CollectionSchema.plugin(deepPopulate, {
     whitelist: [
         'tariffId',
