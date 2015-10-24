@@ -1,5 +1,5 @@
 var definition = new require('../../models/location/addressFiz');
-var Collection = new require('../../../helpers/mongoose/modelBuilder')('AddressFiz', definition);
+var Collection = new require('../../../helpers/mongoose/modelBuilder')('Address', definition);
 
 exports.add = function (address, done) {
     var model = new Collection(address);
@@ -25,7 +25,7 @@ exports.getByAddressTypeId = function (typeId, done) {
 };
 
 exports.getByValue = function (value, done) {
-    Collection.findOne({value: value, isDeleted: false}, function (err, res) {
+    Collection.findOne({name: value, isDeleted: false}, function (err, res) {
         if (err) done(errorBuilder(err));
         done({operationResult: 0, result: res});
     });

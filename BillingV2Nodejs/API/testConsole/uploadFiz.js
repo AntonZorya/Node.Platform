@@ -29,12 +29,11 @@ clientTypeFizRepo.getAll(function (data) {
     clientTypeFiz = data.result[0]._doc;
 });
 
-var workbook = XLS.readFile('inputData/clientFiz.xls');
+var workbook = XLS.readFile('../inputData/fizSite10.xls');
 var sheet_name_list = workbook.SheetNames;
-var sheet = workbook.Sheets[sheet_name_list[0]];
+var sheet = workbook.Sheets[sheet_name_list[1]];
 var data = XLS.utils.sheet_to_json(sheet, {header: 1});
 data = _.rest(data, 1);
-data = data.slice(57831);
 console.log('clientFiz readed');
 
 //var workbook = XLS.readFile('inputData/vodomerFiz.xls');
@@ -64,22 +63,22 @@ clientTypeFizRepo.getAll(function (types) {
         //
         //    async.each(data, function (rowArray, eachDone) {
         //
-        //        if (typeof rowArray[5] != 'undefined') {
+        //        if (typeof rowArray[3] != 'undefined') {
         //
         //            var parentAddresses = [];
         //
         //            var streetId = mongoose.Types.ObjectId().toString();
-        //            var streetName = rowArray[5];
+        //            var streetName = rowArray[3];
         //            streetName = streetName.toString().trim();
         //            var foundStreet = null;
         //
         //            var newStreet = {
         //                _id: streetId,
         //                addressTypeId: streetTypeId,
-        //                value: streetName,
+        //                name: streetName,
         //                parentId: null,
         //                isDeleted: false,
-        //                createDateTime: null
+        //                createDateTime: new Date()
         //            };
         //
         //            if (addresses.length == 0) {
@@ -95,10 +94,10 @@ clientTypeFizRepo.getAll(function (types) {
         //                }
         //            }
         //
-        //            if (typeof rowArray[6] != 'undefined') {
+        //            if (typeof rowArray[4] != 'undefined') {
         //
         //                var houseId = mongoose.Types.ObjectId().toString();
-        //                var house = rowArray[6];
+        //                var house = rowArray[4];
         //                house = house.toString().trim();
         //
         //                //вытаскиваем дома улицы
@@ -114,17 +113,10 @@ clientTypeFizRepo.getAll(function (types) {
         //                        addresses.push({
         //                            _id: houseId,
         //                            addressTypeId: houseTypeId,
-        //                            value: house,
+        //                            name: house,
         //                            parentId: streetId,
-        //                            parentAddresses: [
-        //                                {
-        //                                    typeId: streetTypeId,
-        //                                    typeName: 'Улица',
-        //                                    shortTypeName: 'ул.',
-        //                                    id: streetId,
-        //                                    name: streetName
-        //                                }
-        //                            ]
+        //                            isDeleted: false,
+        //                            createDateTime: new Date()
         //                        });
         //                    } else {
         //                        houseId = foundHouse._id;
@@ -134,46 +126,24 @@ clientTypeFizRepo.getAll(function (types) {
         //                    addresses.push({
         //                        _id: houseId,
         //                        addressTypeId: houseTypeId,
-        //                        value: house,
+        //                        name: house,
         //                        parentId: streetId,
-        //                        parentAddresses: [
-        //                            {
-        //                                typeId: streetTypeId,
-        //                                typeName: 'Улица',
-        //                                shortTypeName: 'ул.',
-        //                                id: streetId,
-        //                                name: streetName
-        //                            }
-        //                        ]
-        //
+        //                        isDeleted: false,
+        //                        createDateTime: new Date()
         //                    });
         //                }
         //
-        //                if (typeof rowArray[7] != 'undefined') {
+        //                if (typeof rowArray[5] != 'undefined') {
         //
-        //                    var flat = rowArray[7];
+        //                    var flat = rowArray[5];
         //                    flat = flat.toString().trim();
         //
         //                    addresses.push({
         //                        addressTypeId: flatTypeId,
-        //                        value: flat,
+        //                        name: flat,
         //                        parentId: houseId,
-        //                        parentAddresses: [
-        //                            {
-        //                                typeId: houseTypeId,
-        //                                typeName: 'Дом',
-        //                                shortTypeName: 'д.',
-        //                                id: houseId,
-        //                                name: house
-        //                            },
-        //                            {
-        //                                typeId: streetTypeId,
-        //                                typeName: 'Улица',
-        //                                shortTypeName: 'ул.',
-        //                                id: streetId,
-        //                                name: streetName
-        //                            }
-        //                        ]
+        //                        isDeleted: false,
+        //                        createDateTime: new Date()
         //                    });
         //
         //                }
@@ -184,7 +154,7 @@ clientTypeFizRepo.getAll(function (types) {
         //    }, function () {
         //        async.each(addresses, function (addr, done) {
         //            addressRepo.add(addr, function () {
-        //                console.log('Added address:', addr.value);
+        //                console.log('Added address:', addr.name);
         //                done();
         //            });
         //        }, function () {
@@ -241,27 +211,24 @@ clientTypeFizRepo.getAll(function (types) {
                     counters: counters,
                     sourceCounts: 0,// 0 по счетчику, 1 по среднему, 2 по норме
                     waterPercent: 100,
-                    canalPercent: row[17] ? (row[17].substring('без канал') ? 0 : 100) : 100,
+                    canalPercent: 100,
 
                     isActive: true,
                 }];
                 var clientNorm;
                 try {
-                    clientNorm = row[8] ? row[8].trim() * 200 : 200;
+                    clientNorm = row[6] ? row[6].trim() * 200 : 200;
                 } catch (error) {
                     clientNorm = 200;
                 }
-                var typeName = row[17] ? row[17].trim() : 'абонент';
-                if (!(row[18] in ['Благоустроенная квартира', 'Жилой дом'])) {
-                    typeName = 'абонент';
-                }
+                var typeName = 'абонент';
+
                 var newClient = {
-                    accountNumber: row[2],
-                    number: row[0],
+                    accountNumber: row[1].trim().substring(1),
                     name: row[3] ? row[3] : '',
                     bin: '',
                     rnn: '',
-                    site: row[1],
+                    site: row[0],
 
                     addressId: row[70],
                     address: row[71],
@@ -283,34 +250,34 @@ clientTypeFizRepo.getAll(function (types) {
             }
 
             function getAddress(row, done) {
-                if (row[5]) {
-                    addressRepo.getByValue(row[5].trim(), function (street) {
-                        if (row[6]) {
+                if (row[3]) {
+                    addressRepo.getByValue(row[3], function (street) {
+                        if (row[4]) {
                             addressRepo.getChildrenByParentId(street.result._doc._id, function (houses) {
                                 var foundHouse = _.find(houses.result, function (house) {
-                                    return house._doc.value == row[6].trim();
+                                    return house._doc.name == row[4];
                                 });
-                                if (row[7]) {
+                                if (row[5]) {
                                     addressRepo.getChildrenByParentId(foundHouse._id, function (flats) {
                                         var foundFlat = _.find(flats.result, function (flat) {
-                                            return flat._doc.value == row[7].trim();
+                                            return flat._doc.name == row[5].trim();
                                         });
                                         done({
                                             addressId: foundFlat._doc._id,
-                                            address: street.result._doc.value + ' ' + foundHouse._doc.value + ' ' + foundFlat._doc.value
+                                            address: street.result._doc.name + ' ' + foundHouse._doc.name + ' ' + foundFlat._doc.name
                                         });
                                     });
                                 } else {
                                     done({
                                         addressId: foundHouse._doc._id,
-                                        address: street.result._doc.value + ' ' + foundHouse._doc.value
+                                        address: street.result._doc.name + ' ' + foundHouse._doc.name
                                     });
                                 }
                             });
                         } else {
                             done({
                                 addressId: street.result._doc._id,
-                                address: street.result._doc.value
+                                address: street.result._doc.name
                             });
                         }
                     });
