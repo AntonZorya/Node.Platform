@@ -1,185 +1,11 @@
 <form id="form" class="ui form">
 
-    <!--<div class="field" style="background:#f00;">-->
-
-        <!--<div class="ui dividing header" translate="#Нормы водопотребления">Нормы водопотребления</div>-->
-
-        <!--<div class="fields">-->
-            <!--<div class="three wide field">-->
-                <!--<label>#Нормы водопотребления</label>-->
-            <!--</div>-->
-            <!--<div class="one wide field">-->
-                <!--<label>#Кол-во</label>-->
-            <!--</div>-->
-            <!--<div class="three wide field">-->
-                <!--<label>#Измеритель</label>-->
-            <!--</div>-->
-            <!--<div class="two wide field">-->
-                <!--<label>#% Воды</label>-->
-            <!--</div>-->
-            <!--<div class="two wide field">-->
-                <!--<label>#% Канализации</label>-->
-            <!--</div>-->
-            <!--<div class="two wide field">-->
-                <!--<label>#Итого воды</label>-->
-            <!--</div>-->
-            <!--<div class="two wide field">-->
-                <!--<label>#Итого канализации</label>-->
-            <!--</div>-->
-        <!--</div>-->
-        <!--<div class="fields">-->
-            <!--<div class="three wide field">-->
-                <!--<select ng-model="clientloads[0].negotiableLoad"-->
-                        <!--ng-options="item._id as item.name for item in negotiableLoadList | filter:{ groupNumber : '1' }">-->
-                <!--</select>-->
-            <!--</div>-->
-            <!--<div class="one wide field">-->
-                <!--<input ng-model="clientloads[0].quantity" type="text"/>-->
-            <!--</div>-->
-            <!--<div class="three wide field">-->
-                <!--<label style="font-size: 1.4em; font-weight: 100; line-height: 33px;">-->
-                    <!--{{getLoadUnitName(clientloads[0].negotiableLoad)}}-->
-                    <!--({{getLitersPerDay(clientloads[0].negotiableLoad)}} &nbsp; л)-->
-                <!--</label>-->
-            <!--</div>-->
-            <!--<div class="two wide field">-->
-                <!--<input ng-model="clientloads[0].waterPercent" type="text"/>-->
-            <!--</div>-->
-            <!--<div class="two wide field">-->
-                <!--<input ng-model="clientloads[0].canalPercent" type="text"/>-->
-            <!--</div>-->
-            <!--<div class="two wide field">-->
-                <!--<label style="font-size: 1.4em; font-weight: 100; line-height: 33px;">-->
-                    <!--{{getLitersPerDay(clientloads[0].negotiableLoad)*clientloads[0].quantity*clientloads[0].waterPercent/100}}л-->
-                <!--</label>-->
-            <!--</div>-->
-            <!--<div class="two wide field">-->
-                <!--<label style="font-size: 1.4em; font-weight: 100; line-height: 33px;">-->
-                    <!--{{getLitersPerDay(clientloads[0].negotiableLoad)*clientloads[0].quantity*clientloads[0].canalPercent/100}}л-->
-                <!--</label>-->
-            <!--</div>-->
-        <!--</div>-->
-
-        <!--<div class="ui dividing header">-->
-            <!--<span style="margin-right:20px;">#Дополнительно</span>-->
-            <!--<checkbox type="toggle" ng-model="extraLoadsVar" ng-click="extraLoadsSwitcher()"></checkbox>-->
-        <!--</div>-->
-
-        <!--<div class="fields" ng-show="extraLoadsVar">-->
-            <!--<div class="three wide field">-->
-                <!--<label>#Нормы водопотребления</label>-->
-            <!--</div>-->
-            <!--<div class="one wide field">-->
-                <!--<label>#Кол-во</label>-->
-            <!--</div>-->
-            <!--<div class="three wide field">-->
-                <!--<label>#Измеритель</label>-->
-            <!--</div>-->
-            <!--<div class="two wide field">-->
-                <!--<label>#% Воды</label>-->
-            <!--</div>-->
-            <!--<div class="two wide field">-->
-                <!--<label>#% Канализации</label>-->
-            <!--</div>-->
-            <!--<div class="two wide field">-->
-                <!--<label>#Итого воды</label>-->
-            <!--</div>-->
-            <!--<div class="two wide field">-->
-                <!--<label>#Итого канализации</label>-->
-            <!--</div>-->
-            <!--<div class="one wide field">-->
-                <!--<label>#Удалить</label>-->
-            <!--</div>-->
-        <!--</div>-->
-        <!--<div class="fields" ng-repeat="clientLoad in clientloads" ng-if="$index > 0">-->
-
-            <!--<div class="three wide field">-->
-                <!--<select ng-model="clientloads[$index].negotiableLoad"-->
-                        <!--ng-options="item._id as item.name for item in negotiableLoadList | filter:{ groupNumber : '!1' } | excludeFrom:clientloads:clientloads[$index].negotiableLoad">-->
-                <!--</select>-->
-            <!--</div>-->
-            <!--<div class="one wide field">-->
-                <!--<input ng-model="clientloads[$index].quantity" type="text"/>-->
-            <!--</div>-->
-            <!--<div class="three wide field">-->
-                <!--<label style="font-size: 1.4em; font-weight: 100; line-height: 33px;">-->
-                    <!--{{getLoadUnitName(clientloads[$index].negotiableLoad)}}-->
-                    <!--({{getLitersPerDay(clientloads[$index].negotiableLoad)}}л)-->
-                <!--</label>-->
-            <!--</div>-->
-            <!--<div class="two wide field">-->
-                <!--<input ng-model="clientloads[$index].waterPercent" type="text"/>-->
-            <!--</div>-->
-            <!--<div class="two wide field">-->
-                <!--<input ng-model="clientloads[$index].canalPercent" type="text"/>-->
-            <!--</div>-->
-            <!--<div class="two wide field">-->
-                <!--<label style="font-size: 1.4em; font-weight: 100; line-height: 33px;">-->
-                    <!--{{getLitersPerDay(clientloads[$index].negotiableLoad)*clientloads[$index].quantity*clientloads[$index].waterPercent/100}}л-->
-                <!--</label>-->
-            <!--</div>-->
-            <!--<div class="two wide field">-->
-                <!--<label style="font-size: 1.4em; font-weight: 100; line-height: 33px;">-->
-                    <!--{{getLitersPerDay(clientloads[$index].negotiableLoad)*clientloads[$index].quantity*clientloads[$index].canalPercent/100}}л-->
-                <!--</label>-->
-            <!--</div>-->
-            <!--<div class="one wide field">-->
-                <!--<button class="negative circular ui icon button" ng-click="removeExtraLoad($index)">-->
-                    <!--<i class="icon remove"></i>-->
-                <!--</button>-->
-            <!--</div>-->
-
-
-        <!--</div>-->
-
-        <!--<div ng-show="extraLoadsVar">-->
-
-            <!--<button ng-class="{disabled: addAvailable==false}" class="positive circular ui icon button" ng-click="addExtraLoads()">-->
-                <!--<i class="icon plus"></i>-->
-            <!--</button>-->
-        <!--</div>-->
-
-    <!--</div>-->
-
-    <div>--------------------------------------------------------------------------------------------------------------</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     <div class="field" >
 
-        <div class="ui dividing header" translate="#Нормы водопотребления">Нормы водопотребления</div>
+        <h4 class="ui top attached header">{{'#Нормы водопотребления' | translate}}</h4>
+
+        <div class="ui attached segment">
 
         <div class="fields">
             <div class="three wide field">
@@ -209,38 +35,53 @@
                 <select ng-model="clientload.negotiableLoad"
                         ng-options="item._id as item.name for item in negotiableLoadList | exclusiveNegotiableLoadsFilterByGroup:clientloads:1:clientload.negotiableLoad">
                 </select>
+                <div ng-show="parent.isErrorForField('clientLoadsArray.'+($index)+'.negotiableLoad', parent)" class="ui red pointing prompt label transition" style="width: 100%;white-space: normal;">
+                    {{parent.getErrorForField('clientLoadsArray.'+($index)+'.negotiableLoad', parent)}}
+                </div>
             </div>
             <div class="one wide field">
                 <input ng-model="clientload.quantity" type="text"/>
+                <div ng-show="parent.isErrorForField('clientLoadsArray.'+($index)+'.quantity', parent)" class="ui red pointing prompt label transition" style="width: 100%;white-space: normal;">
+                    {{parent.getErrorForField('clientLoadsArray.'+($index)+'.quantity', parent)}}
+                </div>
             </div>
             <div class="three wide field">
-                <label style="font-size: 1.4em; font-weight: 100; line-height: 33px;">
+                <label style="font-size: 1.1em; line-height: 33px;">
                     {{getLoadUnitName(clientload.negotiableLoad)}}
                     ({{getLitersPerDay(clientload.negotiableLoad)}} &nbsp; л)
                 </label>
             </div>
             <div class="two wide field">
                 <input ng-model="clientload.waterPercent" type="text"/>
+                <div ng-show="parent.isErrorForField('clientLoadsArray.'+($index)+'.waterPercent', parent)" class="ui red pointing prompt label transition" style="width: 100%;white-space: normal;">
+                    {{parent.getErrorForField('clientLoadsArray.'+($index)+'.waterPercent', parent)}}
+                </div>
             </div>
             <div class="two wide field">
                 <input ng-model="clientload.canalPercent" type="text"/>
+                <div ng-show="parent.isErrorForField('clientLoadsArray.'+($index)+'.canalPercent', parent)" class="ui red pointing prompt label transition" style="width: 100%;white-space: normal;">
+                    {{parent.getErrorForField('clientLoadsArray.'+($index)+'.canalPercent', parent)}}
+                </div>
             </div>
             <div class="two wide field">
-                <label style="font-size: 1.4em; font-weight: 100; line-height: 33px;">
+                <label style="font-size: 1.1em; line-height: 33px;">
                     {{getLitersPerDay(clientload.negotiableLoad)*clientload.quantity*clientload.waterPercent/100}} &nbsp; л
                 </label>
             </div>
             <div class="two wide field">
-                <label style="font-size: 1.4em; font-weight: 100; line-height: 33px;">
+                <label style="font-size: 1.1em; line-height: 33px;">
                     {{getLitersPerDay(clientload.negotiableLoad)*clientload.quantity*clientload.canalPercent/100}} &nbsp; л
                 </label>
             </div>
         </div>
 
-        <div class="ui dividing header">
-            <span style="margin-right:20px;">#Дополнительно</span>
-            <checkbox type="toggle" ng-model="extraLoadsVar" ng-click="extraLoadsSwitcher()"></checkbox>
         </div>
+
+        <h4 class="ui top attached header">
+            <span style="margin-right: 20px;">{{'#Дополнительно' | translate}}</span>
+            <checkbox type="toggle" ng-model="extraLoadsVar" ng-click="extraLoadsSwitcher()"></checkbox></h4>
+
+        <div class="ui attached segment">
 
         <div class="fields" ng-show="extraLoadsVar">
             <div class="three wide field">
@@ -273,29 +114,41 @@
                 <select ng-model="clientload.negotiableLoad"
                         ng-options="item._id as item.name for item in negotiableLoadList | exclusiveNegotiableLoadsFilterByGroup:clientloads:1:clientload.negotiableLoad:false">
                 </select>
+                <div ng-show="parent.isErrorForField('clientLoadsArray.'+($index+1)+'.negotiableLoad', parent)" class="ui red pointing prompt label transition" style="width: 100%;white-space: normal;">
+                    {{parent.getErrorForField('clientLoadsArray.'+($index+1)+'.negotiableLoad', parent)}}
+                </div>
             </div>
             <div class="one wide field">
                 <input ng-model="clientload.quantity" type="text"/>
+                <div ng-show="parent.isErrorForField('clientLoadsArray.'+($index+1)+'.quantity', parent)" class="ui red pointing prompt label transition" style="width: 100%;white-space: normal;">
+                    {{parent.getErrorForField('clientLoadsArray.'+($index+1)+'.quantity', parent)}}
+                </div>
             </div>
             <div class="three wide field">
-                <label style="font-size: 1.4em; font-weight: 100; line-height: 33px;">
+                <label style="font-size: 1.1em; line-height: 33px; overflow: hidden; white-space: nowrap;">
                     {{getLoadUnitName(clientload.negotiableLoad)}}
                     ({{getLitersPerDay(clientload.negotiableLoad)}} &nbsp; л)
                 </label>
             </div>
             <div class="two wide field">
                 <input ng-model="clientload.waterPercent" type="text"/>
+                <div ng-show="parent.isErrorForField('clientLoadsArray.'+($index+1)+'.waterPercent', parent)" class="ui red pointing prompt label transition" style="width: 100%;white-space: normal;">
+                    {{parent.getErrorForField('clientLoadsArray.'+($index+1)+'.waterPercent', parent)}}
+                </div>
             </div>
             <div class="two wide field">
                 <input ng-model="clientload.canalPercent" type="text"/>
+                <div ng-show="parent.isErrorForField('clientLoadsArray.'+($index+1)+'.canalPercent', parent)" class="ui red pointing prompt label transition" style="width: 100%;white-space: normal;">
+                    {{parent.getErrorForField('clientLoadsArray.'+($index+1)+'.canalPercent', parent)}}
+                </div>
             </div>
             <div class="two wide field">
-                <label style="font-size: 1.4em; font-weight: 100; line-height: 33px;">
+                <label style="font-size: 1.1em; line-height: 33px;">
                     {{getLitersPerDay(clientload.negotiableLoad)*clientload.quantity*clientload.waterPercent/100}} &nbsp; л
                 </label>
             </div>
             <div class="two wide field">
-                <label style="font-size: 1.4em; font-weight: 100; line-height: 33px;">
+                <label style="font-size: 1.1em; line-height: 33px;">
                     {{getLitersPerDay(clientload.negotiableLoad)*clientload.quantity*clientload.canalPercent/100}} &nbsp; л
                 </label>
             </div>
@@ -312,6 +165,8 @@
             <button ng-class="{disabled: addAvailable==false}" class="positive circular ui icon button" ng-click="addExtraLoads()">
                 <i class="icon plus"></i>
             </button>
+        </div>
+
         </div>
 
     </div>
