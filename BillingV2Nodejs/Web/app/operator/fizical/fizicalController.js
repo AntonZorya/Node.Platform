@@ -181,7 +181,7 @@ function fizicalController($scope, dataService, toastr, printSvc, $templateCache
         modalSvc.showModal('/app/operator/fizical/editPassportData.html', 'editPassportDataModal', $scope);
     };
 
-    $scope.addClient = function() {
+    $scope.addClient = function () {
         modalSvc.showModal('/app/operator/fizical/addFizClient.html', 'addFizClientModal', $scope);
     }
 
@@ -255,7 +255,7 @@ function fizicalController($scope, dataService, toastr, printSvc, $templateCache
         }
     };
 
-    $scope.clickByNorm = function(clientFiz) {
+    $scope.clickByNorm = function (clientFiz) {
         clientFiz.checkByNorm = !clientFiz.checkByNorm;
         $scope.byNorm(clientFiz);
     }
@@ -270,32 +270,30 @@ function fizicalController($scope, dataService, toastr, printSvc, $templateCache
 
         if (clientFiz.checkByNorm) {
 
-               dataService.get('/clientFiz/hasCalcWithCounter', {
-                   clientId: clientFiz._id,
-                   period: $scope.period.value
-               }).then(function (res) {
-                   if (res.result) {
-                       if (confirm('#Удалить текущие начисления по вводу?')) {
-                           self.calculateByNorm(clientFiz, true);
-                       }
-                       else {
-                           self.calculateByNorm(clientFiz, false);
-                       }
-                   }
-                   else
-                   {
-                       self.calculateByNorm(clientFiz, false);
-                   }
-               });
+            dataService.get('/clientFiz/hasCalcWithCounter', {
+                clientId: clientFiz._id,
+                period: $scope.period.value
+            }).then(function (res) {
+                if (res.result) {
+                    if (confirm('#Удалить текущие начисления по вводу?')) {
+                        self.calculateByNorm(clientFiz, true);
+                    }
+                    else {
+                        self.calculateByNorm(clientFiz, false);
+                    }
+                }
+                else {
+                    self.calculateByNorm(clientFiz, false);
+                }
+            });
         }
-        else
-        {
+        else {
             self.removeCalculateByNorm(clientFiz);
         }
     }
 
 
-    this.calculateByNorm = function(client, withClear) {
+    this.calculateByNorm = function (client, withClear) {
 
         var body = {
             client: client,
@@ -314,7 +312,7 @@ function fizicalController($scope, dataService, toastr, printSvc, $templateCache
         });
     }
 
-    this.removeCalculateByNorm = function(client) {
+    this.removeCalculateByNorm = function (client) {
         dataService.post('/clientFiz/removeNormCalculations', {client: client}).then(function (response) {
             if (response.operationResult === 0) {
                 toastr.success('', 'Данные успешно удалены');
@@ -333,37 +331,10 @@ function fizicalController($scope, dataService, toastr, printSvc, $templateCache
 
 
     $scope.getAllBalance = function () {
-        //TODO: оптимизировать - посчитать на сервере и вернуть на клиента только суммы по всем клиентам
         dataService.get('/balanceFiz/getAllBalance', {period: $scope.period.value}).then(function (response) {
-
-            var groupedBalances = _(response.result).groupBy(function (bal) {
-                return bal.balanceTypeId.name;
-            });
-
-            $scope.nachisl = {
-                name: 'Начисления',
-                sum: 0
-            };
-            _.each(groupedBalances['Начисление'], function (bal) {
-                $scope.nachisl.sum = $scope.nachisl.sum + bal.sum;
-            });
-
-            $scope.forfeit = {
-                name: 'Штрафы',
-                sum: 0
-            };
-            _.each(groupedBalances['Штраф'], function (bal) {
-                $scope.forfeit.sum = $scope.forfeit.sum + bal.sum;
-            });
-
-            $scope.payment = {
-                name: 'Оплата',
-                sum: 0
-            };
-            _.each(groupedBalances['Оплата'], function (bal) {
-                $scope.payment.sum = $scope.payment.sum + bal.sum;
-            });
-
+            $scope.nachisl = {name: 'Начисления', sum: response.result.nachisl};
+            $scope.forfeit = {name: 'Штрафы', sum: response.result.forfeit};
+            $scope.payment = {name: 'Оплата', sum: response.result.payment};
         });
     };
 

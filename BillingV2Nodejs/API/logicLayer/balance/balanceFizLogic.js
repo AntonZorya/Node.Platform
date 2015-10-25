@@ -61,6 +61,10 @@ exports.getById = function (id, done) {
     });
 };
 
+exports.getAllBalance = function (period, done) {
+    BalanceRepo.getGroupedSumBalance(period * 1, done);
+};
+
 exports.getByPeriodAndByClientId = function (dateFrom, dateTo, clientId, done) {
     BalanceRepo.getByPeriodAndByClientId(dateFrom, dateTo, clientId, function (data) {
         done(data);
@@ -69,12 +73,6 @@ exports.getByPeriodAndByClientId = function (dateFrom, dateTo, clientId, done) {
 
 exports.getByPeriod = function (dateFrom, dateTo, done) {
     BalanceRepo.getByPeriod(dateFrom, dateTo, function (data) {
-        done(data);
-    });
-};
-
-exports.getAllBalance = function (period, done) {
-    BalanceRepo.getAllBalance(period, function (data) {
         done(data);
     });
 };

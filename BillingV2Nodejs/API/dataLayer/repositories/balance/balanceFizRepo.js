@@ -77,6 +77,46 @@ exports.getAllBalance = function (period, done) {
     });
 };
 
+var balanceTypes = [
+    {
+        name: 'forfeit',
+        id: '55cdf5c5bd2c5768423c5796'
+    }, {
+        name: 'payment',
+        id: '55cdf61a2a5acf103fc2b6ed'
+    }, {
+        name: 'nachisl',
+        id: '55cdf641fb777624231ab6d9'
+    }
+];
+exports.getGroupedSumBalance = function (period, done) {
+    Collection.aggregate(
+        {
+            $match: {
+                period: period,
+                isDeleted: false
+            }
+        }, {
+            $group: {
+                _id: '$balanceTypeId',
+                sum: {
+                    $sum: '$sum'
+                }
+            }
+        }, function (err, result) {
+            if (err) return done(errorBuilder(err[0]));
+            var res = {};
+            result.forEach(function(group){
+                var name = _.find(balanceTypes, function(type){
+                    return type.id == group._id;
+                }).name;
+                res[name] = group.sum;
+            });
+            done({operationResult: 0, result: res});
+        }
+    );
+}
+
 //не используется
 exports.getByPeriodAndByClientId = function (dateFrom, dateTo, clientId, done) {
     Collection.find(

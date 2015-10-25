@@ -12,9 +12,9 @@ exports.definition = _.extend({
 	accountNumber: {type: String, required: "#accountNumber required"},
 	number: {type: String},
 	name: {type: String, required: "#name required"},
-	bin: {type: String, required: "#bin required"},
+	bin: {type: String},//, required: "#bin required"},
 	rnn: {type: String},
-	site: {type: String, required: "#site required"},
+	site: {type: String},//, required: "#site required"},
 
 	addressId: {type: Schema.Types.ObjectId, required: true},
 	address: {type: String, required: "#address required"},
