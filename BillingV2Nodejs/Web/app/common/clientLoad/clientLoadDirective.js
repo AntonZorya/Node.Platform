@@ -54,6 +54,7 @@ function clientLoad(dataSvc) {
             clientloads: "="
         },
         link: function (scope, elm, attrs) {
+            scope.parent = scope.$parent;
 
             scope.negotiableLoadList = [];
             scope.extraLoadsVar = false;
