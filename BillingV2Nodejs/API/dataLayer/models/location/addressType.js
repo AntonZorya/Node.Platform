@@ -4,5 +4,5 @@ var Schema = mongoose.Schema;
 var _ = require('underscore');
 
 exports.definition = _.extend({
-    name: {type: String, required: true}
+    name: {type: String}
 }, ModelBase);

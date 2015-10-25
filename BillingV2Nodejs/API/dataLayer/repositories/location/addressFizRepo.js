@@ -4,7 +4,6 @@ var Collection = new require('../../../helpers/mongoose/modelBuilder')('Address'
 exports.add = function (address, done) {
     var model = new Collection(address);
     model.save(function (err) {
-        console.log('add' + err);
         if (err) return done(errorBuilder(err));
         done({operationResult: 0});
     });

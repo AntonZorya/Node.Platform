@@ -19,10 +19,10 @@ global._ = require('underscore');
 var XLS = require('xlsjs');
 var async = require('async');
 
-var clientFizRepo = rootRequire('dataLayer/repositories/client/clientFizRepo');
+var clientFizRepo = require('../dataLayer/repositories/client/clientFizRepo');
 var clientTypeFizRepo = require('../dataLayer/repositories/client/clientTypeFizRepo');
-var addressRepo = rootRequire('dataLayer/repositories/location/addressFizRepo');
-var addressTypeRepo = rootRequire('dataLayer/repositories/location/addressTypeRepo');
+var addressRepo = require('../dataLayer/repositories/location/addressFizRepo');
+var addressTypeRepo = require('../dataLayer/repositories/location/addressTypeRepo');
 
 var clientTypeFiz = {};
 clientTypeFizRepo.getAll(function (data) {
@@ -85,7 +85,7 @@ clientTypeFizRepo.getAll(function (types) {
         //                addresses.push(newStreet);
         //            } else {
         //                foundStreet = _.find(addresses, function (addr) {
-        //                    return addr.value == streetName;
+        //                    return addr.name == streetName;
         //                });
         //                if (!foundStreet) {
         //                    addresses.push(newStreet);
@@ -106,7 +106,7 @@ clientTypeFizRepo.getAll(function (types) {
         //                });
         //                if (foundHousesForStreet) {
         //                    var foundHouse = _.find(foundHousesForStreet, function (h) {
-        //                        return h.value === house;
+        //                        return h.name === house;
         //                    });
         //                    //если такого дома для улицы в базе еще нет
         //                    if (!foundHouse) {
@@ -153,8 +153,9 @@ clientTypeFizRepo.getAll(function (types) {
         //        eachDone();
         //    }, function () {
         //        async.each(addresses, function (addr, done) {
-        //            addressRepo.add(addr, function () {
-        //                console.log('Added address:', addr.name);
+        //            addressRepo.add(addr, function (err) {
+        //                if (err) console.error(JSON.stringify(err));
+        //                else console.log('Added address:', addr.name);
         //                done();
         //            });
         //        }, function () {
