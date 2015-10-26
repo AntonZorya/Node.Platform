@@ -31,6 +31,8 @@ exports.definition = _.extend({
 	checkByNorm: {type: Boolean},
 	waterPercent: {type: Number},
 	canalPercent: {type: Number},
-	abonentAreaNumber: {type: String }
+	abonentAreaNumber: {type: String },
+
+	clientLoads: []
 
 }, ModelBase);

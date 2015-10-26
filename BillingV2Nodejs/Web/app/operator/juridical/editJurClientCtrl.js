@@ -9,9 +9,7 @@ function editJurClientController($scope, dataService, modalSvc, toastr, valSvc) 
     this.container = $("#editJurClientContainer");
 
 
-    $scope.modalItem = {
-        clientLoads:[]
-    };
+    $scope.modalItem = {};
     $scope.modalItem = _.extend($scope.modalItem, $scope.$parent.selectedItem);
 
     $scope.cancel = function () {

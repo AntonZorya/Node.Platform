@@ -7,285 +7,296 @@
     <div class="content" id="editFizClientContainer">
 
         <form class="ui form">
-            <div class="fields">
-                <div class="two wide field">
-                    <label>{{'#Лицевой счет' | translate}}</label>
-                    <input type="text" name="accountNumber" placeholder="{{'#Лицевой счет' | translate}}"
-                           ng-model="modalItem.accountNumber">
-                    <div ng-show="isErrorForField('accountNumber', this)" class="ui red pointing prompt label transition">{{getErrorForField('accountNumber', this)}}</div>
-                </div>
-                <div class="two wide field">
-                    <label>{{'#Наименование абонента' | translate}}</label>
-                    <input type="text" name="name" placeholder="{{'#Наименование компании' | translate}}"
-                           ng-model="modalItem.name">
-                    <div ng-show="isErrorForField('name', this)" class="ui red pointing prompt label transition">{{getErrorForField('name', this)}}</div>
-                </div>
-                <div class=" two wide field">
-                    <label>{{'#ИИН' | translate}}</label>
-                    <input type="text" name="bin" placeholder="{{'#БИН' | translate}}"
-                           ng-model="modalItem.bin">
-                    <div ng-show="isErrorForField('bin', this)" class="ui red pointing prompt label transition">{{getErrorForField('bin', this)}}</div>
-                </div>
+            <div class="ui relaxed grid">
+                <div class="eight wide column">
+                    <h4 class="ui top attached header">{{'#Абонент' | translate}}</h4>
 
+                    <div class="ui attached segment">
 
-                <div class="two wide field">
-                    <label>{{'#Адрес' | translate}}</label>
-                    <address-input class="two wide field" addressid="modalItem.addressId" addresstext="modalItem.address"></address-input>
-                </div>
+                        <div class="two fields">
+                            <div class="field">
+                                <label>{{'#Лицевой счет' | translate}}</label>
+                                <input type="text" name="accountNumber" placeholder="{{'#Лицевой счет' | translate}}"
+                                       ng-model="modalItem.accountNumber">
+                                <div ng-show="isErrorForField('accountNumber', this)" class="ui red pointing prompt label transition">
+                                    {{getErrorForField('accountNumber', this)}}
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label>{{'#Наименование абонента' | translate}}</label>
+                                <input type="text" name="name" placeholder="{{'#Наименование компании' | translate}}"
+                                       ng-model="modalItem.name">
+                                <div ng-show="isErrorForField('name', this)" class="ui red pointing prompt label transition">{{getErrorForField('name', this)}}</div>
+                            </div>
+                        </div>
 
-                <div class="two wide field">
-                    <label>{{'#Кол-во проживающих' | translate}}</label>
-                    <input type="text" name="residentsCount" placeholder="{{'#Кол-во проживающих' | translate}}"
-                           ng-model="modalItem.residentsCount">
-                    <div ng-show="isErrorForField('residentsCount', this)" class="ui red pointing prompt label transition">{{getErrorForField('residentsCount', this)}}</div>
-                </div>
-                <div class="two wide field">
-                    <label>{{'#Телефон' | translate}}</label>
-                    <input type="text" name="phone" placeholder="{{'#Телефон' | translate}}"
-                           ng-model="modalItem.phone">
-                </div>
-                <div class="two wide field">
-                    <label>{{'#email' | translate}}</label>
-                    <input type="text" name="email" placeholder="{{'#email' | translate}}"
-                           ng-model="modalItem.email">
-                </div>
-                <div class="two wide field">
-                    <label>{{'#Площадь' | translate}}</label>
-                    <input type="text" name="area" placeholder="{{'#Площадь' | translate}}"
-                           ng-model="modalItem.area">
-                </div>
+                        <div class="field">
+                            <label>{{'#ИИН' | translate}}</label>
+                            <input type="text" name="bin" placeholder="{{'#БИН' | translate}}"
+                                   ng-model="modalItem.bin">
+                            <div ng-show="isErrorForField('bin', this)" class="ui red pointing prompt label transition">{{getErrorForField('bin', this)}}</div>
+                        </div>
 
-                <div class="two wide field">
-                    <label>{{'#КСК' | translate}}</label>
-                    <select class="ui search dropdown" ng-model="modalItem.kskId"
-                            ng-options="ksk.name for ksk in $parent.ksks track by ksk._id"></select>
-                </div>
+                        <div class="field">
+                            <label>{{'#Адрес' | translate}}</label>
+                            <address-input class="two wide field" addressid="modalItem.addressId" addresstext="modalItem.address"></address-input>
+                        </div>
 
+                        <div class="two fields">
+                            <div class="field">
+                                <label>{{'#Телефон' | translate}}</label>
+                                <input type="text" name="phone" placeholder="{{'#Телефон' | translate}}"
+                                       ng-model="modalItem.phone">
+                            </div>
+                            <div class="field">
+                                <label>{{'#email' | translate}}</label>
+                                <input type="text" name="email" placeholder="{{'#email' | translate}}"
+                                       ng-model="modalItem.email">
+                            </div>
+                        </div>
 
-                <div class="two wide field">
-                    <label>{{'#Контроллер' | translate}}</label>
-                    <select class="ui search dropdown" ng-model="modalItem.controllerId"
-                            ng-options="controller.fullName for controller in $parent.controllers track by controller._id">
-                    </select>
-                    <div ng-show="isErrorForField('controllerId', this)" class="ui red pointing prompt label transition">{{getErrorForField('controllerId', this)}}</div>
-                </div>
-
-                <div class="two wide field">
-                    <label>{{'#Тип' | translate}}</label>
-                    <select class="ui search dropdown" ng-model="modalItem.clientType"
-                            ng-options="clientType.name for clientType in $parent.clientTypes track by clientType._id">
-                    </select>
-                    <div ng-show="isErrorForField('clientType', this)" class="ui red pointing prompt label transition">{{getErrorForField('clientType', this)}}</div>
-                </div>
-
-                <div class="two wide field">
-                    <label>{{'#Абонентский участок' | translate}}</label>
-                    <input type="text" name="site" placeholder="{{'#Абонентский участок' | translate}}"
-                           ng-model="modalItem.site">
-                    <div ng-show="isErrorForField('site', this)" class="ui red pointing prompt label transition">{{getErrorForField('site', this)}}</div>
-                </div>
-
-            </div>
-        </form>
-
-        <div class="ui divider"></div>
-
-        <form class="ui form">
-            <div class="ui dividing header">
-                {{'#Технические данные' | translate }}. {{selectedItem.name}}. Категория: {{modalItem.clientType.name}}
-            </div>
-            <div class="fields">
-
-                <div class="three wide field">
-                    <label>{{'#Выберите Тариф на воду' | translate}}</label>
-
-                    <div class="ui input">
-                        <select class="ui search dropdown" ng-model="modalItem.clientType.tariffId"
-                                ng-options="tariff.name for tariff in $parent.tariffs track by tariff._id"></select>
-                    </div>
-                </div>
-                <div class=" two wide field">
-                    <label>{{'#Тариф на воду' | translate}}</label>
-
-                    <div class="ui large label">{{modalItem.clientType.tariffId.water}}</div>
-                </div>
-                <div class=" two wide field">
-                    <label>{{'#Тариф на канализацию' | translate}}</label>
-
-                    <div class="ui large label">{{modalItem.clientType.tariffId.canal}}</div>
-                </div>
-                <div class=" two wide field">
-                    <label ng-bind="'#Норма' | translate"></label>
-
-                    <div class="ui input">
-                        <input type="text" name="norm" ng-model="modalItem.norm">
-                    </div>
-                </div>
-                <div class=" two wide field">
-                    <label ng-bind="'#Процент по воде'  | translate"></label>
-
-                    <div class="ui input">
-                        <input type="text" name="norm" ng-model="modalItem.waterPercent">
                     </div>
 
                 </div>
-                <div class=" two wide field">
-                    <label ng-bind="'#Процент по канализации' | translate"></label>
 
-                    <div class="ui input">
-                        <input type="text" name="norm" ng-model="modalItem.canalPercent">
-                    </div>
+                <div class="eight wide column">
+                    <h4 class="ui top attached header">{{'#Дополнительно' | translate}}</h4>
 
-                </div>
-                <div class=" two wide field">
-                    <label ng-bind="'#Начислять по канализации' | translate"></label>
+                    <div class="ui attached segment">
 
-                    <div class="ui checkbox">
-                        <input type="checkbox" name="checkByNorm" ng-model="modalItem.checkByNorm">
-                    </div>
+                        <div class="field">
+                            <label>{{'#Тип' | translate}}</label>
+                            <select class="ui search dropdown" ng-model="modalItem.clientType"
+                                    ng-options="clientType.name for clientType in $parent.clientTypes track by clientType._id">
+                            </select>
+                            <div ng-show="isErrorForField('clientType', this)" class="ui red pointing prompt label transition">{{getErrorForField('clientType', this)}}</div>
+                        </div>
 
-                </div>
-            </div>
-        </form>
+                        <div class="two fields">
+                            <div class="field">
+                                <label>{{'#Контроллер' | translate}}</label>
+                                <select class="ui search dropdown" ng-model="modalItem.controllerId"
+                                        ng-options="controller.fullName for controller in $parent.controllers track by controller._id">
+                                </select>
+                                <div ng-show="isErrorForField('controllerId', this)" class="ui red pointing prompt label transition">{{getErrorForField('controllerId', this)}}</div>
+                            </div>
+                            <div class="field">
+                                <label>{{'#Абонентский участок' | translate}}</label>
+                                <input type="text" name="site" placeholder="{{'#Абонентский участок' | translate}}"
+                                       ng-model="modalItem.site">
+                                <div ng-show="isErrorForField('site', this)" class="ui red pointing prompt label transition">{{getErrorForField('site', this)}}</div>
+                            </div>
+                        </div>
 
+                        <div class="three fields">
+                            <div class="field">
+                                <label>{{'#Кол-во проживающих' | translate}}</label>
+                                <input type="text" name="residentsCount" placeholder="{{'#Кол-во проживающих' | translate}}"
+                                       ng-model="modalItem.residentsCount">
+                                <div ng-show="isErrorForField('residentsCount', this)" class="ui red pointing prompt label transition">{{getErrorForField('residentsCount', this)}}</div>
+                            </div>
+                            <div class="field">
+                                <label>{{'#Площадь' | translate}}</label>
+                                <input type="text" name="area" placeholder="{{'#Площадь' | translate}}"
+                                       ng-model="modalItem.area">
+                            </div>
+                            <div class="field">
+                                <label>{{'#КСК' | translate}}</label>
+                                <select class="ui search dropdown" ng-model="modalItem.kskId"
+                                        ng-options="ksk.name for ksk in $parent.ksks track by ksk._id"></select>
+                            </div>
+                        </div>
 
-        <table>
+                        <div class="three fields">
+                            <div class="field">
+                                <label>{{'#Выберите Тариф на воду' | translate}}</label>
+                                <select class="ui search dropdown" ng-model="modalItem.clientType.tariffId"
+                                            ng-options="tariff.name for tariff in $parent.tariffs track by tariff._id"></select>
+                            </div>
+                            <div class="field">
+                                <label>{{'#Тариф на воду' | translate}}</label>
 
-            <tbody>
+                                <div class="ui large label">{{modalItem.clientType.tariffId.water}}</div>
+                            </div>
+                            <div class="field">
+                                <label>{{'#Тариф на канализацию' | translate}}</label>
 
-            <tr ng-repeat="pipeline in modalItem.pipelines">
+                                <div class="ui large label">{{modalItem.clientType.tariffId.canal}}</div>
+                            </div>
+                        </div>
 
-                <td colspan="6">
-
-                    <table class="ui table" style="margin-bottom: 0 !important;">
-                        <tr>
-                            <td>
-                                <b>Ввод:</b>
+                        <div class="four fields">
+                            <div class="field">
+                                <label ng-bind="'#Норма' | translate"></label>
 
                                 <div class="ui input">
+                                    <input type="text" name="norm" ng-model="modalItem.norm">
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label ng-bind="'#Процент по воде'  | translate"></label>
+
+                                <div class="ui input">
+                                    <input type="text" name="norm" ng-model="modalItem.waterPercent">
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label ng-bind="'#Процент по канализации' | translate"></label>
+
+                                <div class="ui input">
+                                    <input type="text" name="norm" ng-model="modalItem.canalPercent">
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label ng-bind="'#Начислять по канализации' | translate"></label>
+
+                                <div class="ui checkbox">
+                                    <input type="checkbox" name="checkByNorm" ng-model="modalItem.checkByNorm">
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="sixteen wide column">
+                    <h4 class="ui top attached header">{{'#Технические данные' | translate }}. {{selectedItem.name}}. Категория: {{modalItem.clientType.name}}</h4>
+
+                    <div class="ui attached segment">
+
+                        <div class="ui secondary segment" ng-repeat="pipeline in modalItem.pipelines">
+                            <div class="six fields">
+                                <div class="field">
+                                    <label>{{'#Ввод:' | translate}}</label>
                                     <input type="text" ng-model="pipeline.description"/>
                                 </div>
-                            </td>
-                            <td>
-                                <label>{{'% вод.' | translate}}</label>
-
-                                <div class="ui input">
+                                <div class="field">
+                                    <label>{{'#% воды' | translate}}</label>
                                     <input type="text" name="waterPercent" ng-model="pipeline.waterPercent">
                                 </div>
-                            </td>
-                            <td>
-                                <label>{{'% кан.' | translate}}</label>
-
-                                <div class="ui input">
+                                <div class="field">
+                                    <label>{{'#% канализации' | translate}}</label>
                                     <input type="text" name="canalPercent" ng-model="pipeline.canalPercent">
                                 </div>
-                            </td>
-                            <td>
-                                {{'#Среднее' | translate}}
-                                <div class="ui input">
+                                <div class="field">
+                                    <label>{{'#Среднее' | translate}}</label>
                                     <input type="text" name="norm" ng-model="pipeline.avg">
                                 </div>
-                            </td>
-                            <td>
-                                <button class="ui button" ng-click="addNewCounter($index)">Добавить счетчик</button>
-                            </td>
-                            <td>
-                                <button class="ui button" ng-click="removePipeline($index)">{{'#Удалить ввод' | translate}}</button>
-                            </td>
-                        </tr>
-                    </table>
+                                <div class="field">
+                                    <button class="ui button" ng-click="addNewCounter($index)">Добавить счетчик</button>
+                                </div>
+                                <div class="field">
+                                    <button class="ui button" ng-click="removePipeline($index)">{{'#Удалить ввод' | translate}}</button>
+                                </div>
+                            </div>
+                            <div class="ui grid">
+                                <div class="sixteen wide column">
 
+                                    <table class="ui compact small celled table">
+                                        <thead>
+                                        <tr>
+                                            <th>{{'#counterNumber'|translate}}</th>
+                                            <th>{{'#Дата установки счетчика'|translate}}</th>
+                                            <th>{{'#Дата след. поверки/замены счетчика'|translate}}</th>
+                                            <th>{{'#counterPlumb'|translate}}</th>
+                                            <th>{{'#Дата установки пломбы'|translate}}</th>
+                                            <th>{{'#Марка счетчика'|translate}}</th>
+                                            <th>{{'#Предыдущие показания'|translate}}</th>
+                                            <th></th>
+                                        </tr>
+                                        </thead>
 
-                    <table class="ui basic celled table" style="margin-top: 0 !important;">
-                        <thead>
-                        <tr>
-                            <th>{{'#counterNumber'|translate}}</th>
-                            <th>{{'#Дата установки счетчика'|translate}}</th>
-                            <th>{{'#Дата след. поверки/замены счетчика'|translate}}</th>
-                            <th>{{'#counterPlumb'|translate}}</th>
-                            <th>{{'#Дата установки пломбы'|translate}}</th>
-                            <th>{{'#Марка счетчика'|translate}}</th>
-                            <th>{{'#Предыдущие показания'|translate}}</th>
-                            <th></th>
-                        </tr>
-                        </thead>
-                        <tbody>
+                                        <tbody>
+                                        <tr ng-repeat="counter in pipeline.counters"
+                                            ng-class="{'error disabled': !counter.isActive,'positive': counter.isActive}">
 
-                        <tr ng-repeat="counter in pipeline.counters"
-                            ng-class="{
-                            'error disabled': !counter.isActive,
-                            'positive': counter.isActive
-                            }">
-                            <td>
-                                <div class="ui input">
-                                    <input type="text" ng-model="counter.counterNumber"/>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="ui icon input">
-                                    <i class="calendar icon"></i>
-                                    <input ui-date="dateOptions" type="text" class="ng-pristine ng-valid ng-touched"
-                                           ng-model="counter.installDate"/>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="ui icon input">
-                                    <i class="calendar icon"></i>
-                                    <input ui-date="dateOptions" type="text" class="ng-pristine ng-valid ng-touched"
-                                           ng-model="counter.checkDate"/>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="ui input">
-                                    <input type="text" class="ng-pristine ng-valid ng-touched"
-                                           ng-model="counter.plumbNumber"/>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="ui icon input">
-                                    <i class="calendar icon"></i>
-                                    <input ui-date="dateOptions" type="text" class="ng-pristine ng-valid ng-touched"
-                                           ng-model="counter.plumbInstallDate"/>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="ui input">
-                                    <select class="ui search dropdown" ng-model="counter.markId"
-                                            ng-options="mark.name for mark in $parent.counterMarks track by mark._id"></select>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="ui input" ng-show="counter.isCounterNew">
-                                    <input type="text" ng-model="counter.lastCounts"/>
-                                </div>
-                            </td>
-                            <td>
-                                <button class="ui button" ng-click="disableCounter($parent.$index, $index)">Снять
-                                </button>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                    <br>
+                                            <td>
+                                                <div class="ui input">
+                                                    <input type="text" ng-model="counter.counterNumber"/>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="ui icon input">
+                                                    <i class="calendar icon"></i>
+                                                    <input ui-date="dateOptions" type="text" class="ng-pristine ng-valid ng-touched"
+                                                           ng-model="counter.installDate"/>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="ui icon input">
+                                                    <i class="calendar icon"></i>
+                                                    <input ui-date="dateOptions" type="text" class="ng-pristine ng-valid ng-touched"
+                                                           ng-model="counter.checkDate"/>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="ui input">
+                                                    <input type="text" class="ng-pristine ng-valid ng-touched"
+                                                           ng-model="counter.plumbNumber"/>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="ui icon input">
+                                                    <i class="calendar icon"></i>
+                                                    <input ui-date="dateOptions" type="text" class="ng-pristine ng-valid ng-touched"
+                                                           ng-model="counter.plumbInstallDate"/>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="ui input">
+                                                    <select class="ui search dropdown" ng-model="counter.markId"
+                                                            ng-options="mark.name for mark in $parent.counterMarks track by mark._id"></select>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="ui input" ng-show="counter.isCounterNew">
+                                                    <input type="text" ng-model="counter.lastCounts"/>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <button class="ui button" ng-click="disableCounter($parent.$index, $index)">Снять
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        </tbody>
 
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <button class="ui button" ng-click="addNewPipeline()">{{'#Добавить ввод' | translate}}</button>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        <div class="ui red message" style="margin-top:30px;" ng-show="commonErrors.length>0">
-            <ul>
-                <li ng-repeat="error in commonErrors">{{error}}</li>
-            </ul>
-        </div>
+                                    </table>
 
-        <div class="ui right floated buttons">
-            <div class="ui button red" ng-click="cancel()">{{'#cancel' | translate}}</div>
-            <div class="ui positive button" ng-click="save()">{{'#save' | translate}}</div>
-        </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <button class="ui button" ng-click="addNewPipeline()">{{'#Добавить ввод' | translate}}</button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="sixteen wide column">
+                    <client-load clientloads="modalItem.clientLoads"></client-load>
+                </div>
+
+                <div class="sixteen wide column">
+
+                    <div class="field">
+                        <div class="ui red message" ng-show="commonErrors.length>0">
+                            <ul>
+                                <li ng-repeat="error in commonErrors">{{error}}</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="ui right floated buttons">
+                        <div class="ui button red" ng-click="cancel()">{{'#cancel' | translate}}</div>
+                        <div class="ui positive button" ng-click="save()">{{'#save' | translate}}</div>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+
     </div>
 </div>

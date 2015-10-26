@@ -9,6 +9,9 @@ var TariffLogic = require('../../logicLayer/tariff/tariffFizLogic');
 var mongoose = require('mongoose');
 var _ = require('underscore');
 var roleDefinitions = require("../../dataLayer/security/roleDefinitions");
+var clientFactory = require("devir-mbclient");
+var client = new clientFactory.core(clientFactory.netConnector, "localhost", "9009", function (isReconecting) {
+});
 
 exports.add = function (clientFiz, orgId, done) {
 
@@ -46,65 +49,99 @@ exports.get = function (id, done) {
 exports.update = function (data, done) {
     var clientFiz = data.client;
     var removedPipelines = data.removedPipelines;
-    clientFizValidator('clientFiz', clientFizDefinition, clientFiz, function (validationRes) {
-        if (validationRes.operationResult == 0) {
 
-            for (var i = 0; i < clientFiz.pipelines.length; i++)
-                for (var j = 0; j < clientFiz.pipelines[i].counters.length; j++) {
-                    if (clientFiz.pipelines[i].counters[j].isCounterNew)
-                        clientFiz.pipelines[i].counters[j].isCounterNew = false;
+
+    async.series([
+            function(callback){
+                if(clientFiz.clientLoads){
+                    client.sendRequest("/loadings/clientLoad/validate", clientFiz.clientLoads, function (err, data) {
+                        if(err){
+                            return callback(err);
+                        }
+                        if(data.operationResult==0){
+                            clientFiz.clientLoads = data.result;
+                            return callback(null);
+                        }
+                        else{
+                            return callback(data);
+                        }
+                    });
                 }
+                else return callback({operationResult:1, result:["#clientLoads not found"]});
+            },
+            function(callback){
 
-            ClientFizRepo.update(clientFiz, function (res) {
-                if (res.operationResult == 0 && removedPipelines && removedPipelines.length > 0) {
-                    async.each(removedPipelines, function(pipelineId, doneEach){
-                        CalculationLogic.getByPipelineId(pipelineId, function(result){
-                            if (result.operationResult == 0){
-                                if (result.result){
-                                    async.each(result.result, function(calc, eachCalcDone){
-                                        BalanceLogic.remove(calc.balanceId, function(res){
-                                            if (res.operationResult == 0){
-                                                CalculationLogic.remove(calc._id, function(res){
-                                                    if (res.operationResult == 0){
-                                                        eachCalcDone();
+                clientFizValidator('clientFiz', clientFizDefinition, clientFiz, function (validationRes) {
+                    if (validationRes.operationResult == 0) {
+
+                        for (var i = 0; i < clientFiz.pipelines.length; i++)
+                            for (var j = 0; j < clientFiz.pipelines[i].counters.length; j++) {
+                                if (clientFiz.pipelines[i].counters[j].isCounterNew)
+                                    clientFiz.pipelines[i].counters[j].isCounterNew = false;
+                            }
+
+                        ClientFizRepo.update(clientFiz, function (res) {
+                            if (res.operationResult == 0 && removedPipelines && removedPipelines.length > 0) {
+                                async.each(removedPipelines, function(pipelineId, doneEach){
+                                    CalculationLogic.getByPipelineId(pipelineId, function(result){
+                                        if (result.operationResult == 0){
+                                            if (result.result){
+                                                async.each(result.result, function(calc, eachCalcDone){
+                                                    BalanceLogic.remove(calc.balanceId, function(res){
+                                                        if (res.operationResult == 0){
+                                                            CalculationLogic.remove(calc._id, function(res){
+                                                                if (res.operationResult == 0){
+                                                                    eachCalcDone();
+                                                                } else {
+                                                                    eachCalcDone(res.result);
+                                                                }
+                                                            });
+                                                        } else {
+                                                            eachCalcDone(res.result);
+                                                        }
+                                                    });
+                                                }, function(err){
+                                                    if (err) {
+                                                        doneEach(err[0]);
                                                     } else {
-                                                        eachCalcDone(res.result);
+                                                        doneEach();
                                                     }
                                                 });
                                             } else {
-                                                eachCalcDone(res.result);
+                                                doneEach(result.result);
                                             }
-                                        });
-                                    }, function(err){
-                                        if (err) {
-                                            doneEach(err[0]);
-                                        } else {
-                                            doneEach();
+                                        } else{
+                                            doneEach(result.result);
                                         }
                                     });
-                                } else {
-                                    doneEach(result.result);
-                                }
-                            } else{
-                                doneEach(result.result);
+                                }, function(err){
+                                    if (err){
+                                        callback(null,err[0]);
+                                    } else{
+                                        callback(null,res);
+                                    }
+                                });
+                            } else {
+                                return callback(null,res);
                             }
                         });
-                    }, function(err){
-                        if (err){
-                            done(err[0]);
-                        } else{
-                            done(res);
-                        }
-                    });
-                } else {
-                    return done(res);
-                }
-            });
-        }
-        else {
-            done(validationRes);
-        }
-    });
+                    }
+                    else {
+                        callback(null,validationRes);
+                    }
+                });
+
+
+            }
+        ],
+        function(err, results){
+            if(err) return done(err);
+            else return done(results[1]);
+            // results is now equal to ['one', 'two']
+        });
+
+
+
 };
 
 exports.sync = function (clientFizArr, done) {

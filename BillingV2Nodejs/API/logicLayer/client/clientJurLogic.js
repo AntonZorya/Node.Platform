@@ -48,62 +48,34 @@ exports.get = function (id, done) {
 
 exports.update = function (data, done) {
     var clientJur = data.client;
+    clientJurValidator('clientJur', clientJurDefinition, clientJur, function (validationRes) {
+        if (validationRes.operationResult == 0) {
 
-    async.series([
-            function(callback){
-                if(clientJur.clientLoads){
-                    client.sendRequest("/loadings/clientLoad/validate", clientJur.clientLoads, function (err, data) {
-                        if(err){
-                            return callback(err);
-                        }
-                        if(data.operationResult==0){
-                            clientJur.clientLoads = data.result;
-                            return callback(null);
-                        }
-                        else{
-                            return callback(data);
-                        }
-                    });
+            for (var i = 0; i < clientJur.pipelines.length; i++)
+                for (var j = 0; j < clientJur.pipelines[i].counters.length; j++) {
+                    if (clientJur.pipelines[i].counters[j].isCounterNew)
+                        clientJur.pipelines[i].counters[j].isCounterNew = false;
                 }
-                else return callback({operationResult:1, result:["#clientLoads not found"]});
-            },
-            function(callback){
 
-                clientJurValidator('clientJur', clientJurDefinition, clientJur, function (validationRes) {
-                    if (validationRes.operationResult == 0) {
-
-                        for (var i = 0; i < clientJur.pipelines.length; i++)
-                            for (var j = 0; j < clientJur.pipelines[i].counters.length; j++) {
-                                if (clientJur.pipelines[i].counters[j].isCounterNew)
-                                    clientJur.pipelines[i].counters[j].isCounterNew = false;
-                            }
-
-                        ClientJurRepo.update(clientJur, function (res) {
-                            if (data.idsRmPipelines.length > 0) {
-                                async.each(data.idsRmPipelines, function (id, eachDone) {
-                                    BalanceLogic.removeByPipelineId(id, function (err) {
-                                        eachDone(err);
-                                    });
-                                }, function (err) {
-                                    if (err) return callback(null,err);
-                                    else return callback(null,res);
-                                });
-                            } else {
-                                return callback(null,res);
-                            }
+            ClientJurRepo.update(clientJur, function (res) {
+                if (data.idsRmPipelines.length > 0) {
+                    async.each(data.idsRmPipelines, function (id, eachDone) {
+                        BalanceLogic.removeByPipelineId(id, function (err) {
+                            eachDone(err);
                         });
-                    }
-                    else {
-                        callback(null,validationRes);
-                    }
-                });
-            }
-        ],
-        function(err, results){
-            if(err) return done(err);
-            else return done(results[1]);
-            // results is now equal to ['one', 'two']
-        });
+                    }, function (err) {
+                        if (err) return done(err);
+                        else return done(res);
+                    });
+                } else {
+                    return done(res);
+                }
+            });
+        }
+        else {
+            done(validationRes);
+        }
+    });
 
 
 

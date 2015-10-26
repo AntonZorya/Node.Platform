@@ -8,7 +8,9 @@ function editFizClientController($scope, dataService, modalSvc, toastr, valSvc) 
     this.container = $("#editFizClientContainer");
     valSvc.init($scope);
 
-    $scope.modalItem = {};
+    $scope.modalItem = {
+        clientLoads:[]
+    };
     var selected = JSON.parse(JSON.stringify($scope.$parent.selectedItem));
     $scope.modalItem = _.extend($scope.modalItem, selected);
 
