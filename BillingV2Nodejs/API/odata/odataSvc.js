@@ -4,7 +4,7 @@ require('./model');
 
 	var config = {
 		type: colleges,
-		responseLimit: 10000,
+		responseLimit: 20000,
 		database: 'BillingController',
 		provider: {
 			server: '192.168.66.27:27017',
