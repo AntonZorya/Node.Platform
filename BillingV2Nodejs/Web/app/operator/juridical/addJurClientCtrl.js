@@ -16,7 +16,7 @@ function addJurClientController($scope, dataService, modalSvc, toastr, valSvc) {
 
     $scope.save = function () {
         $scope.commonErrors = [];
-        if ($scope.modalItem.addressId){
+        if (!$scope.modalItem.addressId){
             $scope.commonErrors.push('Выберите адрес');
         }
         else {

@@ -25,7 +25,7 @@ function addFizClientController($scope, dataService, modalSvc, toastr, valSvc) {
 
     $scope.save = function () {
         $scope.commonErrors = [];
-        if (!$scope.addressId) {
+        if (!$scope.modalItem.addressId) {
             $scope.commonErrors.push('Выберите адрес');
         }
         else {
