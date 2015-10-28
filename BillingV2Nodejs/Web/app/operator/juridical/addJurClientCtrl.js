@@ -10,7 +10,7 @@ function addJurClientController($scope, dataService, modalSvc, toastr, valSvc) {
 
 
     $scope.modalItem = {
-        period: $scope.$parent.period.period,
+        period: $scope.$parent.period,
         pipelines: []
     };
 

@@ -19,7 +19,7 @@ exports.definition = _.extend({
     address: {type: String, required: "#address required"},
     phone: {type: String},
     email: {type: String},
-    period: {type: Number},
+    period: {type: Number, required: "#period required"},
     pipelines: clientPipelines,
 
     controllerId: {type: Schema.Types.ObjectId, ref: 'Controller', required: true},
