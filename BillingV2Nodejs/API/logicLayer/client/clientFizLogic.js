@@ -59,7 +59,9 @@ exports.update = function (data, done) {
                             return callback(err);
                         }
                         if(data.operationResult==0){
-                            clientFiz.clientLoads = data.result;
+                            clientFiz.clientLoads = data.result.clientLoads;
+                            clientFiz.waterTotalNormPerDay = data.result.totals.waterTotalNormPerDay;
+                            clientFiz.canalTotalNormPerDay = data.result.totals.canalTotalNormPerDay;
                             return callback(null);
                         }
                         else{
