@@ -116,45 +116,26 @@
                             <div class="field">
                                 <label>{{'#Тариф на воду' | translate}}</label>
 
-                                <div class="ui large label">{{modalItem.clientType.tariffId.water}}</div>
+                                <div class="fluid ui big label">{{modalItem.clientType.tariffId.water}}</div>
                             </div>
                             <div class="field">
                                 <label>{{'#Тариф на канализацию' | translate}}</label>
 
-                                <div class="ui large label">{{modalItem.clientType.tariffId.canal}}</div>
+                                <div class="fluid ui big label">{{modalItem.clientType.tariffId.canal}}</div>
                             </div>
                         </div>
 
-                        <div class="four fields">
+                        <div class="two fields">
                             <div class="field">
-                                <label ng-bind="'#Норма' | translate"></label>
-
-                                <div class="ui input">
-                                    <input type="text" name="norm" ng-model="modalItem.norm">
-                                </div>
+                                <label>{{'#Норма по воде в сутки (л)' | translate}}</label>
+                                <div class="fluid ui big label">{{modalItem.waterTotalNormPerDay}}</div>
                             </div>
                             <div class="field">
-                                <label ng-bind="'#Процент по воде'  | translate"></label>
-
-                                <div class="ui input">
-                                    <input type="text" name="norm" ng-model="modalItem.waterPercent">
-                                </div>
-                            </div>
-                            <div class="field">
-                                <label ng-bind="'#Процент по канализации' | translate"></label>
-
-                                <div class="ui input">
-                                    <input type="text" name="norm" ng-model="modalItem.canalPercent">
-                                </div>
-                            </div>
-                            <div class="field">
-                                <label ng-bind="'#Начислять по канализации' | translate"></label>
-
-                                <div class="ui checkbox">
-                                    <input type="checkbox" name="checkByNorm" ng-model="modalItem.checkByNorm">
-                                </div>
+                                <label>{{'#Норма по канализации в сутки (л)' | translate}}</label>
+                                <div class="fluid ui big label">{{modalItem.canalTotalNormPerDay}}</div>
                             </div>
                         </div>
+
 
                     </div>
                 </div>
