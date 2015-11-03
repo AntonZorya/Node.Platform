@@ -307,8 +307,8 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
 
     $scope.getFilledPDF = function (client) {
         dataService.get('/files/docx/getFilledPDF', {
-            templateId: '56278466889209541f33e89d',
-            clientName: client.name,
+            templateId: '563894c69f337c64175ffae3',
+            client: client,
             price: client.balances[0]
         }).then(function (response) {
             alert(response.result);

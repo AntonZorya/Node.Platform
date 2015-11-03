@@ -6,9 +6,12 @@ module.exports = function (router) {
 
     router.route("/files/docx/getFilledPDF")
         .get(function (req, res) {
+            var client = req.query.client;
+
             var payload = {
+                clientIdByPeriod: req.query.clientIdByPeriod,
                 templateId: req.query.templateId,
-                body: {
+                objToFill: {
                     first_name: req.query.clientName,
                     last_name: '',
                     price: req.query.clientBalance
@@ -23,5 +26,4 @@ module.exports = function (router) {
                 }
             });
         });
-
 };
