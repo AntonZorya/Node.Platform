@@ -1,3 +1,4 @@
+global.config = require('./config');
 
 var express = require('express');        // call express
 var app = express();                 // define our app using express
@@ -21,7 +22,7 @@ app.use(cors());
 _ = require('underscore');
 
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://192.168.66.27/BillingController'); // connect to our database
+mongoose.connect('mongodb://' + config.db.host + '/' + config.db.dbName); // connect to our database
 //mongoose.connect('mongodb://localhost/BillingController');
 
 // configure app to use bodyParser()

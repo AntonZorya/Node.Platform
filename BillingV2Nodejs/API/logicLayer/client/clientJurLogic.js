@@ -8,10 +8,6 @@ var CalculationLogic = require('../../logicLayer/calculations/calculationLogic')
 var TariffLogic = require('../../logicLayer/tariff/tariffLogic');
 var mongoose = require('mongoose');
 var _ = require('underscore');
-var clientFactory = require("devir-mbclient");
-var client = new clientFactory.core(clientFactory.netConnector, "localhost", "9009", function (isReconecting) {
-});
-
 
 exports.add = function (clientJur, orgId, done) {
 
@@ -76,11 +72,6 @@ exports.update = function (data, done) {
             done(validationRes);
         }
     });
-
-
-
-
-
 };
 
 exports.sync = function (clientJurArr, done) {
@@ -202,10 +193,10 @@ exports.updateClientCounter = function (body, userId, done) {
         var balanceAvg = null;//в CalculationLogic идет проверка на null
 
         //добор/недобор
-        var isShortage = false;
         var isShortageAvg = false;
-        var shortageCubicMeters = 0;
-        var shortageSum = 0;
+
+        var calculationAvg = null;//без счетчика по среднему, в CalculationLogic идет проверка на null
+        var minConsumption = clientJur.clientType.minConsumption;
 
         var calculation = {
             clientJurId: clientJur._id,
@@ -218,17 +209,15 @@ exports.updateClientCounter = function (body, userId, done) {
             waterSum: waterSum,
             canalSum: canalSum,
             //считаем от минимума
-            isShortage: isShortage, //добор/недобор,
-            shortageCubicMeters: shortageCubicMeters, //недобор м3,
-            shortageSum: shortageSum, //недобор тг
+            isShortage: false, //добор/недобор,
+            shortageCubicMeters: 0, //недобор м3,
+            shortageSum: 0, //недобор тг
             period: period,
             //аудит
             date: new Date(),
             userId: userId,
             calculationType: 0 //0 - по счетчику, 1 - по среднему,
         };
-        var calculationAvg = null;//без счетчика по среднему, в CalculationLogic идет проверка на null
-        var minConsumption = clientJur.clientType.minConsumption;
 
         //находим предыдущие показания в этом периоде
         CalculationLogic.getByCounterId(counter._id, period, function (calcByCounterResp) {
@@ -301,24 +290,14 @@ exports.updateClientCounter = function (body, userId, done) {
                         calculationAvg.calculationType = 1; //0 - по счетчику, 1 - по среднему,
                         calculationAvg.daysCountByAvg = daysDifferenceCount;
 
-                        if (minConsumption) {
-                            isShortageAvg = calculationAvg.waterCubicMetersCount < calculationAvg.minConsumption;
-                            if (isShortageAvg) {
-                                calculationAvg.shortageCubicMeters = minConsumption ? minConsumption - calculationAvg.waterCubicMetersCount : 0;
-                                calculationAvg.shortageSum = calculationAvg.shortageCubicMeters * tariff.water;
-                            }
-                        }
+                        //if (minConsumption) {
+                        //    isShortageAvg = calculationAvg.waterCubicMetersCount < calculationAvg.minConsumption;
+                        //    if (isShortageAvg) {
+                        //        calculationAvg.shortageCubicMeters = minConsumption ? minConsumption - calculationAvg.waterCubicMetersCount : 0;
+                        //        calculationAvg.shortageSum = calculationAvg.shortageCubicMeters * tariff.water;
+                        //    }
+                        //}
 
-                    }
-                }
-
-
-                if (minConsumption) {
-
-                    isShortage = calculation.waterCubicMetersCount < calculation.minConsumption;
-                    if (isShortage) {
-                        calculation.shortageCubicMeters = minConsumption ? minConsumption - calculation.waterCubicMetersCount : 0;
-                        calculation.shortageSum = calculation.shortageCubicMeters * tariff.water;
                     }
                 }
 
@@ -326,15 +305,34 @@ exports.updateClientCounter = function (body, userId, done) {
                     if (balanceAvgResp.operationResult === 0) {
                         CalculationLogic.addMany([calculationAvg, calculation], function (calculationAvgResp) {
                             if (calculationAvgResp.operationResult === 0) {
-                                ClientJurRepo.update(clientJur, function (counterResp) {
-                                    done(counterResp);
+                                ClientJurRepo.update(clientJur, function (result) {
+                                    if (result.operationResult != 0) {
+                                        console.error(result.result);
+                                        done(result);
+                                    } else {
+                                        CalculationLogic.getWaterCountByClient(clientJur._id, function (result) {
+                                            if (result.operationResult == 0 && result.result < minConsumption) {
+                                                var shortage = {
+                                                    shortageWaterCount: minConsumption - result.result,
+                                                    shortageSum: 0
+                                                };
+                                                shortage.shortageSum =
+                                                    shortage.shortageWaterCount
+                                                    * tariff.water
+                                                    * (pipeline.waterPercent / 100);
+                                                shortage.shortageSum += 0;
+                                                result.result = shortage;
+                                            }
+                                            done(result);
+                                        });
+                                    }
                                 });
                             } else {
-                                console.log('Ошибка вставки в коллекцию calculations');
+                                console.error('Ошибка вставки в коллекцию calculations');
                             }
                         });
                     } else {
-                        console.log('Ошибка вставки в коллекцию balances');
+                        console.error('Ошибка вставки в коллекцию balances');
                     }
 
                 });

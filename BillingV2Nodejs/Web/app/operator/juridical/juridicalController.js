@@ -305,6 +305,16 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
 
     };
 
+    $scope.getFilledPDF = function (client) {
+        dataService.get('/files/docx/getFilledPDF', {
+            templateId: '56278466889209541f33e89d',
+            clientName: client.name,
+            price: client.balances[0]
+        }).then(function (response) {
+            alert(response.result);
+        });
+    };
+
     $scope.$on('changeTariffId', function (event, args) {
         var client = _.where($scope.data, {_id: args.clientId})[0];
         if (client) {

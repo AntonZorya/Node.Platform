@@ -84,9 +84,9 @@ exports.get = function (id, done) {
 
 exports.update = function (client, done) {
     if (client._id) {
-        Collection.findOneAndUpdate({_id: client._id}, client, {new: true}, function (err, res) {
+        Collection.findOneAndUpdate({_id: client._id}, client, {new: true}, function (err) {
             if (err) return done(errorBuilder(err));
-            return done({operationResult: 0, result: res});
+            return done({operationResult: 0});
         });
     }
     else {

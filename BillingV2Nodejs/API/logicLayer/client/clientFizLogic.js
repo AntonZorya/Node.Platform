@@ -9,8 +9,8 @@ var TariffLogic = require('../../logicLayer/tariff/tariffFizLogic');
 var mongoose = require('mongoose');
 var _ = require('underscore');
 var roleDefinitions = require("../../dataLayer/security/roleDefinitions");
-var clientFactory = require("devir-mbclient");
-var client = new clientFactory.core(clientFactory.netConnector, "localhost", "9009", function (isReconecting) {
+var mbClientConn = require('../../helpers/mbConnection/mbConnection');
+var mbClient = mbClientConn(function (isReconecting) {
 });
 
 exports.add = function (clientFiz, orgId, done) {
@@ -54,7 +54,7 @@ exports.update = function (data, done) {
     async.series([
             function(callback){
                 if(clientFiz.clientLoads){
-                    client.sendRequest("/loadings/clientLoad/validate", clientFiz.clientLoads, function (err, data) {
+                    mbClient.sendRequest("/loadings/clientLoad/validate", clientFiz.clientLoads, function (err, data) {
                         if(err){
                             return callback(err);
                         }
