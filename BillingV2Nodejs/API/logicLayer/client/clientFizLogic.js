@@ -52,26 +52,26 @@ exports.update = function (data, done) {
 
 
     async.series([
-            function(callback){
-                if(clientFiz.clientLoads){
+            function (callback) {
+                if (clientFiz.clientLoads) {
                     mbClient.sendRequest("/loadings/clientLoad/validate", clientFiz.clientLoads, function (err, data) {
-                        if(err){
+                        if (err) {
                             return callback(err);
                         }
-                        if(data.operationResult==0){
+                        if (data.operationResult == 0) {
                             clientFiz.clientLoads = data.result.clientLoads;
                             clientFiz.waterTotalNormPerDay = data.result.totals.waterTotalNormPerDay;
                             clientFiz.canalTotalNormPerDay = data.result.totals.canalTotalNormPerDay;
                             return callback(null);
                         }
-                        else{
+                        else {
                             return callback(data);
                         }
                     });
                 }
-                else return callback({operationResult:1, result:["#clientLoads not found"]});
+                else return callback({operationResult: 1, result: ["#clientLoads not found"]});
             },
-            function(callback){
+            function (callback) {
 
                 clientFizValidator('clientFiz', clientFizDefinition, clientFiz, function (validationRes) {
                     if (validationRes.operationResult == 0) {
@@ -84,15 +84,15 @@ exports.update = function (data, done) {
 
                         ClientFizRepo.update(clientFiz, function (res) {
                             if (res.operationResult == 0 && removedPipelines && removedPipelines.length > 0) {
-                                async.each(removedPipelines, function(pipelineId, doneEach){
-                                    CalculationLogic.getByPipelineId(pipelineId, function(result){
-                                        if (result.operationResult == 0){
-                                            if (result.result){
-                                                async.each(result.result, function(calc, eachCalcDone){
-                                                    BalanceLogic.remove(calc.balanceId, function(res){
-                                                        if (res.operationResult == 0){
-                                                            CalculationLogic.remove(calc._id, function(res){
-                                                                if (res.operationResult == 0){
+                                async.each(removedPipelines, function (pipelineId, doneEach) {
+                                    CalculationLogic.getByPipelineId(pipelineId, function (result) {
+                                        if (result.operationResult == 0) {
+                                            if (result.result) {
+                                                async.each(result.result, function (calc, eachCalcDone) {
+                                                    BalanceLogic.remove(calc.balanceId, function (res) {
+                                                        if (res.operationResult == 0) {
+                                                            CalculationLogic.remove(calc._id, function (res) {
+                                                                if (res.operationResult == 0) {
                                                                     eachCalcDone();
                                                                 } else {
                                                                     eachCalcDone(res.result);
@@ -102,7 +102,7 @@ exports.update = function (data, done) {
                                                             eachCalcDone(res.result);
                                                         }
                                                     });
-                                                }, function(err){
+                                                }, function (err) {
                                                     if (err) {
                                                         doneEach(err[0]);
                                                     } else {
@@ -112,36 +112,35 @@ exports.update = function (data, done) {
                                             } else {
                                                 doneEach(result.result);
                                             }
-                                        } else{
+                                        } else {
                                             doneEach(result.result);
                                         }
                                     });
-                                }, function(err){
-                                    if (err){
-                                        callback(null,err[0]);
-                                    } else{
-                                        callback(null,res);
+                                }, function (err) {
+                                    if (err) {
+                                        callback(null, err[0]);
+                                    } else {
+                                        callback(null, res);
                                     }
                                 });
                             } else {
-                                return callback(null,res);
+                                return callback(null, res);
                             }
                         });
                     }
                     else {
-                        callback(null,validationRes);
+                        callback(null, validationRes);
                     }
                 });
 
 
             }
         ],
-        function(err, results){
-            if(err) return done(err);
+        function (err, results) {
+            if (err) return done(err);
             else return done(results[1]);
             // results is now equal to ['one', 'two']
         });
-
 
 
 };
@@ -177,29 +176,24 @@ exports.getPeriods = function (done) {
 
 exports.search = function (searchTerm, period, user, done) {
 
-    if (_.contains(user.roles, roleDefinitions.admin.sysName))
-    {
+    if (_.contains(user.roles, roleDefinitions.admin.sysName)) {
         ClientFizRepo.search(searchTerm, period, function (res) {
             searchCallback(res, period, done);
         });
-    } else
-    if (_.contains(user.roles, roleDefinitions.operatorFizical.sysName)) {
-        ClientFizRepo.searhcBySite(searchTerm, period, user.sites, function(res) {
-           searchCallback(res, period, done);
+    } else if (_.contains(user.roles, roleDefinitions.operatorFizical.sysName)) {
+        ClientFizRepo.searhcBySite(searchTerm, period, user.sites, function (res) {
+            searchCallback(res, period, done);
         });
-    } else
-    if (user.controllerId)
-    {
-        ClientFizRepo.searchByControllerId(searchTerm, period, user.controllerId, function(res) {
-           searchCallback(res, period, done);
+    } else if (user.controllerId) {
+        ClientFizRepo.searchByControllerId(searchTerm, period, user.controllerId, function (res) {
+            searchCallback(res, period, done);
         });
     } else {
         return done({operationResult: 1, result: "#access denied"});
     }
 };
 
-function searchCallback(res, period, done)
-{
+function searchCallback(res, period, done) {
     if (res.operationResult == 0) {
         async.each(res.result, function (client, callback) {
             BalanceLogic.getTotalByClientId(client._doc._id, period, function (balancesRes) {
@@ -594,8 +588,7 @@ exports.removeNormCalculations = function (client, done) {
                             })
                         });
                     }
-                    else
-                    {
+                    else {
                         return done(remCalcResp);
                     }
                 })

@@ -36,6 +36,7 @@ exports.definition = _.extend({
 	abonentAreaNumber: {type: String },
 
 	clientLoads: [],
-	residentsCount: {type: Number}
+	residentsCount: {type: Number},
+	userId: {type: Schema.Types.ObjectId, ref: 'User'}
 
 }, ModelBase);

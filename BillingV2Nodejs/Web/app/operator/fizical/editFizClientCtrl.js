@@ -1,9 +1,9 @@
 /**
  * Created by Alibek on 06.10.2015.
  */
-billingApplication.controller('editFizClientController', ['$scope', 'dataService', 'modalSvc', 'toastr', 'validationSvc', editFizClientController]);
+billingApplication.controller('editFizClientController', ['$scope', 'dataService', 'modalSvc', 'toastr', 'validationSvc', '$rootScope', editFizClientController]);
 
-function editFizClientController($scope, dataService, modalSvc, toastr, valSvc) {
+function editFizClientController($scope, dataService, modalSvc, toastr, valSvc, $rootScope) {
     var self = this;
     this.container = $("#editFizClientContainer");
     valSvc.init($scope);
@@ -59,7 +59,8 @@ function editFizClientController($scope, dataService, modalSvc, toastr, valSvc) 
                 isActive: true,
                 isCounterNew: true,
                 currentCounts: 0,
-                installDate: new Date()
+                installDate: new Date(),
+                userId: $rootScope.user._id
             };
             $scope.modalItem.pipelines[pipelineIndex].counters.push(newCounter);
         }
@@ -98,7 +99,8 @@ function editFizClientController($scope, dataService, modalSvc, toastr, valSvc) 
             fileIds: [],
             sourceCounts: 0,// 0 по счетчику, 1 по среднему, 2 по норме
             avg: null,
-            norm: null
+            norm: null,
+            userId: $rootScope.user._id
         });
     }
 
@@ -108,6 +110,7 @@ function editFizClientController($scope, dataService, modalSvc, toastr, valSvc) 
                 removedPipelines.push($scope.modalItem.pipelines[pipIndex]._id);
             }
             $scope.modalItem.pipelines.splice(pipIndex, 1);
+            $scope.modalItem.userId = $rootScope.user._id;
         }
     }
 }

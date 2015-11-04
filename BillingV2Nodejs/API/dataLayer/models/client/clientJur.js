@@ -3,7 +3,6 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var _ = require('underscore');
 var phones = require(_modelsPath + 'client/phones').definition;
-//var clientCounters = require(_modelsPath + 'client/clientCounters').definition;
 var tariff = require(_modelsPath + 'tariff/tariff').definition;
 var clientType = require(_modelsPath + 'client/clientType').definition;
 var clientPipelines = require(_modelsPath + 'client/clientPipelines').definition;
@@ -26,11 +25,9 @@ exports.definition = _.extend({
     clientType: clientType,
     kskId: {type: Schema.Types.ObjectId, ref: 'ksk'},
     abonentEntryDate: {type: Date},
-    clientId: {type: Schema.Types.ObjectId}
+    clientId: {type: Schema.Types.ObjectId},
+    userId: {type: Schema.Types.ObjectId, ref: 'User'}
 
-    //floor: {type: Number},//этаж TODO на клиенте сделать добавление floor в коллекцию "Address"
-    //floorsTotal: {type: Number}, //всего этажей TODO на клиенте сделать добавление floorsTotal  в коллекцию "Address"
-    //area: {type: Number},//площадь TODO на клиенте сделать добавление area в коллекцию "Address"
 }, ModelBase);
 
 
