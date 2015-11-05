@@ -27,6 +27,8 @@ build/Release
 node_modules
 !BillingV2Nodejs/API/odata/**/node_modules
 .idea/*
+.vscode/*
+
 BillingV2Nodejs/.idea/*
 BillingV2Nodejs/Web/libs/*
 BillingV2Nodejs/API/config.js
