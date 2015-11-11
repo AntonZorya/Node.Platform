@@ -306,19 +306,16 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
     };
 
     $scope.getFilledPDF = function (client, $event) {
-        if (!client.invoiceId) {
+        if (client.invoiceId) {
             dataService.openPDF(client.invoiceId);
         } else {
             dataService.get('/files/docx/getFilledPDF', {
-                templateId: '56432f7f9241c2c8577ce5f5',
+                templateId: '56433cecdc8fa00efdcd56cc',
                 clientId: client._id,
             }, $event.currentTarget).then(function (response) {
                 if (response.operationResult == 0) {
                     client.invoiceId = response.result;
-                    //$scope.getFilledPDF(client);
-
-                    dataService.openPDF(client.invoiceId);
-
+                    $scope.getFilledPDF(client);
                 } else {
                     toastr.error('', 'Произошла ошибка');
                 }
