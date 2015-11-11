@@ -305,14 +305,25 @@ function juridicalController($scope, dataService, toastr, printSvc, $templateCac
 
     };
 
-    $scope.getFilledPDF = function (client) {
-        dataService.get('/files/docx/getFilledPDF', {
-            templateId: '563894c69f337c64175ffae3',
-            client: client,
-            price: client.balances[0]
-        }).then(function (response) {
-            alert(response.result);
-        });
+    $scope.getFilledPDF = function (client, $event) {
+        if (!client.invoiceId) {
+            dataService.openPDF(client.invoiceId);
+        } else {
+            dataService.get('/files/docx/getFilledPDF', {
+                templateId: '56432f7f9241c2c8577ce5f5',
+                clientId: client._id,
+            }, $event.currentTarget).then(function (response) {
+                if (response.operationResult == 0) {
+                    client.invoiceId = response.result;
+                    //$scope.getFilledPDF(client);
+
+                    dataService.openPDF(client.invoiceId);
+
+                } else {
+                    toastr.error('', 'Произошла ошибка');
+                }
+            });
+        }
     };
 
     $scope.$on('changeTariffId', function (event, args) {

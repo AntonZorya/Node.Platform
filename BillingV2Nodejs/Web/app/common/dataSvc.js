@@ -29,21 +29,21 @@ function dataService($http, $q, $location, $window, $cookies, API_HOST, $indexed
 
 
         var re = /(\/login)|(\/languages)|(\/register)|(\/loginNormal)/;
-        if (url.match(re)){
+        if (url.match(re)) {
             return "";
         }
         var token = $.cookie("ArndBooksAuthToken");
         //$cookies.get('ArndBooksAuthToken');
         if (!token)
             this.toLogin();
-        else{
+        else {
             this.redirectToLoginActive = false;
             return token;
         }
     };
 
     this.toLogin = function () {
-        if(!this.redirectToLoginActive) {
+        if (!this.redirectToLoginActive) {
             var currentUrl = encodeURIComponent($location.absUrl());
             this.redirectToLoginActive = true;
             $window.location.href = '#/loginNormal?url=' + currentUrl;
@@ -57,7 +57,7 @@ function dataService($http, $q, $location, $window, $cookies, API_HOST, $indexed
 
         if (loaderElem)
             $(loaderElem).addClass("loading");
-        if(!this.redirectToLoginActive || token=="") {
+        if (!this.redirectToLoginActive || token == "") {
 
             $http({
                 method: 'GET',
@@ -218,5 +218,8 @@ function dataService($http, $q, $location, $window, $cookies, API_HOST, $indexed
 
     };
 
+    this.openPDF = function(pdfId){
+        window.open(this.urlFor('/files/download?fileId=' + pdfId));
+    };
 
 }

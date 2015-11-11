@@ -26,7 +26,8 @@ exports.definition = _.extend({
     kskId: {type: Schema.Types.ObjectId, ref: 'ksk'},
     abonentEntryDate: {type: Date},
     clientId: {type: Schema.Types.ObjectId},
-    userId: {type: Schema.Types.ObjectId, ref: 'User'}
+    userId: {type: Schema.Types.ObjectId, ref: 'User'},
+    invoiceId: {type: Schema.Types.ObjectId}
 
 }, ModelBase);
 

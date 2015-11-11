@@ -76,7 +76,7 @@ exports.getAllByCtrlId = function (ctrlId, done) {
 };
 
 exports.get = function (id, done) {
-    Collection.findById(id, {isDeleted: false}).deepPopulate('tariffId addressId').exec(function (err, client) {
+    Collection.findById(id, {isDeleted: false}).populate('clientType.tariffId').populate('addressId').exec(function (err, client) {
         if (err) return done(errorBuilder(err));
         return done({operationResult: 0, result: client});
     });

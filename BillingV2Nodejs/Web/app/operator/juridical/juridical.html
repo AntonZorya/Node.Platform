@@ -12,7 +12,8 @@
         <table class="ui basic table">
             <tr>
                 <td>
-                    <button title="{{'#Предыдущие периоды' | translate}}" class="ui button" ng-click="toClosedPeriods()">
+                    <button title="{{'#Предыдущие периоды' | translate}}" class="ui button"
+                            ng-click="toClosedPeriods()">
                         <i class="reply icon"></i>
                     </button>
                     Период: &nbsp;
@@ -164,8 +165,8 @@
                                     ng-click="editJurClient()"></button>
                             <button class="ui  button" ng-bind="'#История' | translate"
                                     ng-click="getClientBalanceDetails()"></button>
-                            <button ng-show="false" class="ui button" ng-bind="'#Счет-фактура' | translate"
-                                    ng-click="getFilledPDF(item)"></button>
+                            <button ng-show="true" class="ui button" ng-bind="'#Счет-фактура' | translate"
+                                    ng-click="getFilledPDF(item, $event)"></button>
 
                             <table class="ui basic table">
                                 <tbody>
@@ -336,7 +337,7 @@
                 <div class="field">
                     <label>*{{'#Сумма' | translate}}</label>
                     <input type="text" name="sum" placeholder="{{'#Сумма' | translate}}" ng-model="$parent.enteredSum"
-                            >
+                    >
                 </div>
                 <div class="field">
                     <label>*{{'#Номер квитанции' | translate}} </label>
