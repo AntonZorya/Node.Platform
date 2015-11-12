@@ -12,7 +12,7 @@ function mainCtrl(dataService, $scope, valSvc, modalSvc) {
         $scope.totalClientsPassed = 0;
         $scope.controllers = [];
 
-        dataService.get('/balance/getAllBalance', {period: 201509}).then(function (response) {
+        dataService.get('/balance/getAllBalance', {period: 201510}).then(function (response) {
             $scope.nachisl = { name: 'Начисления', sum: response.result.nachisl};
             $scope.forfeit = { name: 'Штрафы', sum: response.result.forfeit};
             $scope.payment = { name: 'Оплата', sum: response.result.payment};
