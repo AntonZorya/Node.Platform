@@ -47,6 +47,7 @@ function report2Ctrl(dataSvc, $scope, valSvc) {
 		dataSvc.get("/report2", {period: period}, $("#container")).then(function(res) {
 			$scope.result = res.result;
 			$scope.resultTotals.passed = 0;
+			$scope.resultTotals.total = 0;
 			$scope.resultTotals.sumWaterCubic = 0;
 			$scope.resultTotals.sumCanalCubic = 0;
 			$scope.resultTotals.sumWaterMoney = 0;
@@ -57,6 +58,8 @@ function report2Ctrl(dataSvc, $scope, valSvc) {
 			_.each(res.result, function(elem){
 				if(elem.passed)
 				$scope.resultTotals.passed += parseInt(elem.passed);
+				if (elem.total)
+				$scope.resultTotals.total += parseInt(elem.total);
 				if(elem.sumWaterCubic)
 				$scope.resultTotals.sumWaterCubic += parseFloat(elem.sumWaterCubic);
 				if(elem.sumCanalCubic)

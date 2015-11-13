@@ -157,7 +157,8 @@ exports.report5 = function (period, done) {
                     {"pipelines.counters.currentCounts": {$ne: null}},
                     {"pipelines.counters.currentCounts": {$ne: ""}},
                     {"pipelines.counters.currentCounts": {$ne: 0}},
-                    {"pipelines.counters.dateOfCurrentCounts": {$ne: null}}
+                    {"pipelines.counters.dateOfCurrentCounts": {$ne: null}},
+                    {isDeleted: false}
                 ]
 
             }
@@ -180,6 +181,16 @@ exports.report5 = function (period, done) {
 exports.report6 = function (period, done) {
     Collection.aggregate(
         {
+            $match: {
+
+                $and: [
+                    {period: parseInt(period)},
+                    {isDeleted: false}
+                ]
+
+            }
+        },
+        {
             $group: {
                 _id: {controllerId: "$controllerId"},
                 total: {$sum: 1}
@@ -201,6 +212,7 @@ exports.report2 = function (period, done) {
     var round6Result;
     var round8Result;
     var round10Result;
+    var round13Result;
 
     async.series([
             function (callback) {
@@ -300,11 +312,47 @@ exports.report2 = function (period, done) {
                     }
                 );
             },
+            function (callback){
+                Collection.aggregate(
+                    {
+                        $match: {
+
+                            $and: [
+                                {period: parseInt(period)},
+                                {isDeleted: false}
+                            ]
+
+                        }
+                    },
+
+                    {
+                        $group: {
+                            _id: {controllerId: "$controllerId"},
+                            total: {$sum: 1}
+                        }
+                    },
+
+                    function (err, result) {
+                        if (err) return callback(err, 'ROUND13 SUCCESS');
+                        round13Result = result;
+                        //console.log(round13Result);
+                        return callback(null, 'ROUND13 SUCCESS');
+                    }
+                );
+            },
             function (callback) {
                 _.each(round3Result, function (elem) {
                     _.each(round4Result, function (elem2) {
                         if (elem.controllerId == elem2._id.controllerId) {
                             elem.passed = elem2.total;
+                        }
+                    })
+                });
+
+                _.each(round3Result, function (elem) {
+                    _.each(round13Result, function (elem2) {
+                        if (elem.controllerId == elem2._id.controllerId) {
+                            elem.total = elem2.total;
                         }
                     })
                 });

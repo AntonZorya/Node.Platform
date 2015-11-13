@@ -158,6 +158,7 @@ function mainCtrl(dataService, $scope, valSvc, modalSvc) {
         dataService.get("/report2", {period: 201510}).then(function (res) {
             $scope.result = res.result;
             $scope.resultTotals.passed = 0;
+            $scope.resultTotals.total = 0;
             $scope.resultTotals.sumWaterCubic = 0;
             $scope.resultTotals.sumCanalCubic = 0;
             $scope.resultTotals.sumWaterMoney = 0;
@@ -168,6 +169,8 @@ function mainCtrl(dataService, $scope, valSvc, modalSvc) {
             _.each(res.result, function (elem) {
                 if (elem.passed)
                     $scope.resultTotals.passed += parseInt(elem.passed);
+                if (elem.total)
+                    $scope.resultTotals.total += parseInt(elem.total);
                 if (elem.sumWaterCubic)
                     $scope.resultTotals.sumWaterCubic += parseFloat(elem.sumWaterCubic);
                 if (elem.sumCanalCubic)
