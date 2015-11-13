@@ -82,9 +82,9 @@ function mainCtrl(dataService, $scope, valSvc, modalSvc) {
     };
 
 
-    dataService.get('/report5', {period: 201509}).then(function (response) {
+    dataService.get('/report5', {period: 201510}).then(function (response) {
         $scope.passedClientsByControllers = response.result;
-        dataService.get('/report6', {period: 201509}).then(function (response) {
+        dataService.get('/report6', {period: 201510}).then(function (response) {
             $scope.allClientsByControllers = response.result;
             $scope.totalClients = 0;
             _.each($scope.allClientsByControllers, function (item) {
@@ -155,7 +155,7 @@ function mainCtrl(dataService, $scope, valSvc, modalSvc) {
 
     $scope.getReport2 = function () {
         $scope.resultTotals = {};
-        dataService.get("/report2", {period: 201509}).then(function (res) {
+        dataService.get("/report2", {period: 201510}).then(function (res) {
             $scope.result = res.result;
             $scope.resultTotals.passed = 0;
             $scope.resultTotals.sumWaterCubic = 0;

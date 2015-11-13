@@ -21,6 +21,7 @@
     "devir-mbserver": "0.0.5",
     "express": "^4.12.4",
     "express-session": "^1.11.2",
+    "gridfs": "^1.0.0",
     "lwip": "0.0.7",
     "moment": "^2.10.3",
     "mongoose": "^4.0.3",
