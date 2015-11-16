@@ -99,4 +99,5 @@ function juridicalHistoryController($scope, dataService, toastr, printSvc, $temp
         });
 
     };
+
 }

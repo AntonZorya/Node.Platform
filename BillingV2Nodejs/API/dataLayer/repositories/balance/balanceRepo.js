@@ -48,12 +48,12 @@ exports.update = function (balance, done) {
 
 exports.remove = function (balanceId, done) {
     if (balanceId) {
-        Collection.findOneAndRemove({_id: balanceId}, function (err) {
+        Collection.findOneAndUpdate({_id: balanceId}, {isDeleted: true}, function (err) {
             if (err) return done(errorBuilder(err));
             return done({operationResult: 0});
         });
     }
-}
+};
 
 exports.getById = function (id, done) {
     Collection.find({_id: id, isDeleted: false}, function (err, res) {
@@ -143,7 +143,7 @@ exports.getGroupedSumBalance = function (period, done) {
     );
 }
 
-//не используется
+//пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 exports.getByPeriodAndByClientJurId = function (dateFrom, dateTo, clientJurId, done) {
     Collection.find(
         {
@@ -159,7 +159,7 @@ exports.getByPeriodAndByClientJurId = function (dateFrom, dateTo, clientJurId, d
         });
 };
 
-//не используется
+//пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 exports.getByPeriodAndByClientFizId = function (dateFrom, dateTo, clientFizId, done) {
     Collection.find(
         {

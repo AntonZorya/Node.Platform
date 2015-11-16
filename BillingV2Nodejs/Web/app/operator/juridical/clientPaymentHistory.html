@@ -52,8 +52,23 @@
                         <td>{{data.date | date:'dd.MM.yyyy hh:mm:ss'}}</td>
                         <td>{{data.balanceId.sum}}</td>
                         <td>{{data.comment}}</td>
+                        <td colspan="8">
+                            <button class="ui button green" ng-bind="'#Редактировать' | translate"
+                                    ng-click="editForfeitJurClient(data)"></button>
+                            <button class="ui button red" ng-click="forfeitDetailsDelete(data)">{{'#Удалить' | translate}}</button>
+                        </td>
+
                     </tr>
                     </tbody>
+
+
+                     <tfoot>
+                     <tr>
+
+                    </tr>
+                    </tfoot>
+
+
                 </table>
             </div>
             <br/>

@@ -13,7 +13,7 @@ function forfeitController($scope, dataService, modalSvc, toastr, $rootScope) {
         },
         user: $rootScope.user
     };
-
+//console.log("Summa"+$scope.body.forfeitDetails.sum);
     $scope.forfeitDetailsAdd = function () {
         dataService.post('/forfeitDetails/add', $scope.body).then(function (response) {
 
