@@ -7,6 +7,8 @@ function dataService($http, $q, $location, $window, $cookies, API_HOST, $indexed
         return API_HOST + url;
     };
 
+    this.redirectToLoginActive = false;
+
     var self = this;
 
     this.checkForIndexedDB = function () {
@@ -27,18 +29,25 @@ function dataService($http, $q, $location, $window, $cookies, API_HOST, $indexed
 
 
         var re = /(\/login)|(\/languages)|(\/register)|(\/loginNormal)/;
-        if (url.match(re)) return "";
+        if (url.match(re)) {
+            return "";
+        }
         var token = $.cookie("ArndBooksAuthToken");
         //$cookies.get('ArndBooksAuthToken');
         if (!token)
             this.toLogin();
-        else
+        else {
+            this.redirectToLoginActive = false;
             return token;
+        }
     };
 
     this.toLogin = function () {
-        var currentUrl = encodeURIComponent($location.absUrl());
-        $window.location.href = '#/loginNormal?url=' + currentUrl;
+        if (!this.redirectToLoginActive) {
+            var currentUrl = encodeURIComponent($location.absUrl());
+            this.redirectToLoginActive = true;
+            $window.location.href = '#/loginNormal?url=' + currentUrl;
+        }
     };
 
 
@@ -48,45 +57,47 @@ function dataService($http, $q, $location, $window, $cookies, API_HOST, $indexed
 
         if (loaderElem)
             $(loaderElem).addClass("loading");
+        if (!this.redirectToLoginActive || token == "") {
 
-        $http({
-            method: 'GET',
-            url: this.urlFor(url),
-            params: params,
-            headers: {
-                'Authorization': token
-            },
-        })
-            .success(function (data) {
-                if (loaderElem)
-                    $(loaderElem).removeClass("loading");
-                deferred.resolve(data);
+            $http({
+                method: 'GET',
+                url: this.urlFor(url),
+                params: params,
+                headers: {
+                    'Authorization': token
+                },
             })
-            .error(function (error, status) {
-                if (loaderElem)
-                    $(loaderElem).removeClass("loading");
-                if (status == 401) {
-                    self.toLogin();
-                } else {
+                .success(function (data) {
+                    if (loaderElem)
+                        $(loaderElem).removeClass("loading");
+                    deferred.resolve(data);
+                })
+                .error(function (error, status) {
+                    if (loaderElem)
+                        $(loaderElem).removeClass("loading");
+                    if (status == 401) {
+                        self.toLogin();
+                    } else {
 
-                    if (loaderElem) {
-                        $(loaderElem).dimmer({
-                            closable: false,
-                            template: {
-                                dimmer: function () {
-                                    return $('<div class="ui dimmer"><div class="content"><div class="center"><i class="huge frown icon"></i> <h3>Произошла ошибка</h3></div></div></div>').attr('class', 'ui dimmer');
+                        if (loaderElem) {
+                            $(loaderElem).dimmer({
+                                closable: false,
+                                template: {
+                                    dimmer: function () {
+                                        return $('<div class="ui dimmer"><div class="content"><div class="center"><i class="huge frown icon"></i> <h3>Произошла ошибка</h3></div></div></div>').attr('class', 'ui dimmer');
+                                    }
                                 }
-                            }
-                        });
+                            });
 
-                        $(loaderElem).dimmer('show');
+                            $(loaderElem).dimmer('show');
+
+                        }
+                        deferred.reject(error);
+
 
                     }
-                    deferred.reject(error);
-
-
-                }
-            });
+                });
+        }
 
         return deferred.promise;
     };
@@ -207,5 +218,8 @@ function dataService($http, $q, $location, $window, $cookies, API_HOST, $indexed
 
     };
 
+    this.openPDF = function(pdfId){
+        window.open(this.urlFor('/files/download?fileId=' + pdfId));
+    };
 
 }

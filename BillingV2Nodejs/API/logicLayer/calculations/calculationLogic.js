@@ -57,7 +57,10 @@ exports.getByCounterId = function (counterId, period, done) {
     });
 };
 
-exports.remove = function(calculationId, done){
+exports.remove = function (calculationId, done) {
     CalcRepo.remove(calculationId, done);
 };
 
+exports.getWaterCountByClient = function (clientId, done) {
+    CalcRepo.getSumByClient(clientId, done);
+};

@@ -21,7 +21,7 @@
 		<thead>
 			<tr>
 				<th >Контролер</th>
-				<th >Количество объектов</th>
+				<th >Объектов, пройдено / всего</th>
 				<th >Вода, м3</th>
 				<th >Канализация, м3</th>
 				<th >Вода, тенге</th>
@@ -33,7 +33,7 @@
 		<tbody>
 			<tr ng-repeat="res in result">
 				<td >{{res.controllerId}}</td>
-				<td class="right aligned">{{res.passed | number:0}}</td>
+				<td class="right aligned">{{res.passed | number:0}} / {{res.total | number:0}}</td>
 				<td class="right aligned">{{res.sumWaterCubic | number:2}}</td>
 				<td class="right aligned">{{res.sumCanalCubic | number:2}}</td>
 				<td class="right aligned">{{res.sumWaterMoney | number:2}}</td>
@@ -45,7 +45,7 @@
 		<tfoot>
 			<tr >
 				<th >Общий итог</th>
-				<th class="right aligned">{{resultTotals.passed | number:0}}</th>
+				<th class="right aligned">{{resultTotals.passed | number:0}} / {{resultTotals.total | number:0}}</th>
 				<th class="right aligned">{{resultTotals.sumWaterCubic | number:2}}</th>
 				<th class="right aligned">{{resultTotals.sumCanalCubic | number:2}}</th>
 				<th class="right aligned">{{resultTotals.sumWaterMoney | number:2}}</th>

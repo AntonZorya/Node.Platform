@@ -1,9 +1,9 @@
 /**
  * Created by Alibek on 06.10.2015.
  */
-billingApplication.controller('addFizClientController', ['$scope', 'dataService', 'modalSvc', 'toastr', 'validationSvc', addFizClientController]);
+billingApplication.controller('addFizClientController', ['$scope', 'dataService', 'modalSvc', 'toastr', 'validationSvc', '$rootScope', addFizClientController]);
 
-function addFizClientController($scope, dataService, modalSvc, toastr, valSvc) {
+function addFizClientController($scope, dataService, modalSvc, toastr, valSvc, $rootScope) {
     var self = this;
     this.container = $("#addFizClientContainer");
     valSvc.init($scope);
@@ -20,7 +20,8 @@ function addFizClientController($scope, dataService, modalSvc, toastr, valSvc) {
             kanalPercent: 100,
             counters: [],
             fields: []
-        }]
+        }],
+        userId: $rootScope.user._id
     };
 
     $scope.save = function () {

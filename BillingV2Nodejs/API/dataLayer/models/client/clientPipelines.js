@@ -18,7 +18,8 @@ exports.definition = [{
 
     sourceCounts: {type: Number},// 0 по счетчику, 1 по среднему, 2 по норме
     avg: {type: Number}, //среднее - должно расчитываться на основе предыдущих месяцев или пользователь может вбить сам
-    norm: {type: Number} //норма
+    norm: {type: Number},//норма
+    userId: {type: Schema.Types.ObjectId, ref: 'User'}
 
 }];
 

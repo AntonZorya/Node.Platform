@@ -21,5 +21,6 @@ exports.definition =
         fileIds: [], //акт снятия, акт установки
         isActive: {type: Boolean},
         isCounterNew: {type: Boolean},
-        isPrevAvgCalculated: {type: Boolean} // после замены счетчика - был ли расчет по среднему
+        isPrevAvgCalculated: {type: Boolean}, // после замены счетчика - был ли расчет по среднему
+        userId: {type: Schema.Types.ObjectId, ref: 'User'}
     }];

@@ -7,7 +7,6 @@ var BalanceRepo = require('../../dataLayer/repositories/balance/balanceRepo'),
     CalculationRepo = require('../../dataLayer/repositories/calculations/calculationRepo'),
     ForfeitDetailsRepo = require('../../dataLayer/repositories/forfeitDetails/forfeitDetailsRepo');
 
-
 exports.add = function (balance, done) {
 
     validator('balance', balanceDefinition, balance, function (validationRes) {

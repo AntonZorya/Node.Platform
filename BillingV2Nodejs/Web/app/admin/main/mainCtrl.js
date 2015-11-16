@@ -12,7 +12,7 @@ function mainCtrl(dataService, $scope, valSvc, modalSvc) {
         $scope.totalClientsPassed = 0;
         $scope.controllers = [];
 
-        dataService.get('/balance/getAllBalance', {period: 201509}).then(function (response) {
+        dataService.get('/balance/getAllBalance', {period: 201510}).then(function (response) {
             $scope.nachisl = { name: 'Начисления', sum: response.result.nachisl};
             $scope.forfeit = { name: 'Штрафы', sum: response.result.forfeit};
             $scope.payment = { name: 'Оплата', sum: response.result.payment};
@@ -82,9 +82,9 @@ function mainCtrl(dataService, $scope, valSvc, modalSvc) {
     };
 
 
-    dataService.get('/report5', {period: 201509}).then(function (response) {
+    dataService.get('/report5', {period: 201510}).then(function (response) {
         $scope.passedClientsByControllers = response.result;
-        dataService.get('/report6', {period: 201509}).then(function (response) {
+        dataService.get('/report6', {period: 201510}).then(function (response) {
             $scope.allClientsByControllers = response.result;
             $scope.totalClients = 0;
             _.each($scope.allClientsByControllers, function (item) {
@@ -155,9 +155,10 @@ function mainCtrl(dataService, $scope, valSvc, modalSvc) {
 
     $scope.getReport2 = function () {
         $scope.resultTotals = {};
-        dataService.get("/report2", {period: 201509}).then(function (res) {
+        dataService.get("/report2", {period: 201510}).then(function (res) {
             $scope.result = res.result;
             $scope.resultTotals.passed = 0;
+            $scope.resultTotals.total = 0;
             $scope.resultTotals.sumWaterCubic = 0;
             $scope.resultTotals.sumCanalCubic = 0;
             $scope.resultTotals.sumWaterMoney = 0;
@@ -168,6 +169,8 @@ function mainCtrl(dataService, $scope, valSvc, modalSvc) {
             _.each(res.result, function (elem) {
                 if (elem.passed)
                     $scope.resultTotals.passed += parseInt(elem.passed);
+                if (elem.total)
+                    $scope.resultTotals.total += parseInt(elem.total);
                 if (elem.sumWaterCubic)
                     $scope.resultTotals.sumWaterCubic += parseFloat(elem.sumWaterCubic);
                 if (elem.sumCanalCubic)
