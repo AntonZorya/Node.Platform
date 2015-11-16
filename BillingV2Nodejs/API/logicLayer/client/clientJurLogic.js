@@ -310,21 +310,21 @@ exports.updateClientCounter = function (body, userId, done) {
                                         console.error(result.result);
                                         done(result);
                                     } else {
-                                        CalculationLogic.getWaterCountByClient(clientJur._id, function (result) {
-                                            if (result.operationResult == 0 && result.result < minConsumption) {
-                                                var shortage = {
-                                                    shortageWaterCount: minConsumption - result.result,
-                                                    shortageSum: 0
-                                                };
-                                                shortage.shortageSum =
-                                                    shortage.shortageWaterCount
-                                                    * tariff.water
-                                                    * (pipeline.waterPercent / 100);
-                                                shortage.shortageSum += 0;
-                                                result.result = shortage;
-                                            }
+                                        //CalculationLogic.getWaterCountByClient(clientJur._id, function (result) {
+                                        //    if (result.operationResult == 0 && result.result < minConsumption) {
+                                        //        var shortage = {
+                                        //            shortageWaterCount: minConsumption - result.result,
+                                        //            shortageSum: 0
+                                        //        };
+                                        //        shortage.shortageSum =
+                                        //            shortage.shortageWaterCount
+                                        //            * tariff.water
+                                        //            * (pipeline.waterPercent / 100);
+                                        //        shortage.shortageSum += 0;
+                                        //        result.result = shortage;
+                                        //    }
                                             done(result);
-                                        });
+                                        //});
                                     }
                                 });
                             } else {
