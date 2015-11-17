@@ -1,6 +1,7 @@
 global.config = require('./config');
 
 var express = require('express');        // call express
+var compression = require('compression');
 var app = express();                 // define our app using express
 var bodyParser = require('body-parser');
 var passport = require('./helpers/passport/passportInit');
@@ -9,9 +10,10 @@ errorBuilder = require('./helpers/mongoose/errorBuilder').buildError;
 operationResultBuilder = require('./helpers/common/operationOutcome').buildOperationOutcome;
 
 
-
+isOdataWorking = false;
 
 app.use(cors());
+app.use(compression({level:9}));
 
 //var corsOptions = {
 //  origin: 'http://example.com'
@@ -85,7 +87,7 @@ console.log('Magic happens on port ' + port);
 
 //require('./testConsole/toxa').main();
 //require('./testConsole/vasya').main();
-require('./odata/odataSvc');
+//require('./odata/odataSvc');
 
 
 // var menu = require('node-menu');

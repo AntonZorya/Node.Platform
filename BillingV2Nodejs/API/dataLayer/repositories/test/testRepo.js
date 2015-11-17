@@ -1,3 +1,5 @@
+var fs = require('fs');
+var moment = require('moment');
 var mongoose = require('mongoose');
 var async = require('async');
 var deepPopulate = require('mongoose-deep-populate')(mongoose);
@@ -23,6 +25,50 @@ ForfeitCollectionSchema.plugin(deepPopulate, { whitelist: ['balanceId.balanceTyp
 
 var ClientPopulated = mongoose.model('_ClientPopulated', MixedSchema);
 var ClientPopulatedAndAggregated = mongoose.model('_ClientPopulatedAndAggregated', MixedSchema, '_ClientPopulatedAndAggregated');
+
+var odataModel = {
+    Лицевой_счет : "",
+    Номер : "Edm.Double",
+    Наименование : "",
+    БИН : "",
+    РНН : "",
+    Адрес : "",
+    Период : "",
+    Номер_ввода : "Edm.Double",
+    Описание_ввода : "",
+    Процент_воды_ввода : "Edm.Double",
+    Процент_канализации_ввода : "Edm.Double",
+    Ввод_в_действии : "",
+    Номер_счетчика : "",
+    Текущий_статус_счетчика : "",
+    Текущие_показания_счетчика : "Edm.Double",
+    Дата_текущих_показаний_счетчика : "Edm.DateTime",
+    Проблемы_счетчика : "",
+    Описание_проблемы_счетчика : "",
+    Предыдущие_показания_счетчика : "Edm.Double",
+    Дата_предыдущих_показаний_счетчика : "Edm.DateTime",
+    Номер_пломбы_счетчика : "",
+    Счетчик_в_действии : "",
+    Имя_контролера : "",
+    Код_контролера : "",
+    Тип_потребителя : "",
+    Наименование_тарифа : "",
+    Тариф_за_воду : "Edm.Double",
+    Тариф_за_канализацию : "Edm.Double",
+    Тип_баланса : "",
+    Объем_начисленной_воды : "Edm.Double",
+    Объем_начисленной_канализации : "Edm.Double",
+    Тенге_начисленной_воды : "Edm.Double",
+    Тенге_начисленной_канализации : "Edm.Double",
+    Тенге_начисленной_общая: "Edm.Double",
+    Потреблено_ниже_нормы : "",
+    Потребление_ниже_нормы_на_м3 : "Edm.Double",
+    Потребление_ниже_нормы_на_тенге : "Edm.Double",
+    Дата_начисления : "Edm.DateTime",
+    Сумма_штрафа : "Edm.Double",
+    Дата_штрафа : "Edm.DateTime",
+    Комментарий_к_штрафу : ""
+};
 
 
 
@@ -429,6 +475,95 @@ exports.unwindData = function (done) {
             //ROUND8
             //ROUND8
         },
+        function(callback){
+            //ROUND9
+            //ROUND9
+            //ROUND9
+            ClientPopulatedAndAggregated
+                .find()
+                .lean()
+                .exec(function (err, docs) {
+                    if (err) {
+                        return callback(err, 'ROUND9 ERROR');
+                    }
+
+                    var head = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\" ?><feed xmlns:d=\"http://schemas.microsoft.com/ado/2007/08/dataservices\" xmlns:m=\"http://schemas.microsoft.com/ado/2007/08/dataservices/metadata\" xmlns=\"http://www.w3.org/2005/Atom\">";
+                    var foot = "</feed>";
+                    //var i = 0;
+
+                    async.series([
+                            function(callback){
+                                fs.writeFile('odata.xml', head, function (err) {
+                                    if (err) throw err;
+                                    //console.log("head written");
+                                    callback(null, 'one');
+                                });
+
+                            },
+                            function(callback){
+                                async.eachSeries(docs, function(doc, callback) {
+                                    var entry = "<entry><content type=\"application/xml\"><m:properties>";
+                                    for (var prop in odataModel) {
+                                        if (odataModel.hasOwnProperty(prop)) {
+                                            var type = (odataModel[prop]!=""      ?    "m:type=\""+odataModel[prop]+"\""    :     "");
+                                            if(odataModel[prop]=="Edm.DateTime" && doc[prop]){
+                                                var date = moment(doc[prop]);
+                                                doc[prop] = date.toISOString();
+                                                //doc[prop] = moment(doc[prop], "YYYY-MM-DD HH:mm:ss");
+                                            }
+                                            entry+="<d:"+prop+" "+type+" " + (!doc[prop] ? "m:null=\"true\"" : "")  + ">"+(doc[prop]?doc[prop]:"")+"</d:"+prop+">";
+
+                                            //console.log(p);
+                                            //console.log(m);
+                                            //console.log(o[p]);
+                                        }
+                                    }
+                                    entry+="</m:properties></content></entry>";
+                                    //console.log(i++);
+
+                                    fs.appendFile('odata.xml', entry, function (err) {
+                                        if (err) throw err;
+                                        //console.log("entry written");
+                                        callback();
+                                    });
+
+
+                                }, function(err){
+                                    callback(null, 'two');
+                                });
+
+                            },
+
+                            function(callback){
+                                fs.appendFile('odata.xml', foot, function (err) {
+                                    if (err) throw err;
+                                    //console.log("foot written");
+                                    callback(null, 'three');
+                                });
+
+                            },
+                        ],
+                        function(err, results){
+                            if( err ) {
+                                return callback(err, 'ROUND9 ERROR');
+                            }
+                            callback(null, 'ROUND9 SUCCESS');
+                        });
+
+
+
+
+
+
+
+
+
+
+                });
+            //ROUND9
+            //ROUND9
+            //ROUND9
+        }
     ],
         // optional callback
         function (err, results) {
