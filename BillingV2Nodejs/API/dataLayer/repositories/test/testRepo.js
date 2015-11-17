@@ -76,6 +76,7 @@ exports.unwindData = function (done) {
     var round1Result;
     var round5Result;
     var round7Result;
+    var round41Result;
 
     async.series([
         function (callback) {
@@ -343,6 +344,94 @@ exports.unwindData = function (done) {
             //ROUND6
             //ROUND6
         },
+
+
+            function (callback) {
+                //ROUND4,1
+                //ROUND4,1
+                //ROUND4,1
+                ClientPopulated.aggregate(
+                    {
+                        $match:
+                        {
+                            $or:
+                                [
+                                    {
+                                        pipelines: { $size: 0 }
+                                    },
+                                    {
+                                        "pipelines.counters": { $size: 0 }
+                                    }
+                                ]
+                        }
+                    },
+                    {
+                        $project: {
+                            _id: 0,
+                            clientJurId: "$_id",
+                            phone: "$phone",
+                            email: "$email",
+                            abonentEntryDate: "$abonentEntryDate",
+                            "Лицевой_счет": "$accountNumber",
+                            "Номер": "$number",
+                            "Наименование": "$name",
+                            "БИН": "$bin",
+                            "РНН": "$rnn",
+                            "Адрес": "$address",
+                            "Период": "$period",
+
+                            "Имя_контролера": "$controllerId.fullName",
+                            "Код_контролера": "$controllerId.code",
+                            "Тип_потребителя": "$clientType.name",
+                            clientType_minConsumption: "$clientType.minConsumption",
+                            clientType_avgConsumption: "$clientType.avgConsumption",
+                            clientType_maxConsumption: "$clientType.maxConsumption",
+                            clientType_parentId: "$clientType.parentId",
+                            "Наименование_тарифа": "$clientType.tariffId.name",
+                            "Тариф_за_воду": "$clientType.tariffId.water",
+                            "Тариф_за_канализацию": "$clientType.tariffId.canal",
+                            clientType_tariffId_date: "$clientType.tariffId.date",
+                            kskId_name: "$kskId.name",
+                        }
+                    },
+
+
+
+                    function (err, result) {
+                        if (err) {
+                            return callback(err, 'ROUND4 ERROR');
+                        }
+                        round41Result = result;
+                        callback(null, 'ROUND4 SUCCESS');
+                    });
+                //ROUND4,1
+                //ROUND4,1
+                //ROUND4,1
+            },
+            function (callback) {
+                //ROUND4,2
+                //ROUND4,2
+                //ROUND4,2
+                async.eachSeries(round41Result, function (doc, callback) {
+
+                    var model2 = ClientPopulatedAndAggregated(doc);
+
+                    model2.save(function(err){
+                        if (err) return callback(err);
+                        callback();
+                    });
+
+                }, function (err) {
+                    if (err) {
+                        return callback(err, 'ROUND4,2 ERROR');
+                    }
+                    callback(null, 'ROUND4,2 SUCCESS');
+                });
+                //ROUND4,2
+                //ROUND4,2
+                //ROUND4,2
+            },
+
         function (callback) {
             //ROUND7
             //ROUND7
@@ -475,6 +564,9 @@ exports.unwindData = function (done) {
             //ROUND8
             //ROUND8
         },
+
+
+
         function(callback){
             //ROUND9
             //ROUND9
