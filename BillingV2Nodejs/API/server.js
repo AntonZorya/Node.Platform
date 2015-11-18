@@ -10,7 +10,6 @@ errorBuilder = require('./helpers/mongoose/errorBuilder').buildError;
 operationResultBuilder = require('./helpers/common/operationOutcome').buildOperationOutcome;
 
 
-isOdataWorking = false;
 
 app.use(cors());
 app.use(compression({level:9}));

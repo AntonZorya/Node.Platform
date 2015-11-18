@@ -32,3 +32,4 @@ node_modules
 BillingV2Nodejs/.idea/*
 BillingV2Nodejs/Web/libs/*
 BillingV2Nodejs/API/config.js
+BillingV2Nodejs/API/odata.xml
