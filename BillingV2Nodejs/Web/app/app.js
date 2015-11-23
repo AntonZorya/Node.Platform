@@ -65,6 +65,18 @@ var billingApplication = angular.module('billingApplication', ['indexedDB', "hig
             .when('/test', {
                 templateUrl: "./app/admin/test/testView.html"
             })
+            .when('/dictionary', {
+                templateUrl: "./app/admin/dictionary/dictionaryView.html"
+            })
+            .when('/dictionary/clienttypes', {
+                templateUrl: "./app/admin/test/testView.html"
+            })
+            .when('/dictionary/controllers', {
+                templateUrl: "./app/admin/test/testView.html"
+            })
+            .when('/dictionary/tariffs', {
+                templateUrl: "./app/admin/test/testView.html"
+            })
         ;
     }]).config(['$translatePartialLoaderProvider', function (translatePartialLoader) {
         translatePartialLoader.addPart('identity');

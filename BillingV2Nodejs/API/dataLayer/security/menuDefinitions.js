@@ -88,5 +88,30 @@ module.exports = [
         name: "Баланс",
         roles: null,
         childs: []
+    },
+    {
+        url: "/dictionary",
+        name: "Справочники",
+        roles: [roleDefinitions.admin, roleDefinitions.organizationAdmin],
+        childs: [
+            {
+                url: "/dictionary/clienttypes",
+                name: "Тип клиентов",
+                roles: null,
+                childs: []
+            },
+            {
+                url: "/dictionary/controllers",
+                name: "Контролеры",
+                roles: null,
+                childs: []
+            },
+            {
+                url: "/dictionary/tariffs",
+                name: "Тарифы",
+                roles: null,
+                childs: []
+            }
+        ]
     }
 ];
